@@ -284,7 +284,7 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnXuatHoaDonActionPerformed
 
     private void btnBanHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBanHangMouseClicked
-        BanHang bh = new BanHang();
+        QuanLyBanHang bh = new QuanLyBanHang();
         
         JPanel panelBanHang = bh.pnlBanHang();
         

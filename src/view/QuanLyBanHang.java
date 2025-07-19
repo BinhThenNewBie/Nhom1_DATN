@@ -44,7 +44,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author ADMIN
  */
-public class BanHang extends javax.swing.JFrame {
+public class QuanLyBanHang extends javax.swing.JFrame {
 
     DefaultTableModel modelUuDai;
     DefaultTableModel modelHDCho;
@@ -58,7 +58,7 @@ public class BanHang extends javax.swing.JFrame {
     /**
      * Creates new form StaffBanHang
      */
-    public BanHang() {
+    public QuanLyBanHang() {
         initComponents();
         initTable();
         fillTableUuDai();
@@ -1538,14 +1538,18 @@ public class BanHang extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -1554,7 +1558,7 @@ public class BanHang extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BanHang().setVisible(true);
+                new QuanLyBanHang().setVisible(true);
             }
         });
     }
