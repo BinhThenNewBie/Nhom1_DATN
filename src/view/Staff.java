@@ -42,7 +42,7 @@ public class Staff extends javax.swing.JFrame {
         button.setOpaque(true);                 
         button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
         button.setForeground(Color.WHITE);        
-        button.setBackground(Color.decode("#768EA3")); 
+        button.setBackground(Color.decode("#1c2e4a")); 
 
         button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
     }
@@ -57,19 +57,75 @@ public class Staff extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btnLogOut = new javax.swing.JButton();
-        lblExit = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblAccount = new javax.swing.JLabel();
         btnBanHang = new javax.swing.JButton();
         btnXuatHoaDon = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        btnLogOut = new javax.swing.JButton();
+        lblExit = new javax.swing.JLabel();
         pnlMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(191, 208, 212));
+        jPanel1.setBackground(new java.awt.Color(21, 35, 56));
 
-        btnLogOut.setBackground(new java.awt.Color(118, 142, 163));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        lblAccount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblAccount.setForeground(new java.awt.Color(21, 35, 56));
+        lblAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/MainForm_Admin/image/staff_logo.png"))); // NOI18N
+        lblAccount.setText("    STAFF");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(lblAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblAccount)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        btnBanHang.setBackground(new java.awt.Color(31, 51, 86));
+        btnBanHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnBanHang.setForeground(new java.awt.Color(255, 255, 255));
+        btnBanHang.setText("BÁN HÀNG");
+        btnBanHang.setBorder(null);
+        btnBanHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBanHangMouseClicked(evt);
+            }
+        });
+        btnBanHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBanHangActionPerformed(evt);
+            }
+        });
+
+        btnXuatHoaDon.setBackground(new java.awt.Color(31, 51, 86));
+        btnXuatHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnXuatHoaDon.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatHoaDon.setText("XUẤT HOÁ ĐƠN");
+        btnXuatHoaDon.setBorder(null);
+        btnXuatHoaDon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatHoaDonActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btnLogOut.setBackground(new java.awt.Color(31, 51, 86));
         btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnLogOut.setForeground(new java.awt.Color(255, 255, 255));
         btnLogOut.setText("LOG OUT");
@@ -95,75 +151,41 @@ public class Staff extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        lblAccount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblAccount.setForeground(new java.awt.Color(118, 142, 163));
-        lblAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/MainForm_Admin/image/staff_logo.png"))); // NOI18N
-        lblAccount.setText("    STAFF");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(lblAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblAccount)
-                .addContainerGap(14, Short.MAX_VALUE))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
-
-        btnBanHang.setBackground(new java.awt.Color(118, 142, 163));
-        btnBanHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnBanHang.setForeground(new java.awt.Color(255, 255, 255));
-        btnBanHang.setText("BÁN HÀNG");
-        btnBanHang.setBorder(null);
-        btnBanHang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnBanHangMouseClicked(evt);
-            }
-        });
-        btnBanHang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBanHangActionPerformed(evt);
-            }
-        });
-
-        btnXuatHoaDon.setBackground(new java.awt.Color(118, 142, 163));
-        btnXuatHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnXuatHoaDon.setForeground(new java.awt.Color(255, 255, 255));
-        btnXuatHoaDon.setText("XUẤT HOÁ ĐƠN");
-        btnXuatHoaDon.setBorder(null);
-        btnXuatHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnXuatHoaDonActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnBanHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,11 +195,8 @@ public class Staff extends javax.swing.JFrame {
                 .addComponent(btnBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
                 .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 481, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 473, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
@@ -196,8 +215,8 @@ public class Staff extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
                 .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -216,17 +235,17 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutMouseClicked
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        btnLogOut.setBackground(Color.decode("#89A4BD"));
+        btnLogOut.setBackground(Color.decode("#4E6688"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
         btnLogOut.setFocusPainted(false);
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);
         btnLogOut.setOpaque(true);
 
-        btnBanHang.setBackground(Color.decode("#768EA3"));
+        btnBanHang.setBackground(Color.decode("#1c2e4a"));
         btnBanHang.setForeground(Color.decode("#FFFFFF"));
 
-        btnXuatHoaDon.setBackground(Color.decode("#768EA3"));
+        btnXuatHoaDon.setBackground(Color.decode("#1c2e4a"));
         btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnLogOutActionPerformed
 
@@ -235,41 +254,41 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_lblExitMouseClicked
 
     private void btnBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanHangActionPerformed
-        btnBanHang.setBackground(Color.decode("#89A4BD"));
+        btnBanHang.setBackground(Color.decode("#4E6688"));
         btnBanHang.setForeground(Color.decode("#FFFFFF"));
         btnBanHang.setFocusPainted(false);
         btnBanHang.setBorderPainted(false);
         btnBanHang.setContentAreaFilled(false);
         btnBanHang.setOpaque(true);
 
-        btnLogOut.setBackground(Color.decode("#768EA3"));
+        btnLogOut.setBackground(Color.decode("#1c2e4a"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
 
-        btnXuatHoaDon.setBackground(Color.decode("#768EA3"));
+        btnXuatHoaDon.setBackground(Color.decode("#1c2e4a"));
         btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnBanHangActionPerformed
 
     private void btnXuatHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatHoaDonActionPerformed
-        btnXuatHoaDon.setBackground(Color.decode("#89A4BD"));
+        btnXuatHoaDon.setBackground(Color.decode("#4E6688"));
         btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
         btnXuatHoaDon.setFocusPainted(false);
         btnXuatHoaDon.setBorderPainted(false);
         btnXuatHoaDon.setContentAreaFilled(false);
         btnXuatHoaDon.setOpaque(true);
 
-        btnLogOut.setBackground(Color.decode("#768EA3"));
+        btnLogOut.setBackground(Color.decode("#1c2e4a"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
 
-        btnBanHang.setBackground(Color.decode("#768EA3"));
+        btnBanHang.setBackground(Color.decode("#1c2e4a"));
         btnBanHang.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnXuatHoaDonActionPerformed
 
     private void btnBanHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBanHangMouseClicked
-        StaffBanHang stForm = new StaffBanHang();
+        BanHang bh = new BanHang();
         
-        JPanel panelStaff = stForm.pnlSBH();
+        JPanel panelBanHang = bh.pnlBanHang();
         
-        setForm(panelStaff);
+        setForm(panelBanHang);
     }//GEN-LAST:event_btnBanHangMouseClicked
 
     /**
@@ -313,6 +332,7 @@ public class Staff extends javax.swing.JFrame {
     private javax.swing.JButton btnXuatHoaDon;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblAccount;
     private javax.swing.JLabel lblExit;
     private javax.swing.JPanel pnlMain;
