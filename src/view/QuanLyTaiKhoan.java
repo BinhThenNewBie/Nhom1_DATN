@@ -177,6 +177,10 @@ public void moKhoaTaiKhoan(){
                 JOptionPane.showMessageDialog(this, "Tài khoản đã bị khóa!");
                 return;
             }
+            if ("ADMIN".equals(chontk.getVaiTro())) {
+            JOptionPane.showMessageDialog(this, "Tài khoản admin không khóa được");
+            return;
+}
             
             int xacNhan = JOptionPane.showConfirmDialog(this, 
                 "Bạn có chắc muốn khóa tài khoản: " + chontk.getID_TK() + "?", 
