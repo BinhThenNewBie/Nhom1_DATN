@@ -15,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author ADMIN
  */
-public class StaffXuatHoaDon extends javax.swing.JFrame {
+public class AdminXuatHoaDon extends javax.swing.JFrame {
 
     DefaultTableModel model;
     DefaultTableModel modelCTHD;
     HoaDonDAO hdd = new HoaDonDAO();
 
-    public StaffXuatHoaDon() {
+    public AdminXuatHoaDon() {
         initComponents();
         initTable();
         fillTable();
@@ -118,7 +118,6 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
         btnADD = new javax.swing.JButton();
-        btnBanHang = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblCTHD = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -161,7 +160,7 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnPrint)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pnlThongTinHoaDon.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
@@ -188,16 +187,6 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
         btnADD.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnADD.setForeground(new java.awt.Color(255, 255, 255));
         btnADD.setText("ADD");
-
-        btnBanHang.setBackground(new java.awt.Color(31, 51, 86));
-        btnBanHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnBanHang.setForeground(new java.awt.Color(255, 255, 255));
-        btnBanHang.setText("BÁN HÀNG");
-        btnBanHang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBanHangActionPerformed(evt);
-            }
-        });
 
         tblCTHD.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -226,19 +215,14 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
                 .addComponent(btnADD, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(265, 265, 265))
             .addGroup(pnlThongTinHoaDonLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addGroup(pnlThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlThongTinHoaDonLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(pnlThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlThongTinHoaDonLayout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(pnlThongTinHoaDonLayout.createSequentialGroup()
-                        .addGap(245, 245, 245)
-                        .addComponent(btnBanHang)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         pnlThongTinHoaDonLayout.setVerticalGroup(
@@ -257,10 +241,8 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnADD)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnBanHang)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         lblTitteQLyHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -310,13 +292,6 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanHangActionPerformed
-        // TODO add your handling code here:
-        StaffBanHang stbh = new StaffBanHang();
-        stbh.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnBanHangActionPerformed
-
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
         // TODO add your handling code here:
         showDetailsHDCho();
@@ -339,28 +314,29 @@ public class StaffXuatHoaDon extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StaffXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StaffXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StaffXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StaffXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminXuatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffXuatHoaDon().setVisible(true);
+                new AdminXuatHoaDon().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnADD;
-    private javax.swing.JButton btnBanHang;
     private javax.swing.JButton btnPrint;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

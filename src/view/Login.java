@@ -50,8 +50,8 @@ public class Login extends javax.swing.JFrame {
                     Admin ad = new Admin();
                     ad.setVisible(true);
                 }else{
-                    StaffBanHang stff = new StaffBanHang();
-                    stff.setVisible(true);
+                    Staff st = new Staff();
+                    st.setVisible(true);
                 }
                 
             }
