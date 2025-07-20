@@ -24,6 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import view.QuanLyNhanVien;
+import view.QuanLySanPham;
+import view.QuanLyTaiKhoan;
+import view.QuanLyUuDai;
 
 /**
  *
@@ -42,9 +46,8 @@ public class Admin extends javax.swing.JFrame {
             lblTime.setText(time);
         });
         timer.start();
-
-        setLocationRelativeTo(null); // Đưa cửa sổ ra giữa màn hình
-
+        this.setSize(1600, 1000);
+        setLocationRelativeTo(null); 
         initDefaultElement();
 
         mainPanel.setLayout(new BorderLayout()); // Sử dụng BorderLayout
@@ -167,8 +170,6 @@ public class Admin extends javax.swing.JFrame {
 
         // Styling cho panel - giữ nguyên màu
         pnlMenu.setBorder(new EmptyBorder(10, 10, 10, 10));
-        // pnlMenu.setBackground(Color.decode("#34495e")); // bỏ dòng này
-
         Logo.setBorder(new EmptyBorder(0, 0, 0, 0));
     }
 
@@ -225,7 +226,6 @@ public class Admin extends javax.swing.JFrame {
         btnDangXuat = new javax.swing.JButton();
         btnXuatHoaDon = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -460,23 +460,15 @@ public class Admin extends javax.swing.JFrame {
 
         mainPanel.setBackground(new java.awt.Color(234, 232, 232));
 
-        jLabel11.setText("TIME");
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap(912, Short.MAX_VALUE)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 1025, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 919, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -486,12 +478,14 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -529,7 +523,7 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnQLNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLNVActionPerformed
         // TODO add your handling code here:
-                QuanLyNhanVien qlnvForm = new QuanLyNhanVien();
+        QuanLyNhanVien qlnvForm = new QuanLyNhanVien();
         // Lấy panel cụ thể (ví dụ: panel chính có tên jPanel1)
         JPanel panelQLNV = qlnvForm.getJPanelQLNV();
 
@@ -570,8 +564,11 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQLTKMouseClicked
 
     private void btnQLTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLTKActionPerformed
-        // TODO add your handling code here:
-        //        setForm(new QuanLyTaiKhoan());
+        // TODO add your handling code here:        
+        QuanLyTaiKhoan qltkForm = new QuanLyTaiKhoan();
+        JPanel panelQLTK = qltkForm.getJPanelQLTK();
+        setForm(panelQLTK);
+              
     }//GEN-LAST:event_btnQLTKActionPerformed
 
     private void btnQLSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLSPMouseClicked
@@ -641,7 +638,11 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnQLKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLKMActionPerformed
         // TODO add your handling code here:
-        //        setForm(new QuanLyUuDai());
+        QuanLyUuDai qludForm = new QuanLyUuDai();
+        // Lấy panel cụ thể (ví dụ: panel chính có tên jPanel1)
+        JPanel panelQLUD = qludForm.getJPanelQLUD();
+
+        setForm(panelQLUD);
     }//GEN-LAST:event_btnQLKMActionPerformed
 
     private void btnTKDTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTKDTMouseClicked
@@ -803,7 +804,6 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnTKDT;
     private javax.swing.JButton btnXuatHoaDon;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblexit;
     private javax.swing.JPanel mainPanel;
