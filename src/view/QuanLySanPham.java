@@ -1,6 +1,5 @@
 package view;
 
-import DAO.HoaDonChoDAO;
 import DAO.SanPhamDAO;
 import Model.SanPham;
 import java.awt.BorderLayout;
@@ -29,8 +28,6 @@ public class QuanLySanPham extends javax.swing.JFrame {
     DefaultTableModel tableModel = new DefaultTableModel();
     SanPhamDAO spDao = new SanPhamDAO();
     String strAnh = "";
-    HoaDonChoDAO hdd = new HoaDonChoDAO();
-
     /**
      * Creates new form QuanLySanPham
      */
