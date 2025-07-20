@@ -64,7 +64,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
 
     public void initTable() {
         tableModel = new DefaultTableModel();
-        String[] cols = new String[]{"ID NHÂN VIÊN", "HỌ VÀ TÊN", "CHỨC VỤ", "SỐ ĐIỆN THOẠI", "TRẠNG THÁI"};
+        String[] cols = new String[]{"ID NHÂN VIÊN", "HỌ VÀ TÊN", "CHỨC VỤ", "SỐ ĐIỆN THOẠI","IMG", "TRẠNG THÁI"};
         tableModel.setColumnIdentifiers(cols);
         tblNhanvien.setModel(tableModel);
     }
@@ -84,6 +84,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             txtIdnv.setText(nv.getID_NV());
             txtSdt.setText(nv.getSDT());
             txtTennv.setText(nv.getHoTen());
+            txtAnh.setText(nv.getIMG());
             txtChucvu.setText(nv.getChucVu());
             // Thiết lập kích thước cố định cho ảnh (ví dụ: 200x200 pixels)
             int IMAGE_WIDTH = 220;
@@ -138,7 +139,8 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         txtIdnv.setText("");
         txtTennv.setText("");
         txtSdt.setText("");
-        txtChucvu.setText("STAFF");
+        txtChucvu.setText("");
+        txtAnh.setText("");
         lblAnh.setText("ẢNH NHÂN VIÊN");
         lblAnh.setIcon(null);
         strAnh = "";
@@ -149,6 +151,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         String ID_NV = txtIdnv.getText().trim();
         String hoTen = txtTennv.getText().trim();
         String SDT = txtSdt.getText().trim();
+        String IMG = txtAnh.getText().trim();
         String chucVu = txtChucvu.getText().trim();
 
         // Kiểm tra dữ liệu đầu vào
@@ -172,7 +175,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         }
 
         // SỬA LỖI: Tạo object Nhanvien với constructor đúng
-        Nhanvien nv = new Nhanvien(ID_NV, hoTen, SDT, chucVu, strAnh, "");
+        Nhanvien nv = new Nhanvien(ID_NV, hoTen, SDT, chucVu, IMG, "");
         nv.setTrangThai("ACTIVE"); // Set trạng thái mặc định
 
         int result = nvd.Themnv(nv);
@@ -197,6 +200,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             String ID_NV = txtIdnv.getText().trim();
             String hoTen = txtTennv.getText().trim();
             String SDT = txtSdt.getText().trim();
+            String IMG = txtAnh.getText().trim();
             String chucVu = txtChucvu.getText().trim();
 
             // Kiểm tra dữ liệu đầu vào
@@ -225,7 +229,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             }
 
             // SỬA LỖI: Tạo object Nhanvien với constructor đúng
-            Nhanvien nv = new Nhanvien(ID_NV, hoTen, SDT, chucVu, strAnh, "");
+            Nhanvien nv = new Nhanvien(ID_NV, hoTen, SDT, chucVu, IMG, "");
             nv.setTrangThai("ACTIVE"); // Giữ nguyên trạng thái hoặc set từ UI
 
             int result = nvd.suanv(nv, idNVGoc);
@@ -364,6 +368,8 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         btnThem = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblAnh = new javax.swing.JLabel();
+        txtAnh = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Light", 1, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(31, 51, 86));
@@ -449,7 +455,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cboLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnloc, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMokhoa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -553,6 +559,11 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtAnh.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
+        jLabel5.setText("LINK ẢNH");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -568,23 +579,33 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                         .addComponent(btnKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(391, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel1))
-                                .addGap(33, 33, 33)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(40, 40, 40))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel4))
+                                        .addGap(33, 33, 33)))
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtChucvu, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtSdt)
                                     .addComponent(txtIdnv)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(29, 29, 29)
-                                .addComponent(txtTennv)))
+                                .addComponent(txtTennv))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(35, 35, 35)
+                                .addComponent(txtSdt))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(132, 132, 132)
+                                .addComponent(txtAnh)))
                         .addGap(83, 83, 83)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(204, 204, 204))))
@@ -593,20 +614,25 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdnv, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addGap(36, 36, 36)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtTennv, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGap(32, 32, 32)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33)
+                            .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtChucvu, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)))
@@ -800,6 +826,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -809,6 +836,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAnh;
     private javax.swing.JTable tblNhanvien;
+    private javax.swing.JTextField txtAnh;
     private javax.swing.JTextField txtChucvu;
     private javax.swing.JTextField txtIdnv;
     private javax.swing.JTextField txtSdt;
