@@ -28,15 +28,14 @@ public class TaikhoanDAO {
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
                 Taikhoan tk = new Taikhoan();
-                tk.setID_TK(rs.getString("ID_TK"));
-                tk.setPass(rs.getString("PASS"));
-                tk.setEmail(rs.getString("EMAIL"));
-                tk.setVaiTro(rs.getString("VAITRO"));
+                tk.setID_TK(rs.getString(1));
+                tk.setPass(rs.getString(2));
+                tk.setEmail(rs.getString(3));
+                tk.setVaiTro(rs.getString(4));
                 String trangThai = rs.getString("TRANGTHAI");
                 tk.setTrangThai(trangThai != null ? trangThai : "ACTIVE");
                 Listtk.add(tk);
             }
-            conn.close();
         } catch (Exception e) {
             System.err.println("Error getting all accounts: " + e.getMessage());
             e.printStackTrace();

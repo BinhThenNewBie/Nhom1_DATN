@@ -23,23 +23,19 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
      * Creates new form QuanLyTaiKhoan
      */
     public QuanLyTaiKhoan() {
-        initComponents();
-        
-        // Set layout cho panel chính
-    jPanel1.setLayout(new BorderLayout(10, 10)); // 10px gap
-    
-    // Căn chỉnh panels
+        initComponents();  
+            // Căn chỉnh panels
     jPanelQLTK.add(jPanel1, BorderLayout.NORTH);  // Panel form ở trên
     
     // Set kích thước
     jPanelQLTK.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
-    
         initTable();
         fillTable();
     }
     public void initTable(){
     tableModel = new DefaultTableModel();
     String[] cols = new String[]{"ID TÀI KHOẢN", "PASSWORD","EMAIL", "VAI TRÒ","TRẠNG THÁI"};
+    tableModel.setColumnIdentifiers(cols);
     tblBang.setModel(tableModel);
 }
 public void fillTable(){
@@ -303,6 +299,7 @@ public void moKhoaTaiKhoan(){
 
         cboVaitro.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
         cboVaitro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "STAFF" }));
+        cboVaitro.setEnabled(false);
 
         tblBang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -353,7 +350,7 @@ public void moKhoaTaiKhoan(){
                                 .addComponent(txtPass)
                                 .addComponent(txtEmail1)
                                 .addComponent(cboVaitro, 0, 445, Short.MAX_VALUE)))))
-                .addGap(142, 142, 142))
+                .addGap(159, 159, 159))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +390,7 @@ public void moKhoaTaiKhoan(){
             .addGroup(jPanelQLTKLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanelQLTKLayout.setVerticalGroup(
             jPanelQLTKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -409,7 +406,7 @@ public void moKhoaTaiKhoan(){
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanelQLTK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1506, Short.MAX_VALUE))
+                .addGap(0, 1518, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,6 +442,12 @@ public void moKhoaTaiKhoan(){
         // TODO add your handling code here:
         showdetail();
     }//GEN-LAST:event_tblBangMouseClicked
+public JPanel getMainPanel() {
+     return jPanel1;
+}
+ public JPanel getJPanelQLTK() {
+  return jPanel1;
+}
 
     /**
      * @param args the command line arguments
@@ -479,13 +482,6 @@ public void moKhoaTaiKhoan(){
                 new QuanLyTaiKhoan().setVisible(true);
             }
         });
-    }
-    public JPanel getMainPanel() {
-        return jPanel1;
-    }
-
-    public JPanel getJPanelQLTK() {
-        return jPanel1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

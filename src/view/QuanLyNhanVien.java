@@ -35,7 +35,6 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
      */
     public QuanLyNhanVien() {
         initComponents();
-        initComponents();
             // Set layout cho panel chính
     jPanelQLNV.setLayout(new BorderLayout(10, 10)); // 10px gap
     
