@@ -98,6 +98,7 @@ public class HoaDonDAO {
             return 0;
         }
     }
+
     public int updatetrangThai(String idHD, String trangThai) {
         String sql = "UPDATE HOADON SET TRANGTHAI = ? WHERE ID_HD = ?";
 
@@ -164,8 +165,6 @@ public class HoaDonDAO {
     }
 
     // LƯU THÔNG TIN VÀO HÓA ĐƠN CHỜ 
-  
-
     public int SaveHDCHO(HoaDon hdc) {
         String sql = "INSERT INTO HOADON VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
@@ -297,6 +296,29 @@ public class HoaDonDAO {
         return lstHDC;
     }
 
+    public List<HoaDon> getALLID_hoadon(String ID_HD) {
+        List<HoaDon> lstHDC = new ArrayList<>();
+        String sql = "SELECT * FROM HOADON WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setString(1, ID_HD);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                HoaDon hdc = new HoaDon();
+                hdc.setID_HD(rs.getString("ID_HD"));
+                hdc.setNgayThangNam(rs.getString("NGAYTHANGNAM"));
+                hdc.setThoiGian(rs.getString("THOIGIAN"));
+                hdc.setTongTien(rs.getFloat("TONGTIEN"));
+                hdc.setUuDai(rs.getString("GIATRI"));
+                hdc.setTrangThai(rs.getString("TRANGTHAI"));
+                lstHDC.add(hdc);
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi: " + e.getMessage());
+        }
+        return lstHDC;
+    }
+
     public Object getRowHDCHO(HoaDon hdc) {
         Object[] row = new Object[]{
             hdc.getID_HD(),
@@ -304,7 +326,8 @@ public class HoaDonDAO {
         };
         return row;
     }
-    public Object getRowHDDTT(HoaDon hd){
+
+    public Object getRowHDDTT(HoaDon hd) {
         Object[] row = new Object[]{
             hd.getID_HD(),
             hd.getNgayThangNam(),

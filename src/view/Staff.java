@@ -23,9 +23,11 @@ public class Staff extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setupButtonStyle(btnLogOut);
         setupButtonStyle(btnBanHang);
-        setupButtonStyle(btnXuatHoaDon);
         
         pnlMain.setLayout(new BorderLayout());
+        
+        addHoverEffect(btnLogOut);
+        addHoverEffect(btnBanHang);
     }
     
     public void setForm(JComponent jcom){
@@ -47,6 +49,18 @@ public class Staff extends javax.swing.JFrame {
         button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
     }
 
+    private void addHoverEffect(javax.swing.JButton button) {
+    Color originalColor = button.getBackground();
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(Color.decode("#3b5998"));
+        }
+
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(originalColor);
+        }
+    });
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,7 +74,6 @@ public class Staff extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         lblAccount = new javax.swing.JLabel();
         btnBanHang = new javax.swing.JButton();
-        btnXuatHoaDon = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         btnLogOut = new javax.swing.JButton();
         lblExit = new javax.swing.JLabel();
@@ -108,17 +121,6 @@ public class Staff extends javax.swing.JFrame {
         btnBanHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBanHangActionPerformed(evt);
-            }
-        });
-
-        btnXuatHoaDon.setBackground(new java.awt.Color(31, 51, 86));
-        btnXuatHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnXuatHoaDon.setForeground(new java.awt.Color(255, 255, 255));
-        btnXuatHoaDon.setText("XUẤT HOÁ ĐƠN");
-        btnXuatHoaDon.setBorder(null);
-        btnXuatHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnXuatHoaDonActionPerformed(evt);
             }
         });
 
@@ -176,16 +178,14 @@ public class Staff extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                    .addComponent(btnBanHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(btnBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,9 +193,7 @@ public class Staff extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(85, 85, 85)
                 .addComponent(btnBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 473, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 558, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -245,8 +243,6 @@ public class Staff extends javax.swing.JFrame {
         btnBanHang.setBackground(Color.decode("#1c2e4a"));
         btnBanHang.setForeground(Color.decode("#FFFFFF"));
 
-        btnXuatHoaDon.setBackground(Color.decode("#1c2e4a"));
-        btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
@@ -264,24 +260,7 @@ public class Staff extends javax.swing.JFrame {
         btnLogOut.setBackground(Color.decode("#1c2e4a"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
 
-        btnXuatHoaDon.setBackground(Color.decode("#1c2e4a"));
-        btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnBanHangActionPerformed
-
-    private void btnXuatHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatHoaDonActionPerformed
-        btnXuatHoaDon.setBackground(Color.decode("#4E6688"));
-        btnXuatHoaDon.setForeground(Color.decode("#FFFFFF"));
-        btnXuatHoaDon.setFocusPainted(false);
-        btnXuatHoaDon.setBorderPainted(false);
-        btnXuatHoaDon.setContentAreaFilled(false);
-        btnXuatHoaDon.setOpaque(true);
-
-        btnLogOut.setBackground(Color.decode("#1c2e4a"));
-        btnLogOut.setForeground(Color.decode("#FFFFFF"));
-
-        btnBanHang.setBackground(Color.decode("#1c2e4a"));
-        btnBanHang.setForeground(Color.decode("#FFFFFF"));
-    }//GEN-LAST:event_btnXuatHoaDonActionPerformed
 
     private void btnBanHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBanHangMouseClicked
         QuanLyBanHang bh = new QuanLyBanHang();
@@ -329,7 +308,6 @@ public class Staff extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBanHang;
     private javax.swing.JButton btnLogOut;
-    private javax.swing.JButton btnXuatHoaDon;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

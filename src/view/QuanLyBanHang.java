@@ -407,12 +407,19 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         int i = tblHoaDon.getSelectedRow();
         if (i >= 0) {
             String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
-            String uudai = hdd.getALL().get(i).getUuDai();
+
+            List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
+            if (!listHD.isEmpty()) {
+                String uudai = listHD.get(0).getUuDai();
+                lblUuDai.setText(uudai + " Đã áp dụng");
+            } else {
+                lblUuDai.setText("Không có ưu đãi");
+            }
+
             lblMaHD.setText(ID_HD);
-            lblUuDai.setText(uudai + " Đã áp dụng");
+
             List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
             modelCTHD.setRowCount(0);
-
             for (ChiTietHoaDon cthd : lstcthd) {
                 modelCTHD.addRow(new Object[]{
                     cthd.getID_SP(),
@@ -490,7 +497,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     private String generateMaHD() {
         Random rnd = new Random();
-        int number = 100000 + rnd.nextInt(900000);
+        int number = 10000000 + rnd.nextInt(90000000);
         return "HD" + number;
     }
 
@@ -748,28 +755,25 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     public void uuDai() {
         int j = tblUuDai.getSelectedRow();
         int i = tblHoaDon.getSelectedRow();
-
         if (i < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn trong bảng để áp dụng ưu đãi.");
             return;
         }
 
         String ID_HD = lblMaHD.getText();
-        String uuDai = lblUuDai.getText();
-        float tong = 0;
-
         if (ID_HD.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã hoá đơn không hợp lệ!");
             return;
         }
 
-        if (uuDai.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ưu đãi");
+        // Kiểm tra nếu hóa đơn đã áp dụng ưu đãi thì không cho áp dụng tiếp
+        List<HoaDon> dsHoaDon = hdd.getALL();
+        if (i >= dsHoaDon.size()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn phù hợp.");
             return;
         }
 
-        // Kiểm tra nếu hóa đơn đã áp dụng ưu đãi thì không cho áp dụng tiếp
-        String uuDaiHienTai = hdd.getALL().get(i).getUuDai();
+        String uuDaiHienTai = dsHoaDon.get(i).getUuDai(); // kiểm tra theo DB
         try {
             float daApDung = Float.parseFloat(uuDaiHienTai.replace("%", "").trim());
             if (daApDung > 0) {
@@ -777,12 +781,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi định dạng ưu đãi trong hóa đơn.");
-            return;
+            // không xử lý vì có thể hóa đơn chưa có ưu đãi -> an toàn
         }
 
         if (j >= 0) {
             try {
+                float tong = 0;
                 float tongTien = unformatCurrency(tblHoaDon.getValueAt(i, 1).toString());
                 float giaUuDai = unformatCurrency(tblUuDai.getValueAt(j, 1).toString());
                 String giaTri = tblUuDai.getValueAt(j, 0).toString();
@@ -796,8 +800,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         tong += ct.getGiaSP() * ct.getSoLuong();
                     }
 
-                    float tongSauUuDai = tong * (1 - phanTram / 100);
-                    hdd.updateUuDai(ID_HD, giaTri); // chỉ lưu "%", không lưu "Đã áp dụng"
+                    float tongSauUuDai = tong * (1 - phanTram / 100f);
+                    hdd.updateUuDai(ID_HD, giaTri);
                     hdd.updateTongTien(ID_HD, tongSauUuDai);
                     fillTableHDCho();
                 } else {
@@ -832,29 +836,29 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Không có hóa đơn nào trong danh sách!");
             return;
         }
-
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán");
             return;
         }
 
-        String ID_HD = hdd.getALL().get(i).getID_HD();
-        String thoiGian = hdd.getALL().get(i).getThoiGian();
-        String ngayThangNam = hdd.getALL().get(i).getNgayThangNam();
-        String uuDai = hdd.getALL().get(i).getUuDai();
+        String ID_HD = lblMaHD.getText();
+        List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
+        if (listHD.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!");
+            return;
+        }
+        String thoiGian = listHD.get(0).getThoiGian();
+        String ngayThangNam = listHD.get(0).getNgayThangNam();
+        String uuDai = listHD.get(0).getUuDai();
         String trangThai = "Đã thanh toán";
-
         List<ChiTietHoaDon> ds = hdd.getAllID_HD(ID_HD);
         float tongTien = 0;
-
         for (ChiTietHoaDon ct : ds) {
             tongTien += ct.getGiaSP() * ct.getSoLuong();
         }
-
         float tienUuDai = 0;
-        float tienHD = tongTien; // Giả định không có ưu đãi
-
+        float tienHD = tongTien;
         if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
             String uuDaiPhanTram = uuDai.replace("%", "").trim();
             float phanTram = Float.parseFloat(uuDaiPhanTram);
@@ -864,24 +868,20 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         // Tạo nội dung hóa đơn
         StringBuilder sb = new StringBuilder();
+
         sb.append("HOÁ ĐƠN THANH TOÁN\n");
-        sb.append("--------------------------------------------------\n");
+        sb.append("_________________________________________\n");
         sb.append("Mã hóa đơn   : ").append(ID_HD).append("\n");
         sb.append("Ngày lập     : ").append(ngayThangNam).append("\n");
         sb.append("Thời gian    : ").append(thoiGian).append("\n\n");
         sb.append("Danh sách món:\n");
-        sb.append("--------------------------------------------------\n");
+        sb.append("_________________________________________\n");
         sb.append(String.format("%-25s %-5s %-15s\n", "Tên món", "SL", "Giá món"));
-        sb.append("--------------------------------------------------\n");
-
+        sb.append("_________________________________________\n");
         for (ChiTietHoaDon ct : ds) {
-            String ten = ct.getTenSP();
-            int soLuong = ct.getSoLuong();
-            float gia = ct.getGiaSP();
-            sb.append(String.format("%-25s %-5d %-15s\n", ten, soLuong, formatVND(gia)));
+            sb.append(String.format("%-25s %-5d %-15s\n", ct.getTenSP(), ct.getSoLuong(), formatVND(ct.getGiaSP())));
         }
-
-        sb.append("--------------------------------------------------\n");
+        sb.append("_________________________________________\n");
         sb.append("Tổng tiền    : ").append(formatVND(tongTien)).append("\n");
         if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
             sb.append("Ưu đãi       : ").append(uuDai).append(" - ").append(formatVND(tienUuDai)).append("\n");
@@ -889,23 +889,39 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             sb.append("Ưu đãi       : 0% - 0 VND\n");
         }
         sb.append("Thành tiền   : ").append(formatVND(tienHD)).append("\n");
+        sb.append("_________________________________________\n");
+        sb.append("Cảm ơn quý khách, hẹn gặp lại!");
 
-        // Xác nhận thanh toán
-        if (JOptionPane.showConfirmDialog(this, sb.toString(), "Xác nhận thanh toán",
+        JTextArea textArea = new JTextArea(sb.toString());
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        textArea.setBackground(Color.WHITE);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(400, 500));
+
+        if (JOptionPane.showConfirmDialog(this, scrollPane, "Xác nhận thanh toán",
                 JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
             return;
         }
-
-        // Lưu hóa đơn
         int update = hdd.updatetrangThai(ID_HD, trangThai);
         if (update == 1) {
+            int print = JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất hóa đơn không?", "In hóa đơn",
+                    JOptionPane.YES_NO_OPTION);
+            if (print == JOptionPane.YES_OPTION) {
+                try {
+                    textArea.print();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi in hóa đơn: " + ex.getMessage());
+                }
+            }
+
             fillTableHDCho();
             modelCTHD.setRowCount(0);
             lblMaHD.setText("");
             lblMaSP.setText("");
             lblUuDai.setText("");
             txtSoLuong.setText("");
-            JOptionPane.showMessageDialog(this, "Thánh toán thành công!", "Xác nhận", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Xác nhận", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Thanh toán thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
