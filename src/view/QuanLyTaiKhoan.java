@@ -65,7 +65,6 @@ public void showdetail(){
             txtEmail1.setEnabled(false);
             txtID.setEnabled(false);
             txtPass.setEnabled(false);
-            cboVaitro.setEnabled(false);
             btnLamMoi.setEnabled(false);
         } else {
             btnKhoa.setEnabled(true);
@@ -78,13 +77,11 @@ public void showdetail(){
                 txtEmail1.setEnabled(true);
                 txtID.setEnabled(false);
                 txtPass.setEnabled(false);  
-                cboVaitro.setEnabled(false);
             } else {
                 // Nếu là ADMIN, cho phép sửa tất cả
                 txtEmail1.setEnabled(true);
                 txtID.setEnabled(true);
                 txtPass.setEnabled(true);
-                cboVaitro.setEnabled(true);
             }
         }
     }
