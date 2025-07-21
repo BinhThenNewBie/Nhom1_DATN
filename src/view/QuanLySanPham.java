@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -25,25 +26,28 @@ import javax.swing.table.DefaultTableModel;
  */
 public class QuanLySanPham extends javax.swing.JFrame {
 
+    List<SanPham> list = new ArrayList<>();
     DefaultTableModel tableModel = new DefaultTableModel();
     SanPhamDAO spDao = new SanPhamDAO();
     String strAnh = "";
+
     /**
      * Creates new form QuanLySanPham
      */
     public QuanLySanPham() {
         initComponents();
         // Set layout cho panel chính
-    jPanelQLSP.setLayout(new BorderLayout(10, 10)); // 10px gap
-    
-    // Căn chỉnh panels
-    jPanelQLSP.add(jPanel3, BorderLayout.NORTH);  // Panel form ở trên
-    jPanelQLSP.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
-    
-    // Set kích thước
-    jPanel3.setPreferredSize(new Dimension(1240, 350)); // Panel trên cao 350px
-    jPanel1.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
-    
+        jPanelQLSP.setLayout(new BorderLayout(10, 10)); // 10px gap
+
+        // Căn chỉnh panels
+        jPanelQLSP.add(jPanel3, BorderLayout.NORTH);  // Panel form ở trên
+        jPanelQLSP.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
+
+        // Set kích thước
+        jPanel3.setPreferredSize(new Dimension(1240, 350)); // Panel trên cao 350px
+        jPanel1.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
+
+        loadTatCa();
         initTable();
         fillTable();
     }
@@ -67,26 +71,33 @@ public class QuanLySanPham extends javax.swing.JFrame {
 
     public void showdetail() {
         int i = tblBang.getSelectedRow();
-        if (i >= 0) {
-            String timKiem = txtTimkiem.getText().trim();
-            SanPham sp;
-
-            if (timKiem.isEmpty()) {
-                sp = spDao.getAll().get(i);
-            } else {
-                List<SanPham> list = spDao.getSPByTen(timKiem);
-                if (list.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm có tên: " + timKiem);
-                    return;
-                }
-                sp = list.get(i);
-            }
+        if (i >= 0 && i < list.size()) {
+            SanPham sp = list.get(i);
 
             lblID.setText(sp.getIDSanPham());
             txtTensp.setText(sp.getTenSanPham());
             txtGiatien.setText(String.valueOf(sp.getGiaTien()));
             cboLoai.setSelectedItem(sp.getLoaiSanPham());
             strAnh = sp.getIMG();
+            //        int i = tblBang.getSelectedRow();
+//        if (i >= 0) {
+//            String timKiem = txtTimkiem.getText().trim();
+//            SanPham sp;
+//            if (timKiem.isEmpty()) {
+//                sp = spDao.getAll().get(i);
+//            } else {
+//                List<SanPham> list = spDao.getSPByTen(timKiem);
+//                if (list.isEmpty()) {
+//                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm có tên: " + timKiem);
+//                    return;
+//                }
+//                sp = list.get(i);
+//            }
+//            lblID.setText(sp.getIDSanPham());
+//            txtTensp.setText(sp.getTenSanPham());
+//            txtGiatien.setText(String.valueOf(sp.getGiaTien()));
+//            cboLoai.setSelectedItem(sp.getLoaiSanPham());
+//            strAnh = sp.getIMG();
 
             if (strAnh == null || strAnh.trim().isEmpty() || strAnh.equalsIgnoreCase("NO IMAGE")) {
                 lblAnh.setText("Hình Ảnh Không tồn tại");
@@ -109,6 +120,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
                     lblAnh.setIcon(null);
                 }
             }
+
             int trangThai = sp.getTrangThai();
             if (trangThai == 0) {
                 btnThemSP.setEnabled(false);
@@ -126,7 +138,6 @@ public class QuanLySanPham extends javax.swing.JFrame {
                 txtTensp.setEnabled(false);
                 txtGiatien.setEnabled(false);
                 txtTimkiem.setEnabled(false);
-
             } else {
                 btnThemSP.setEnabled(true);
                 btnMoKhoa.setEnabled(false);
@@ -154,20 +165,20 @@ public class QuanLySanPham extends javax.swing.JFrame {
             return;
         }
 
-        List<SanPham> list = spDao.getSPByTen(ten);
+        list = spDao.getSPByTen(ten);
         if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm nào!");
+            JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm theo tên!");
         } else {
-            loadTable(list);  // nạp bảng dữ liệu tìm được
-            tblBang.setRowSelectionInterval(0, 0); // chọn dòng đầu tiên
-            showdetail(); // hiển thị chi tiết
+            loadTable(list);
+            tblBang.setRowSelectionInterval(0, 0);
+            showdetail();
         }
     }
 
-    public void loadTable(List<SanPham> list) {
+    public void loadTable(List<SanPham> sanPhamList) {
         DefaultTableModel model = (DefaultTableModel) tblBang.getModel();
         model.setRowCount(0);
-        for (SanPham sp : list) {
+        for (SanPham sp : sanPhamList) {
             model.addRow(new Object[]{
                 sp.getIDSanPham(),
                 sp.getTenSanPham(),
@@ -179,20 +190,27 @@ public class QuanLySanPham extends javax.swing.JFrame {
         }
     }
 
-// Bỏ phương thức lọc theo trạng thái
     public void locTheoLoai() {
         String loai = cboLocSP.getSelectedItem().toString();
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        tableModel.setRowCount(0);
 
-        List<SanPham> list;
         if (loai.equalsIgnoreCase("Tất cả")) {
-            list = spDao.getAll(); // Gọi từ DAO
+            list = spDao.getAll();
         } else {
-            list = spDao.locTheoLoai(loai); // Gọi từ DAO
+            list = spDao.locTheoLoai(loai);
         }
 
         for (SanPham sp : list) {
-            tableModel.addRow(spDao.getRow(sp)); // Thêm vào bảng
+            tableModel.addRow(spDao.getRow(sp));
+        }
+    }
+
+    public void loadTatCa() {
+        tableModel.setRowCount(0);
+        list = spDao.getAll();
+
+        for (SanPham sp : list) {
+            tableModel.addRow(spDao.getRow(sp));
         }
     }
 
