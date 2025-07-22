@@ -740,7 +740,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         try {
             int soLuong = Integer.parseInt(soLuongStr);
             if (soLuong <= 0) {
-                JOptionPane.showMessageDialog(this, "Số lượng phải là số nguyên dương!");
+                JOptionPane.showMessageDialog(this, "Số lượng tối thiểu là 1");
+                return false;
+            }
+            if (soLuong >= 50){
+                JOptionPane.showMessageDialog(this, "Số lượng tối đa là 50");
                 return false;
             }
         } catch (NumberFormatException e) {
@@ -840,16 +844,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     }
 
     public void thanhToan() {
-        if (tblChiTietHoaDon.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Không có hóa đơn nào trong danh sách!");
-            return;
-        }
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán");
             return;
         }
-
+        if (tblChiTietHoaDon.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
+            return;
+        }
         String ID_HD = lblMaHD.getText();
         List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
         if (listHD.isEmpty()) {
