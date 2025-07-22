@@ -23,6 +23,20 @@ public class HoaDonDAO {
     List<HoaDon> lstHDC = new ArrayList<>();
     List<ChiTietHoaDon> lstHDCT = new ArrayList<>();
 
+    public boolean existsMaHD(String maHD) {
+        String sql = "SELECT COUNT(*) FROM HOADON WHERE ID_HD = ?";
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maHD);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public ChiTietHoaDon selectCTHD(String ID_HD, String ID_SP) {
         String sql = "SELECT * FROM CHITIETHOADON WHERE ID_HD = ? AND ID_SP = ?";
         try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
