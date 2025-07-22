@@ -31,8 +31,8 @@ public class Login extends javax.swing.JFrame {
     public void checklogin(){
         String usernamein = txtusername.getText();
         char[] passwordin = txtpass.getPassword();
+        boolean loginSuccess = false;
         String passwordStr = new String(passwordin);
-        boolean check = false;
         TaikhoanDAO tkDAO = new TaikhoanDAO();
         List<Taikhoan> dstk = tkDAO.GETALL();
         
@@ -40,28 +40,29 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Xin vui lòng nhập đầy đủ thông tin", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
+   
+      
+
+for (Taikhoan tk : dstk) {
+    if(usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())) {
+        loginSuccess = true;
         
-        
-        
-        for (Taikhoan tk : dstk ) {
-            if(usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())){
-                check = true;
-                if(tk.getVaiTro().equals("ADMIN")){
-                    Admin ad = new Admin();
-                    ad.setVisible(true);
-                }else{
-                    Staff st = new Staff();
-                    st.setVisible(true);
-                }
-                
-            }
-           break;
-           
+        if(tk.getVaiTro().equals("ADMIN")) {
+            Admin ad = new Admin();
+            ad.setVisible(true);
+        } else if(tk.getVaiTro().equals("STAFF")) {
+            Staff st = new Staff();
+            st.setVisible(true);
         }
-        if(!check){
-            JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
-        }
-    
+        
+        break; 
+    }
+}
+
+
+if(!loginSuccess) {
+    JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
+}
     }
     
     
