@@ -740,7 +740,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         try {
             int soLuong = Integer.parseInt(soLuongStr);
             if (soLuong <= 0) {
-                JOptionPane.showMessageDialog(this, "Số lượng phải là số nguyên dương!");
+                JOptionPane.showMessageDialog(this, "Số lượng tối thiểu là 1");
+                return false;
+            }
+            if (soLuong >= 50){
+                JOptionPane.showMessageDialog(this, "Số lượng tối đa là 50");
                 return false;
             }
         } catch (NumberFormatException e) {
