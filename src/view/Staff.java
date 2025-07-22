@@ -22,11 +22,14 @@ public class Staff extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setupButtonStyle(btnLogOut);
+        setupButtonStyle(btnQLBH);
+        setupButtonStyle(btnQLHD);
         
         pnlMain.setLayout(new BorderLayout());
         
         addHoverEffect(btnLogOut);
-        pnlMain();
+        addHoverEffect(btnQLBH);
+        addHoverEffect(btnQLHD);
     }
     
     public void setForm(JComponent jcom){
@@ -35,19 +38,13 @@ public class Staff extends javax.swing.JFrame {
         pnlMain.repaint();
         pnlMain.revalidate();
     }
-    public void pnlMain(){
-        QuanLyBanHang bh = new QuanLyBanHang();
-        
-        JPanel panelBanHang = bh.pnlBanHang();
-        
-        setForm(panelBanHang);
-    }
+
     private void setupButtonStyle(javax.swing.JButton button) {
         button.setFocusPainted(false);          
         button.setBorderPainted(false);          
         button.setContentAreaFilled(false);       
         button.setOpaque(true);                 
-        button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
+        button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
         button.setForeground(Color.WHITE);        
         button.setBackground(Color.decode("#1c2e4a")); 
 
@@ -81,6 +78,8 @@ public class Staff extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         lblExit = new javax.swing.JLabel();
         btnLogOut = new javax.swing.JButton();
+        btnQLBH = new javax.swing.JButton();
+        btnQLHD = new javax.swing.JButton();
         pnlMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -148,34 +147,75 @@ public class Staff extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
+
+        btnQLBH.setBackground(new java.awt.Color(31, 51, 86));
+        btnQLBH.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnQLBH.setForeground(new java.awt.Color(255, 255, 255));
+        btnQLBH.setText("QUẢN LÝ BÁN HÀNG");
+        btnQLBH.setBorder(null);
+        btnQLBH.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQLBHMouseClicked(evt);
+            }
+        });
+        btnQLBH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQLBHActionPerformed(evt);
+            }
+        });
+
+        btnQLHD.setBackground(new java.awt.Color(31, 51, 86));
+        btnQLHD.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnQLHD.setForeground(new java.awt.Color(255, 255, 255));
+        btnQLHD.setText("QUẢN LÝ HOÁ ĐƠN");
+        btnQLHD.setBorder(null);
+        btnQLHD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQLHDMouseClicked(evt);
+            }
+        });
+        btnQLHD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQLHDActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnQLHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnQLBH, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 692, Short.MAX_VALUE)
+                .addGap(88, 88, 88)
+                .addComponent(btnQLBH, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(btnQLHD, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 478, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -183,7 +223,7 @@ public class Staff extends javax.swing.JFrame {
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1311, Short.MAX_VALUE)
+            .addGap(0, 1315, Short.MAX_VALUE)
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,9 +235,9 @@ public class Staff extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,12 +261,67 @@ public class Staff extends javax.swing.JFrame {
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);
         btnLogOut.setOpaque(true);
-
+        
+        btnQLBH.setBackground(Color.decode("#1c2e4a"));
+        btnQLBH.setForeground(Color.decode("#FFFFFF"));
+        
+        btnQLHD.setBackground(Color.decode("#1c2e4a"));
+        btnQLHD.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
         System.exit(0);
     }//GEN-LAST:event_lblExitMouseClicked
+
+    private void btnQLBHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLBHActionPerformed
+        // TODO add your handling code here:
+        btnQLBH.setBackground(Color.decode("#4E6688"));
+        btnQLBH.setForeground(Color.decode("#FFFFFF"));
+        btnQLBH.setFocusPainted(false);
+        btnQLBH.setBorderPainted(false);
+        btnQLBH.setContentAreaFilled(false);
+        btnQLBH.setOpaque(true);
+        
+        btnLogOut.setBackground(Color.decode("#1c2e4a"));
+        btnLogOut.setForeground(Color.decode("#FFFFFF"));
+        
+        btnQLHD.setBackground(Color.decode("#1c2e4a"));
+        btnQLHD.setForeground(Color.decode("#FFFFFF"));
+    }//GEN-LAST:event_btnQLBHActionPerformed
+
+    private void btnQLBHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLBHMouseClicked
+        // TODO add your handling code here:
+        QuanLyBanHang bh = new QuanLyBanHang();
+        
+        JPanel panelBanHang = bh.pnlBanHang();
+        
+        setForm(panelBanHang);
+    }//GEN-LAST:event_btnQLBHMouseClicked
+
+    private void btnQLHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLHDMouseClicked
+        // TODO add your handling code here:
+        QuanLyHoaDon hd = new QuanLyHoaDon();
+        
+        JPanel panelHoaDon = hd.pnlXuat();
+        
+        setForm(panelHoaDon);
+    }//GEN-LAST:event_btnQLHDMouseClicked
+
+    private void btnQLHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLHDActionPerformed
+        // TODO add your handling code here:
+        btnQLHD.setBackground(Color.decode("#4E6688"));
+        btnQLHD.setForeground(Color.decode("#FFFFFF"));
+        btnQLHD.setFocusPainted(false);
+        btnQLHD.setBorderPainted(false);
+        btnQLHD.setContentAreaFilled(false);
+        btnQLHD.setOpaque(true);
+        
+        btnLogOut.setBackground(Color.decode("#1c2e4a"));
+        btnLogOut.setForeground(Color.decode("#FFFFFF"));
+        
+        btnQLBH.setBackground(Color.decode("#1c2e4a"));
+        btnQLBH.setForeground(Color.decode("#FFFFFF"));
+    }//GEN-LAST:event_btnQLHDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,6 +360,8 @@ public class Staff extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogOut;
+    private javax.swing.JButton btnQLBH;
+    private javax.swing.JButton btnQLHD;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
