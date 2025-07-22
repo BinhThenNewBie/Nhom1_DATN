@@ -48,7 +48,7 @@ public class ThongKe extends javax.swing.JFrame {
     
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
+        setSize(1500, 1080);
         
         // Main panel
         pnlMain = new JPanel(new BorderLayout());
