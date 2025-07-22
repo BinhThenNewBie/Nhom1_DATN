@@ -845,7 +845,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public void thanhToan() {
         if (tblChiTietHoaDon.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Không có hóa đơn nào trong danh sách!");
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
             return;
         }
         int i = tblHoaDon.getSelectedRow();
