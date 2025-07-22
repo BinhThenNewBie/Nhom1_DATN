@@ -411,7 +411,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
             if (!listHD.isEmpty()) {
                 String uudai = listHD.get(0).getUuDai();
-                lblUuDai.setText(uudai + " Đã áp dụng");
+                lblUuDai.setText(uudai + " Được áp dụng");
             } else {
                 lblUuDai.setText("Không có ưu đãi");
             }
@@ -446,10 +446,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         }
 
         // Lấy dữ liệu từ bảng
-        String maHD = lblMaHD.getText().trim(); // mã hóa đơn không có trong bảng
-        String maSP = tblChiTietHoaDon.getValueAt(i, 0).toString(); // cột 0: ID_SP
+        String maHD = lblMaHD.getText().trim();
+        String maSP = tblChiTietHoaDon.getValueAt(i, 0).toString();
 
-        // Gọi DAO để lấy chi tiết hóa đơn
         ChiTietHoaDon cthd = hdd.selectCTHD(maHD, maSP);
         if (cthd == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy chi tiết hóa đơn!");
@@ -497,8 +496,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     private String generateMaHD() {
         Random rnd = new Random();
-        int number = 10000000 + rnd.nextInt(90000000);
-        return "HD" + number;
+        String maHD;
+        do {
+            int number = 100000 + rnd.nextInt(900000);
+            maHD = "HD" + number;
+        } while (hdd.existsMaHD(maHD));
+        return maHD;
     }
 
     public void createMaHD() {
@@ -753,65 +756,70 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     }
 
     public void uuDai() {
-        int j = tblUuDai.getSelectedRow();
-        int i = tblHoaDon.getSelectedRow();
-        if (i < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn trong bảng để áp dụng ưu đãi.");
+        int rowUuDai = tblUuDai.getSelectedRow();
+        int rowHoaDon = tblHoaDon.getSelectedRow();
+
+        if (rowHoaDon < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn để áp dụng ưu đãi.");
             return;
         }
 
-        String ID_HD = lblMaHD.getText();
+        String ID_HD = tblHoaDon.getValueAt(rowHoaDon, 0).toString().trim(); // lấy đúng từ bảng
         if (ID_HD.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã hoá đơn không hợp lệ!");
             return;
         }
 
-        // Kiểm tra nếu hóa đơn đã áp dụng ưu đãi thì không cho áp dụng tiếp
-        List<HoaDon> dsHoaDon = hdd.getALL();
-        if (i >= dsHoaDon.size()) {
+        List<HoaDon> dsHoaDon = hdd.getALLID_hoadon(ID_HD);
+        if (dsHoaDon.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn phù hợp.");
             return;
         }
 
-        String uuDaiHienTai = dsHoaDon.get(i).getUuDai(); // kiểm tra theo DB
-        try {
-            float daApDung = Float.parseFloat(uuDaiHienTai.replace("%", "").trim());
-            if (daApDung > 0) {
-                JOptionPane.showMessageDialog(this, "Hóa đơn đã áp dụng ưu đãi. Vui lòng xóa ưu đãi cũ trước khi chọn mã khác.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            // không xử lý vì có thể hóa đơn chưa có ưu đãi -> an toàn
-        }
-
-        if (j >= 0) {
+        HoaDon hd = dsHoaDon.get(0);
+        String uuDaiHienTai = hd.getUuDai();
+        if (uuDaiHienTai != null && !uuDaiHienTai.trim().isEmpty()) {
             try {
-                float tong = 0;
-                float tongTien = unformatCurrency(tblHoaDon.getValueAt(i, 1).toString());
-                float giaUuDai = unformatCurrency(tblUuDai.getValueAt(j, 1).toString());
-                String giaTri = tblUuDai.getValueAt(j, 0).toString();
-
-                if (tongTien >= giaUuDai) {
-                    float phanTram = Float.parseFloat(giaTri.replace("%", "").trim());
-                    lblUuDai.setText(giaTri + " Đã áp dụng");
-
-                    List<ChiTietHoaDon> list = hdd.getAllID_HD(ID_HD);
-                    for (ChiTietHoaDon ct : list) {
-                        tong += ct.getGiaSP() * ct.getSoLuong();
-                    }
-
-                    float tongSauUuDai = tong * (1 - phanTram / 100f);
-                    hdd.updateUuDai(ID_HD, giaTri);
-                    hdd.updateTongTien(ID_HD, tongSauUuDai);
-                    fillTableHDCho();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ưu đãi không hợp lệ! Hóa đơn chưa đủ điều kiện.");
-                    lblUuDai.setText("");
+                float daCoUuDai = Float.parseFloat(uuDaiHienTai.replace("%", "").trim());
+                if (daCoUuDai > 0) {
+                    JOptionPane.showMessageDialog(this, "Hóa đơn đã áp dụng ưu đãi. Vui lòng xóa ưu đãi cũ trước.");
+                    return;
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Lỗi định dạng số!");
+                // Không đọc được -> coi như chưa có ưu đãi
             }
         }
+
+        if (rowUuDai < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã ưu đãi để áp dụng.");
+            return;
+        }
+
+        // Lấy thông tin ưu đãi từ bảng
+        String giaTriUuDai = tblUuDai.getValueAt(rowUuDai, 0).toString(); // ví dụ "10%"
+        float dieuKien = unformatCurrency(tblUuDai.getValueAt(rowUuDai, 1).toString()); // ví dụ: 200000
+        float tongTienHD = unformatCurrency(tblHoaDon.getValueAt(rowHoaDon, 1).toString());
+
+        if (tongTienHD < dieuKien) {
+            JOptionPane.showMessageDialog(this, "Không đủ điều kiện để áp dụng ưu đãi này.");
+            return;
+        }
+
+        // Tính lại tổng tiền chi tiết hóa đơn
+        List<ChiTietHoaDon> chiTiet = hdd.getAllID_HD(ID_HD);
+        float tongGoc = 0;
+        for (ChiTietHoaDon ct : chiTiet) {
+            tongGoc += ct.getGiaSP() * ct.getSoLuong();
+        }
+
+        float phanTramUuDai = Float.parseFloat(giaTriUuDai.replace("%", "").trim());
+        float tongSauUuDai = tongGoc * (1 - phanTramUuDai / 100f);
+
+        // Cập nhật DB
+        hdd.updateUuDai(ID_HD, giaTriUuDai);
+        hdd.updateTongTien(ID_HD, tongSauUuDai);
+        lblUuDai.setText(giaTriUuDai + " Được áp dụng");
+        fillTableHDCho();
     }
 
     public void xoaUuDai() {
@@ -1308,8 +1316,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(pnlThongTinLayout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblUuDai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnTaoHoaDon)
                         .addGap(21, 21, 21))))
         );
@@ -1346,8 +1354,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlThongTinLayout.createSequentialGroup()
                         .addComponent(lblTittleUuDai)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnTaoHoaDon))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

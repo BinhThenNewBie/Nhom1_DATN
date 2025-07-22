@@ -32,6 +32,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
      */
     public QuanLyUuDai() {
         initComponents();
+        this.setSize(1200, 800);
+        this.setLocationRelativeTo(null);     // Canh giữa màn hình   
         // Set layout cho panel chính
     jPanelQLUD.setLayout(new BorderLayout(10, 10)); // 10px gap
     
@@ -39,7 +41,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
     jPanelQLUD.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
     
     // Set kích thước
-    jPanel1.setPreferredSize(new Dimension(1240, 350)); 
+    jPanel1.setPreferredSize(new Dimension(240, 350)); 
         initTable();
         fillTable();
     }
@@ -459,8 +461,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
                                                     .addComponent(cboNamStart1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(jLabel23))))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lblTrangThai1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(168, 168, 168))
+                                        .addComponent(lblTrangThai1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1070, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(108, 108, 108)
@@ -518,8 +519,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
                     .addComponent(btnLamMoi1)
                     .addComponent(btnSua1))
                 .addGap(65, 65, 65)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanelQLUDLayout = new javax.swing.GroupLayout(jPanelQLUD);
@@ -536,7 +537,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             .addGroup(jPanelQLUDLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -555,16 +556,23 @@ public class QuanLyUuDai extends javax.swing.JFrame {
 
     private void tblBang1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBang1MouseClicked
         // TODO add your handling code here:
+       
         showDetail();
     }//GEN-LAST:event_tblBang1MouseClicked
 
     private void btnThem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem1ActionPerformed
         // TODO add your handling code here:
+        if (!validateUuDai()) {
+            return;
+        }
         themUuDai();
     }//GEN-LAST:event_btnThem1ActionPerformed
 
     private void btnSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSua1ActionPerformed
         // TODO add your handling code here:
+        if (!validateUuDai()) {
+            return;
+        }
         suaUuDai();
     }//GEN-LAST:event_btnSua1ActionPerformed
 

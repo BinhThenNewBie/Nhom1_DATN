@@ -119,6 +119,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                 btnLamMoi.setEnabled(false);
                 btnThem.setEnabled(false);
                 txtIdnv.setEnabled(false);
+                txtAnh.setEnabled(false);
                 txtSdt.setEnabled(false);
                 txtTennv.setEnabled(false);
             } else {
@@ -129,6 +130,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                 btnThem.setEnabled(true);
                 txtIdnv.setEnabled(true);
                 txtSdt.setEnabled(true);
+                txtAnh.setEnabled(true);
                 txtTennv.setEnabled(true);
             }
 
@@ -515,6 +517,11 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         txtChucvu.setEnabled(false);
         txtChucvu.setFocusable(false);
         txtChucvu.setOpaque(true);
+        txtChucvu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtChucvuActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
         jLabel3.setText("SỐ ĐIỆN THOẠI");
@@ -614,9 +621,8 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdnv, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
@@ -763,6 +769,10 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_lblAnhMouseClicked
+
+    private void txtChucvuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChucvuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtChucvuActionPerformed
 
     /**
      * @param args the command line arguments
