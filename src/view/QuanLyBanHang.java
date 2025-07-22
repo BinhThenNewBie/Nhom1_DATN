@@ -844,16 +844,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     }
 
     public void thanhToan() {
-        if (tblChiTietHoaDon.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
-            return;
-        }
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán");
             return;
         }
-
+        if (tblChiTietHoaDon.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
+            return;
+        }
         String ID_HD = lblMaHD.getText();
         List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
         if (listHD.isEmpty()) {
