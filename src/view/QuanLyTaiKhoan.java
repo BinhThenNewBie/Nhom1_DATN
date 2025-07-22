@@ -31,6 +31,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     jPanelQLTK.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
         initTable();
         fillTable();
+        checkEmailTrungAdminStaff();
     }
     public void initTable(){
     tableModel = new DefaultTableModel();
@@ -85,6 +86,7 @@ public void showdetail(){
             }
         }
     }
+    checkEmailTrungAdminStaff();
 }
 
 public void lammoi(){
@@ -110,7 +112,26 @@ public void sua(){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập email!");
                 return;
             }
+            // Kiểm tra định dạng email
+            if (!Email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
+                return;
+            }
             
+            
+             // Lấy email của ADMIN và STAFF
+            String emailAdmin = tkd.getEmailByRole("ADMIN");
+            String emailStaff = tkd.getEmailByRole("STAFF");
+
+            // Kiểm tra email nhập có trùng với ADMIN hoặc STAFF khác không
+            if ("ADMIN".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailStaff)) {
+                JOptionPane.showMessageDialog(this, "Email này đang trùng với STAFF! Vui lòng nhập email khác.");
+                return;
+            }
+            if ("STAFF".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailAdmin)) {
+                JOptionPane.showMessageDialog(this, "Email này đang trùng với ADMIN! Vui lòng nhập email khác.");
+                return;
+            }
             int result = 0;
             
             // Nếu là STAFF, chỉ sửa email
@@ -201,6 +222,27 @@ public void moKhoaTaiKhoan(){
             JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần khóa!");
         }
     }
+public void checkEmailTrungAdminStaff() {
+    String emailAdmin = tkd.getEmailByRole("ADMIN");
+    String emailStaff = tkd.getEmailByRole("STAFF");
+
+    if (emailAdmin != null && emailStaff != null && emailAdmin.equalsIgnoreCase(emailStaff)) {
+        // Enable tất cả các control liên quan
+        btnSua.setEnabled(true);  
+        btnKhoa.setEnabled(false);
+        btnMokhoa.setEnabled(false);
+        btnLamMoi.setEnabled(false);
+        txtID.setEnabled(false);
+        txtPass.setEnabled(false);
+        txtEmail1.setEnabled(true);
+        cboVaitro.setEnabled(false);
+
+        txtEmail1.setText(emailAdmin); // Hoặc emailStaff đều như nhau
+        JOptionPane.showMessageDialog(this, 
+            "Email của ADMIN và STAFF đang bị trùng: " + emailAdmin + 
+            ". Vui lòng đổi email để tiếp tục sử dụng!");
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
