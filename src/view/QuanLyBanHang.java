@@ -541,10 +541,29 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         ChiTietHoaDon cthdCu = hdd.selectCTHD(ID_HD, ID_SP);
         if (cthdCu != null) {
-            int tongSoLuong = cthdCu.getSoLuong() + soLuong;
-            cthdCu.setSoLuong(tongSoLuong); // Cập nhật số lượng mới
+            int soLuongHienTai = cthdCu.getSoLuong();
+            int tongSoLuong = soLuongHienTai + soLuong;
+
+            if (tongSoLuong > 50) {
+                JOptionPane.showMessageDialog(this,
+                        "Bạn chỉ có thể thêm tối đa 50 sản phẩm.\n"
+                        + "Hiện tại đã có: " + soLuongHienTai + "\n"
+                        + "Bạn đang cố thêm: " + soLuong + "\n"
+                        + "Tổng cộng sẽ là: " + tongSoLuong + " > 50");
+                return;
+            }
+
+            cthdCu.setSoLuong(tongSoLuong);
             hdd.UpdateSP(ID_HD, ID_SP, cthdCu);
+
         } else {
+            if (soLuong > 50) {
+                JOptionPane.showMessageDialog(this,
+                        "Bạn chỉ có thể thêm tối đa 50 sản phẩm.\n"
+                        + "Bạn đang cố thêm: " + soLuong + " > 50");
+                return;
+            }
+
             for (SanPham sp : spd.getAll()) {
                 if (sp.getIDSanPham().equals(ID_SP)) {
                     ChiTietHoaDon cthd = new ChiTietHoaDon();
@@ -565,7 +584,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             tong += ct.getGiaSP() * ct.getSoLuong();
         }
 
-        //Kiểm tra nếu hóa đơn đã áp dụng ưu đãi
         String uuDai = hdd.getALL().stream()
                 .filter(hd -> hd.getID_HD().equals(ID_HD))
                 .findFirst()
@@ -743,7 +761,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Số lượng tối thiểu là 1");
                 return false;
             }
-            if (soLuong >= 50){
+            if (soLuong >= 50) {
                 JOptionPane.showMessageDialog(this, "Số lượng tối đa là 50");
                 return false;
             }
