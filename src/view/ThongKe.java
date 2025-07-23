@@ -48,7 +48,11 @@ public class ThongKe extends javax.swing.JFrame {
     
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setSize(1500, 1080);
+
+        setSize(1200, 825);
+
         
         // Main panel
         pnlMain = new JPanel(new BorderLayout());
@@ -57,7 +61,7 @@ public class ThongKe extends javax.swing.JFrame {
         // Header panel
         pnlHeader = new JPanel(new FlowLayout());
         pnlHeader.setBackground(new Color(31, 51, 86));
-        pnlHeader.setPreferredSize(new Dimension(1200, 80));
+        pnlHeader.setPreferredSize(new Dimension(1200, 50));
         
         lblTitle = new JLabel("THỐNG KÊ DOANH THU & HÓA ĐƠN");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
@@ -140,7 +144,7 @@ public class ThongKe extends javax.swing.JFrame {
         // Add components to main panel
         pnlMain.add(pnlHeader, BorderLayout.NORTH);
         
-        JPanel pnlContent = new JPanel(new BorderLayout(20, 20));
+        JPanel pnlContent = new JPanel(new BorderLayout(5, 5));
         pnlContent.setBackground(new Color(240, 248, 255));
         pnlContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
