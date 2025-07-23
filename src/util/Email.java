@@ -19,7 +19,6 @@ public class Email {
 
     static final String from = "binhdath06811@gmail.com";
     static final String password = "seramtljhgugykvk";
-    static forgotpass fgp = new forgotpass();
     static String nguoinhan = forgotpass.ngnhan;
     
     
