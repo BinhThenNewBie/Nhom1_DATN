@@ -60,6 +60,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
      */
     public QuanLyBanHang() {
         initComponents();
+        
         initTable();
         fillTableUuDai();
         fillTableHDCho();
@@ -1005,6 +1006,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        pnlBanHang.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         pnlChiTietHoaDon7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         lblTittlePnlChiTietHoaDon7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -1401,7 +1404,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addComponent(jSeparator2)
                     .addGroup(pnlMenuLayout.createSequentialGroup()
                         .addComponent(lblTittlePnlMenu)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 790, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -1445,7 +1448,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                 .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlBanHangLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(pnlBanHangLayout.createSequentialGroup()
                         .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -1477,7 +1481,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlUuDai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1608,7 +1612,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         });
     }
 
-    public JPanel pnlBanHang() {
+    public JPanel getPanelQLBH() {
         return pnlBanHang;
     }
 

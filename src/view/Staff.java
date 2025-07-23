@@ -20,19 +20,21 @@ public class Staff extends javax.swing.JFrame {
      */
     public Staff() {
         initComponents();
+                this.setSize(1655, 1000);
+
         setLocationRelativeTo(null);
         setupButtonStyle(btnLogOut);
         setupButtonStyle(btnQLBH);
         setupButtonStyle(btnQLHD);
-        
+
         pnlMain.setLayout(new BorderLayout());
-        
+
         addHoverEffect(btnLogOut);
         addHoverEffect(btnQLBH);
         addHoverEffect(btnQLHD);
     }
-    
-    public void setForm(JComponent jcom){
+
+    public void setForm(JComponent jcom) {
         pnlMain.removeAll();
         pnlMain.add(jcom);
         pnlMain.repaint();
@@ -40,29 +42,30 @@ public class Staff extends javax.swing.JFrame {
     }
 
     private void setupButtonStyle(javax.swing.JButton button) {
-        button.setFocusPainted(false);          
-        button.setBorderPainted(false);          
-        button.setContentAreaFilled(false);       
-        button.setOpaque(true);                 
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setOpaque(true);
         button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
-        button.setForeground(Color.WHITE);        
-        button.setBackground(Color.decode("#1c2e4a")); 
+        button.setForeground(Color.WHITE);
+        button.setBackground(Color.decode("#1c2e4a"));
 
         button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
     }
 
     private void addHoverEffect(javax.swing.JButton button) {
-    Color originalColor = button.getBackground();
-    button.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseEntered(java.awt.event.MouseEvent evt) {
-            button.setBackground(Color.decode("#3b5998"));
-        }
+        Color originalColor = button.getBackground();
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(Color.decode("#3b5998"));
+            }
 
-        public void mouseExited(java.awt.event.MouseEvent evt) {
-            button.setBackground(originalColor);
-        }
-    });
-}
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(originalColor);
+            }
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -243,7 +246,10 @@ public class Staff extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -262,10 +268,10 @@ public class Staff extends javax.swing.JFrame {
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);
         btnLogOut.setOpaque(true);
-        
+
         btnQLBH.setBackground(Color.decode("#1c2e4a"));
         btnQLBH.setForeground(Color.decode("#FFFFFF"));
-        
+
         btnQLHD.setBackground(Color.decode("#1c2e4a"));
         btnQLHD.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnLogOutActionPerformed
@@ -282,10 +288,10 @@ public class Staff extends javax.swing.JFrame {
         btnQLBH.setBorderPainted(false);
         btnQLBH.setContentAreaFilled(false);
         btnQLBH.setOpaque(true);
-        
+
         btnLogOut.setBackground(Color.decode("#1c2e4a"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
-        
+
         btnQLHD.setBackground(Color.decode("#1c2e4a"));
         btnQLHD.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnQLBHActionPerformed
@@ -293,19 +299,17 @@ public class Staff extends javax.swing.JFrame {
     private void btnQLBHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLBHMouseClicked
         // TODO add your handling code here:
         QuanLyBanHang bh = new QuanLyBanHang();
-        
-        JPanel panelBanHang = bh.pnlBanHang();
-        
+
+        JPanel panelBanHang = bh.getPanelQLBH();
+
         setForm(panelBanHang);
     }//GEN-LAST:event_btnQLBHMouseClicked
 
     private void btnQLHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLHDMouseClicked
         // TODO add your handling code here:
-        QuanLyHoaDon hd = new QuanLyHoaDon();
-        
-        JPanel panelHoaDon = hd.pnlXuat();
-        
-        setForm(panelHoaDon);
+        QuanLyHoaDon qlhdForm = new QuanLyHoaDon();
+        JPanel panelQLHD = qlhdForm.getPanelQLHD(); // Lấy panel chính
+        setForm(panelQLHD);
     }//GEN-LAST:event_btnQLHDMouseClicked
 
     private void btnQLHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLHDActionPerformed
@@ -316,10 +320,10 @@ public class Staff extends javax.swing.JFrame {
         btnQLHD.setBorderPainted(false);
         btnQLHD.setContentAreaFilled(false);
         btnQLHD.setOpaque(true);
-        
+
         btnLogOut.setBackground(Color.decode("#1c2e4a"));
         btnLogOut.setForeground(Color.decode("#FFFFFF"));
-        
+
         btnQLBH.setBackground(Color.decode("#1c2e4a"));
         btnQLBH.setForeground(Color.decode("#FFFFFF"));
     }//GEN-LAST:event_btnQLHDActionPerformed

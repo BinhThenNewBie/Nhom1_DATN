@@ -317,7 +317,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
 
         // Check mã sản phẩm
         if (id.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhấn nút 'TẠO MÃ' trước!");
+            JOptionPane.showMessageDialog(this, "Vui lòng nhấn nút TẠO MÃ trước!");
             return false;
         }
 
