@@ -57,7 +57,7 @@ public class ThongKe extends javax.swing.JFrame {
         // Header panel
         pnlHeader = new JPanel(new FlowLayout());
         pnlHeader.setBackground(new Color(31, 51, 86));
-        pnlHeader.setPreferredSize(new Dimension(1200, 80));
+        pnlHeader.setPreferredSize(new Dimension(1200, 50));
         
         lblTitle = new JLabel("THỐNG KÊ DOANH THU & HÓA ĐƠN");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
