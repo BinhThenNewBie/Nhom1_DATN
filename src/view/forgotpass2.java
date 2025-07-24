@@ -43,7 +43,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     
     public void changepassword(){
         if(trungpass() == true){
-        String email = forgotpass.ngnhan;
+        String email = ConfirmEmail.ngnhan;
         String mk = new String(txtcfnewpassword.getPassword());
         tkDAO.passwordchange(mk, email);
         JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công");
