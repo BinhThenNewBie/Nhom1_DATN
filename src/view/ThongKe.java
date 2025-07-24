@@ -1,7 +1,4 @@
-/*
- * Trang Thống Kê Doanh Thu và Hóa Đơn
- * Sử dụng Java Swing với JFreeChart để hiển thị biểu đồ
- */
+
 package view;
 
 import DAO.HoaDonDAO;
