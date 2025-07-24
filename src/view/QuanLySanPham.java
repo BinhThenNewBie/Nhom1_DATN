@@ -362,7 +362,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
         }
 
         // 2.3 Không chứa ký tự đặc biệt
-        if (giaStr.matches(".*[~!@#$%^&*()_=|<>?{}\\[\\]\\\\/:;'\".,`\\s].*")) {
+        if (giaStr.matches(".*[~!@#$%^&()_=|<>?{}\\[\\]\\\\:;'\".,`\\s].")) {
             JOptionPane.showMessageDialog(this, "Giá tiền không được chứa ký tự đặc biệt!");
             return false;
         }
@@ -453,17 +453,16 @@ public class QuanLySanPham extends javax.swing.JFrame {
         }
 
         // 2.3 Không chứa ký tự đặc biệt
-        if (giaStr.matches(".*[~!@#$%^&*()_=|<>?{}\\[\\]\\\\/:;'\".,`\\s].*")) {
+        if (giaStr.matches(".*[~!@#$%^&()_=|<>?{}\\[\\]\\\\:;'\".,`\\s].")) {
             JOptionPane.showMessageDialog(this, "Giá tiền không được chứa ký tự đặc biệt!");
             return false;
         }
 
         // 2.3 Không được là biểu thức như 10+1, 10-1, 10*2, 100/5
         if (giaStr.contains("+") || giaStr.contains("*") || giaStr.contains("/")) {
-            JOptionPane.showMessageDialog(this, "Không nhập biểu thức, chỉ nhập số nguyên dương!");
+            JOptionPane.showMessageDialog(this, "Giá tiền phải là số dương!");
             return false;
         }
-
         // 2.4 Phải là số nguyên dương và trong khoảng 10.000 – 500.000
         try {
             int gia = Integer.parseInt(giaStr);
