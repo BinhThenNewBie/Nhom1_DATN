@@ -22,50 +22,54 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
     }
-    public void forgotpass(){
+
+    public void forgotpass() {
         forgotpass fgp = new forgotpass();
         fgp.setVisible(true);
-        
-    }    
-    
-    public void checklogin(){
+
+    }
+
+    public void txttrong() { // kiểm tra nếu các ô txt trống 
+        String usernamein = txtusername.getText();
+        char[] passwordin = txtpass.getPassword();
+        String passwordStr = new String(passwordin);
+
+        if (usernamein.isEmpty() || passwordStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Xin vui lòng nhập đầy đủ thông tin", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void kttk() { // kiểm tra kiểm tra xem tài khoản có trong csdl không
         String usernamein = txtusername.getText();
         char[] passwordin = txtpass.getPassword();
         boolean loginSuccess = false;
         String passwordStr = new String(passwordin);
         TaikhoanDAO tkDAO = new TaikhoanDAO();
         List<Taikhoan> dstk = tkDAO.GETALL();
-        
-        if(usernamein.isEmpty() || passwordStr.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Xin vui lòng nhập đầy đủ thông tin", "Error", JOptionPane.ERROR_MESSAGE);
+
+        for (Taikhoan tk : dstk) {
+            if (usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())) {
+                loginSuccess = true;
+
+                if (tk.getVaiTro().equals("ADMIN")) {
+                    Admin ad = new Admin();
+                    ad.setVisible(true);
+                } else if (tk.getVaiTro().equals("STAFF")) {
+                    Staff st = new Staff();
+                    st.setVisible(true);
+                }
+
+                break;
+            }
         }
-        
-   
-      
 
-for (Taikhoan tk : dstk) {
-    if(usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())) {
-        loginSuccess = true;
-        
-        if(tk.getVaiTro().equals("ADMIN")) {
-            Admin ad = new Admin();
-            ad.setVisible(true);
-        } else if(tk.getVaiTro().equals("STAFF")) {
-            Staff st = new Staff();
-            st.setVisible(true);
+        if (!loginSuccess) {
+            JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
+        }else if(loginSuccess){
+            JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
         }
-        
-        break; 
     }
-}
 
-
-if(!loginSuccess) {
-    JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
-}
-    }
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
