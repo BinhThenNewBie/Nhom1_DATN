@@ -10,7 +10,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import view.ConfirmEmail;
+import view.forgotpass;
 
 
 public class Email {
@@ -19,7 +19,7 @@ public class Email {
 
     static final String from = "binhdath06811@gmail.com";
     static final String password = "seramtljhgugykvk";
-    static String nguoinhan = ConfirmEmail.ngnhan;
+    static String nguoinhan = forgotpass.ngnhan;
     
     
     

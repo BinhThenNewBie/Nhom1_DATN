@@ -24,7 +24,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     public void forgotpass() {
-        ConfirmEmail fgp = new ConfirmEmail();
+        forgotpass fgp = new forgotpass();
         fgp.setVisible(true);
 
     }

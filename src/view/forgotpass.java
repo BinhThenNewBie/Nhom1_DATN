@@ -12,7 +12,7 @@ import util.Email;
  *
  * @author PC Của Bình
  */
-public class ConfirmEmail extends javax.swing.JFrame {
+public class forgotpass extends javax.swing.JFrame {
     String ngaunhien = Email.ngaunhien();
     String magui; // biến để lưu mã gửi gần nhất 
     public static String ngnhan; // biến để lưu email người nhận
@@ -20,7 +20,7 @@ public class ConfirmEmail extends javax.swing.JFrame {
     /**
      * Creates new form forgotpass
      */
-    public ConfirmEmail() {
+    public forgotpass() {
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -45,7 +45,7 @@ public class ConfirmEmail extends javax.swing.JFrame {
     public void checkma(){
         String codein = txtcodein.getText();
         if(codein.equals(magui)){
-            ChangePassword fgp2 = new ChangePassword();
+            forgotpass2 fgp2 = new forgotpass2();
             fgp2.setVisible(true);
             dispose();
         }else{
@@ -202,21 +202,23 @@ public class ConfirmEmail extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConfirmEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(forgotpass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConfirmEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(forgotpass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConfirmEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(forgotpass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConfirmEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(forgotpass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConfirmEmail().setVisible(true);
+                new forgotpass().setVisible(true);
             }
         });
     }
