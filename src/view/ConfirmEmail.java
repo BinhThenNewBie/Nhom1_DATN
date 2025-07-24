@@ -45,7 +45,7 @@ public class ConfirmEmail extends javax.swing.JFrame {
     public void checkma(){
         String codein = txtcodein.getText();
         if(codein.equals(magui)){
-            forgotpass2 fgp2 = new forgotpass2();
+            ChangePassword fgp2 = new ChangePassword();
             fgp2.setVisible(true);
             dispose();
         }else{
