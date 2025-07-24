@@ -79,26 +79,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
             txtGiatien.setText(String.valueOf(sp.getGiaTien()));
             cboLoai.setSelectedItem(sp.getLoaiSanPham());
             strAnh = sp.getIMG();
-            //        int i = tblBang.getSelectedRow();
-//        if (i >= 0) {
-//            String timKiem = txtTimkiem.getText().trim();
-//            SanPham sp;
-//            if (timKiem.isEmpty()) {
-//                sp = spDao.getAll().get(i);
-//            } else {
-//                List<SanPham> list = spDao.getSPByTen(timKiem);
-//                if (list.isEmpty()) {
-//                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm có tên: " + timKiem);
-//                    return;
-//                }
-//                sp = list.get(i);
-//            }
-//            lblID.setText(sp.getIDSanPham());
-//            txtTensp.setText(sp.getTenSanPham());
-//            txtGiatien.setText(String.valueOf(sp.getGiaTien()));
-//            cboLoai.setSelectedItem(sp.getLoaiSanPham());
-//            strAnh = sp.getIMG();
-
+           
             if (strAnh == null || strAnh.trim().isEmpty() || strAnh.equalsIgnoreCase("NO IMAGE")) {
                 lblAnh.setText("Hình Ảnh Không tồn tại");
                 lblAnh.setIcon(null);
@@ -158,22 +139,24 @@ public class QuanLySanPham extends javax.swing.JFrame {
         }
     }
 
-    public void timKiemTheoTen() {
-        String ten = txtTimkiem.getText().trim();
-        if (ten.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên sản phẩm để tìm kiếm!");
+    public void timKiemKetHop() {
+        String tuKhoa = txtTimkiem.getText().trim();
+        if (tuKhoa.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập từ khóa để tìm kiếm!");
             return;
         }
 
-        list = spDao.getSPByTen(ten);
+        list = spDao.timKiemKetHop(tuKhoa);
         if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm theo tên!");
+            JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm theo ID hoặc tên!");
         } else {
             loadTable(list);
             tblBang.setRowSelectionInterval(0, 0);
             showdetail();
         }
     }
+   
+    
 
     public void loadTable(List<SanPham> sanPhamList) {
         DefaultTableModel model = (DefaultTableModel) tblBang.getModel();
@@ -1034,7 +1017,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-        timKiemTheoTen();
+        timKiemKetHop();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed

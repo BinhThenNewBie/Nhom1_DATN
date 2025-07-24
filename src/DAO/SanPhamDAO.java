@@ -130,36 +130,35 @@ public class SanPhamDAO {
         return list;
     }
 
-    // 5. Tìm theo tên (gần đúng)
     public List<SanPham> getSPByTen(String ten) {
-        List<SanPham> listsp = new ArrayList<>();
+        List<SanPham> list = new ArrayList<>();
         String sql = "SELECT * FROM SANPHAM WHERE TENSP LIKE ?";
-        Connection con = DBconnect.getConnection();
-        try {
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, "%" + ten + "%");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                SanPham sp = new SanPham();
-                sp.setIDSanPham(rs.getString(1));
-                sp.setTenSanPham(rs.getString(2));
-                sp.setGiaTien(rs.getFloat(3));
-                sp.setLoaiSanPham(rs.getString(4));
-                sp.setIMG(rs.getString(5));
-                sp.setTrangThai(rs.getInt(6));
-                listsp.add(sp);
+        try (Connection con = DBconnect.getConnection(); 
+             PreparedStatement pstm = con.prepareStatement(sql)) {
+            pstm.setString(1, "%" + ten + "%");
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    SanPham sp = new SanPham();
+                    sp.setIDSanPham(rs.getString("ID_SP"));
+                    sp.setTenSanPham(rs.getString("TENSP"));
+                    sp.setGiaTien(rs.getFloat("GIA"));
+                    sp.setLoaiSanPham(rs.getString("LOAI"));
+                    sp.setIMG(rs.getString("IMG"));
+                    sp.setTrangThai(rs.getInt("TRANGTHAI"));
+                    list.add(sp);
+                }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return listsp;
+        return list;
     }
 
-    // 6. Tìm kiếm chính xác 1 sản phẩm (đầu tiên theo tên gần đúng)
-    public SanPham timkiem(String tenSanPham) {
-        String sql = "SELECT * FROM SANPHAM WHERE TENSP LIKE ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setString(1, "%" + tenSanPham + "%");
+    public SanPham timKiemTheoID(String id) {
+        String sql = "SELECT * FROM SANPHAM WHERE ID_SP = ?";
+        try (Connection con = DBconnect.getConnection(); 
+             PreparedStatement pstm = con.prepareStatement(sql)) {
+            pstm.setString(1, id);
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     SanPham sp = new SanPham();
@@ -168,7 +167,7 @@ public class SanPhamDAO {
                     sp.setGiaTien(rs.getFloat("GIA"));
                     sp.setLoaiSanPham(rs.getString("LOAI"));
                     sp.setIMG(rs.getString("IMG"));
-                    sp.setTrangThai(rs.getInt("TrangThai"));
+                    sp.setTrangThai(rs.getInt("TRANGTHAI"));
                     return sp;
                 }
             }
@@ -176,6 +175,32 @@ public class SanPhamDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<SanPham> timKiemKetHop(String tuKhoa) {
+        List<SanPham> list = new ArrayList<>();
+        String sql = "SELECT * FROM SANPHAM WHERE ID_SP LIKE ? OR TENSP LIKE ?";
+        try (Connection con = DBconnect.getConnection(); 
+             PreparedStatement pstm = con.prepareStatement(sql)) {
+            pstm.setString(1, "%" + tuKhoa + "%");
+            pstm.setString(2, "%" + tuKhoa + "%");
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    SanPham sp = new SanPham();
+                    sp.setIDSanPham(rs.getString("ID_SP"));
+                    sp.setTenSanPham(rs.getString("TENSP"));
+                    sp.setGiaTien(rs.getFloat("GIA"));
+                    sp.setLoaiSanPham(rs.getString("LOAI"));
+                    sp.setIMG(rs.getString("IMG"));
+                    sp.setTrangThai(rs.getInt("TRANGTHAI"));
+                    list.add(sp);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Lỗi tìm kiếm kết hợp: " + e.getMessage());
+        }
+        return list;
     }
 
     // 7. Lấy từng dòng để hiển thị lên JTable
