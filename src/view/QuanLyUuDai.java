@@ -167,101 +167,64 @@ public class QuanLyUuDai extends javax.swing.JFrame {
         lblTrangThai1.setText(trangThai);
     }
 
-    private boolean validateUuDai() {
+    public boolean validateUuDai() {
         String giatri = txtGiatri1.getText().trim();
-        String apdung = txtApDung1.getText().trim();
-
         if (giatri.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được để trống");
             return false;
         }
-
         if (giatri.matches(".*[a-zA-Z]+.*")) {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được chứa chữ cái");
             return false;
         }
-
-        if (giatri.matches(".*[^0-9%].*")) {
-            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được chứa ký tự đặc biệt ngoài '%'");
+        if (giatri.matches(".*[^0-9%\\-].*")) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được chứa ký tự đặc biệt");
             return false;
         }
-
-        if (giatri.chars().filter(c -> c == '%').count() != 1 || !giatri.endsWith("%")) {
-            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải kết thúc bằng một dấu '%'");
-            return false;
-        }
-
+        String soGiatri = giatri.replace("%", "");
         int giaTriSo;
         try {
-            giaTriSo = Integer.parseInt(giatri.replace("%", ""));
+            giaTriSo = Integer.parseInt(soGiatri);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không hợp lệ");
             return false;
         }
-
+        if (giaTriSo < 0) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được âm");
+            return false;
+        }
         if (giaTriSo < 5 || giaTriSo > 80) {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 80%");
             return false;
         }
+        txtGiatri1.setText(giaTriSo + "%");
 
+        String apdung = txtApDung1.getText().trim();
         if (apdung.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được để trống");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được để trống");
             return false;
         }
-
         if (apdung.matches(".*[a-zA-Z]+.*")) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được chứa chữ cái");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa chữ cái");
             return false;
         }
-
         if (apdung.matches(".*[^0-9].*")) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được chứa ký tự đặc biệt");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa ký tự đặc biệt");
             return false;
         }
-
         float apDungSo;
         try {
             apDungSo = Float.parseFloat(apdung);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' không hợp lệ");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không hợp lệ");
             return false;
         }
-
         if (apDungSo <= 0) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' phải lớn hơn 0");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải lớn hơn 0");
             return false;
         }
-
         if (apDungSo < 10000 || apDungSo > 500000) {
-            JOptionPane.showMessageDialog(this, "'Áp dụng với' phải từ 10.000 đến 500.000 VND");
-            return false;
-        }
-
-        Date ngayBD = getDateFromComboBox(cboNgayStart1, cboThangStart1, cboNamStart1);
-        Date ngayKT = getDateFromComboBox(cboNgayEnd1, cboThangEnd1, cboNamEnd1);
-
-        if (ngayBD == null || ngayKT == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc");
-            return false;
-        }
-
-        LocalDate localBD = ((java.sql.Date) ngayBD).toLocalDate();
-        LocalDate localKT = ((java.sql.Date) ngayKT).toLocalDate();
-
-        if (!localBD.isBefore(localKT)) {
-            JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc");
-            return false;
-        }
-
-        long daysBetween = ChronoUnit.DAYS.between(localBD, localKT);
-
-        if (daysBetween < 7) {
-            JOptionPane.showMessageDialog(this, "Ưu đãi phải kéo dài ít nhất 7 ngày");
-            return false;
-        }
-
-        if (daysBetween > 92) {
-            JOptionPane.showMessageDialog(this, "Ưu đãi không được kéo dài quá 3 tháng");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 đến 500.000");
             return false;
         }
 
