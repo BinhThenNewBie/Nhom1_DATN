@@ -29,14 +29,20 @@ public class Login extends javax.swing.JFrame {
 
     }
 
-    public void txttrong() { // kiểm tra nếu các ô txt trống 
+    public boolean txttrong() { // kiểm tra nếu các ô txt trống 
         String usernamein = txtusername.getText();
         char[] passwordin = txtpass.getPassword();
+        boolean check = false;
         String passwordStr = new String(passwordin);
 
         if (usernamein.isEmpty() || passwordStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Xin vui lòng nhập đầy đủ thông tin", "Error", JOptionPane.ERROR_MESSAGE);
+            
+        }else{
+            check = true;
         }
+        return check;
+        
     }
 
     public void kttk() { // kiểm tra kiểm tra xem tài khoản có trong csdl không
@@ -65,11 +71,18 @@ public class Login extends javax.swing.JFrame {
 
         if (!loginSuccess) {
             JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
-        }else if(loginSuccess){
+        } else if (loginSuccess) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
         }
     }
 
+    
+    public void Login(){
+        if(txttrong() == true){
+            kttk();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -184,7 +197,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        checklogin();
+        Login();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnForgotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForgotActionPerformed
