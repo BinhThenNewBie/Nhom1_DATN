@@ -369,7 +369,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
 
         // 2.3 Không được là biểu thức như 10+1, 10-1, 10*2, 100/5
         if (giaStr.contains("+") || giaStr.contains("*") || giaStr.contains("/")) {
-            JOptionPane.showMessageDialog(this, "Không nhập biểu thức, chỉ nhập số nguyên dương!");
+            JOptionPane.showMessageDialog(this, "Giá tiền phải là số dương!");
             return false;
         }
 
