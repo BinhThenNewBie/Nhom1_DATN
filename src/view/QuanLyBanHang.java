@@ -60,6 +60,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
      */
     public QuanLyBanHang() {
         initComponents();
+        
         initTable();
         fillTableUuDai();
         fillTableHDCho();
@@ -541,10 +542,29 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         ChiTietHoaDon cthdCu = hdd.selectCTHD(ID_HD, ID_SP);
         if (cthdCu != null) {
-            int tongSoLuong = cthdCu.getSoLuong() + soLuong;
-            cthdCu.setSoLuong(tongSoLuong); // Cập nhật số lượng mới
+            int soLuongHienTai = cthdCu.getSoLuong();
+            int tongSoLuong = soLuongHienTai + soLuong;
+
+            if (tongSoLuong > 50) {
+                JOptionPane.showMessageDialog(this,
+                        "Bạn chỉ có thể thêm tối đa 50 sản phẩm.\n"
+                        + "Hiện tại đã có: " + soLuongHienTai + "\n"
+                        + "Bạn đang cố thêm: " + soLuong + "\n"
+                        + "Tổng cộng sẽ là: " + tongSoLuong + " > 50");
+                return;
+            }
+
+            cthdCu.setSoLuong(tongSoLuong);
             hdd.UpdateSP(ID_HD, ID_SP, cthdCu);
+
         } else {
+            if (soLuong > 50) {
+                JOptionPane.showMessageDialog(this,
+                        "Bạn chỉ có thể thêm tối đa 50 sản phẩm.\n"
+                        + "Bạn đang cố thêm: " + soLuong + " > 50");
+                return;
+            }
+
             for (SanPham sp : spd.getAll()) {
                 if (sp.getIDSanPham().equals(ID_SP)) {
                     ChiTietHoaDon cthd = new ChiTietHoaDon();
@@ -565,7 +585,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             tong += ct.getGiaSP() * ct.getSoLuong();
         }
 
-        //Kiểm tra nếu hóa đơn đã áp dụng ưu đãi
         String uuDai = hdd.getALL().stream()
                 .filter(hd -> hd.getID_HD().equals(ID_HD))
                 .findFirst()
@@ -743,7 +762,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Số lượng tối thiểu là 1");
                 return false;
             }
-            if (soLuong >= 50){
+            if (soLuong >= 50) {
                 JOptionPane.showMessageDialog(this, "Số lượng tối đa là 50");
                 return false;
             }
@@ -986,6 +1005,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         btnLoc = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        pnlBanHang.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         pnlChiTietHoaDon7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -1383,7 +1404,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addComponent(jSeparator2)
                     .addGroup(pnlMenuLayout.createSequentialGroup()
                         .addComponent(lblTittlePnlMenu)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 790, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -1427,7 +1448,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                 .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlBanHangLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(pnlBanHangLayout.createSequentialGroup()
                         .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -1459,7 +1481,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlUuDai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1590,7 +1612,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         });
     }
 
-    public JPanel pnlBanHang() {
+    public JPanel getPanelQLBH() {
         return pnlBanHang;
     }
 

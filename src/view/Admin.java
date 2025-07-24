@@ -46,8 +46,8 @@ public class Admin extends javax.swing.JFrame {
             lblTime.setText(time);
         });
         timer.start();
-        this.setSize(1600, 1000);
-        setLocationRelativeTo(null); 
+        this.setSize(1700, 1000);
+        setLocationRelativeTo(null);
         initDefaultElement();
 
         mainPanel.setLayout(new BorderLayout()); // Sử dụng BorderLayout
@@ -568,7 +568,7 @@ public class Admin extends javax.swing.JFrame {
         QuanLyTaiKhoan qltkForm = new QuanLyTaiKhoan();
         JPanel panelQLTK = qltkForm.getJPanelQLTK();
         setForm(panelQLTK);
-              
+
     }//GEN-LAST:event_btnQLTKActionPerformed
 
     private void btnQLSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLSPMouseClicked
@@ -675,7 +675,9 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnTKDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTKDTActionPerformed
         // TODO add your handling code here:
-        //        setForm(new ThongKe());
+    ThongKe thongKeForm = new ThongKe();
+    JPanel panelTK = thongKeForm.getPanelThongKe();
+    setForm(panelTK);
     }//GEN-LAST:event_btnTKDTActionPerformed
 
     private void btnQLBHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLBHMouseClicked
@@ -708,7 +710,9 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnQLBHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLBHActionPerformed
         // TODO add your handling code here:
-        //        setForm(new QuanLyBanHang());
+                QuanLyBanHang qlbhForm = new QuanLyBanHang();
+        JPanel panelQLBH = qlbhForm.getPanelQLBH(); 
+        setForm(panelQLBH); 
     }//GEN-LAST:event_btnQLBHActionPerformed
 
     private void pnlMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMenuMouseClicked
@@ -717,7 +721,9 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnDangXuatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDangXuatMouseClicked
         // TODO add your handling code here:
-
+        Login lg = new Login();
+        lg.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnDangXuatMouseClicked
 
     private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
@@ -756,6 +762,9 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnXuatHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatHoaDonActionPerformed
         // TODO add your handling code here:
+        QuanLyHoaDon qlhdForm = new QuanLyHoaDon();
+        JPanel panelQLHD = qlhdForm.getPanelQLHD(); 
+        setForm(panelQLHD); 
     }//GEN-LAST:event_btnXuatHoaDonActionPerformed
 
     /**

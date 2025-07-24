@@ -35,13 +35,13 @@ public class QuanLyUuDai extends javax.swing.JFrame {
         this.setSize(1200, 800);
         this.setLocationRelativeTo(null);     // Canh giữa màn hình   
         // Set layout cho panel chính
-    jPanelQLUD.setLayout(new BorderLayout(10, 10)); // 10px gap
-    
-    // Căn chỉnh panels
-    jPanelQLUD.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
-    
-    // Set kích thước
-    jPanel1.setPreferredSize(new Dimension(240, 350)); 
+        jPanelQLUD.setLayout(new BorderLayout(10, 10)); // 10px gap
+
+        // Căn chỉnh panels
+        jPanelQLUD.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
+
+        // Set kích thước
+        jPanel1.setPreferredSize(new Dimension(240, 350));
         initTable();
         fillTable();
     }
@@ -172,72 +172,100 @@ public class QuanLyUuDai extends javax.swing.JFrame {
         String apdung = txtApDung1.getText().trim();
 
         if (giatri.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị ưu đãi");
-            return false;
-        }
-        if (apdung.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị 'áp dụng với'");
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được để trống");
             return false;
         }
 
-        if (!giatri.matches("^\\d+%$")) {
-            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải là số nguyên dương và có dấu % ");
+        if (giatri.matches(".*[a-zA-Z]+.*")) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được chứa chữ cái");
             return false;
         }
 
-        int giaTriSo = Integer.parseInt(giatri.replace("%", ""));
+        if (giatri.matches(".*[^0-9%].*")) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được chứa ký tự đặc biệt ngoài '%'");
+            return false;
+        }
+
+        if (giatri.chars().filter(c -> c == '%').count() != 1 || !giatri.endsWith("%")) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải kết thúc bằng một dấu '%'");
+            return false;
+        }
+
+        int giaTriSo;
+        try {
+            giaTriSo = Integer.parseInt(giatri.replace("%", ""));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không hợp lệ");
+            return false;
+        }
+
         if (giaTriSo < 5 || giaTriSo > 80) {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 80%");
             return false;
         }
 
         if (apdung.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị áp dụng với");
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được để trống");
             return false;
         }
 
-        if (!apdung.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "Áp dụng với chỉ được chứa số và không âm");
+        if (apdung.matches(".*[a-zA-Z]+.*")) {
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được chứa chữ cái");
             return false;
         }
 
-        float apDung = Float.parseFloat(apdung);
-        if (apDung < 10000 || apDung > 500000) {
-            JOptionPane.showMessageDialog(this, "Áp dụng với phải từ 10.000 đến 500.000 VND");
+        if (apdung.matches(".*[^0-9].*")) {
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' không được chứa ký tự đặc biệt");
             return false;
         }
 
-        // === Validate ngày bắt đầu và kết thúc ===
+        float apDungSo;
+        try {
+            apDungSo = Float.parseFloat(apdung);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' không hợp lệ");
+            return false;
+        }
+
+        if (apDungSo <= 0) {
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' phải lớn hơn 0");
+            return false;
+        }
+
+        if (apDungSo < 10000 || apDungSo > 500000) {
+            JOptionPane.showMessageDialog(this, "'Áp dụng với' phải từ 10.000 đến 500.000 VND");
+            return false;
+        }
+
         Date ngayBD = getDateFromComboBox(cboNgayStart1, cboThangStart1, cboNamStart1);
         Date ngayKT = getDateFromComboBox(cboNgayEnd1, cboThangEnd1, cboNamEnd1);
 
         if (ngayBD == null || ngayKT == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc hợp lệ");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc");
             return false;
         }
 
-        LocalDate localNgayBD = ((java.sql.Date) ngayBD).toLocalDate();
-        LocalDate localNgayKT = ((java.sql.Date) ngayKT).toLocalDate();
+        LocalDate localBD = ((java.sql.Date) ngayBD).toLocalDate();
+        LocalDate localKT = ((java.sql.Date) ngayKT).toLocalDate();
 
-        if (localNgayBD.isAfter(localNgayKT)) {
+        if (!localBD.isBefore(localKT)) {
             JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc");
             return false;
         }
 
-        long daysBetween = ChronoUnit.DAYS.between(localNgayBD, localNgayKT);
+        long daysBetween = ChronoUnit.DAYS.between(localBD, localKT);
 
         if (daysBetween < 7) {
-            JOptionPane.showMessageDialog(this, "Ngày kết thúc phải cách ngày bắt đầu ít nhất 7 ngày");
+            JOptionPane.showMessageDialog(this, "Ưu đãi phải kéo dài ít nhất 7 ngày");
             return false;
         }
 
-        if (daysBetween > 183) {
-            JOptionPane.showMessageDialog(this, "Ưu đãi không được kéo dài quá 6 tháng");
+        if (daysBetween > 92) {
+            JOptionPane.showMessageDialog(this, "Ưu đãi không được kéo dài quá 3 tháng");
             return false;
         }
 
         return true;
-
     }
 
     /**
@@ -415,12 +443,12 @@ public class QuanLyUuDai extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(55, 55, 55)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel17)
                                     .addComponent(jLabel16)
@@ -462,14 +490,13 @@ public class QuanLyUuDai extends javax.swing.JFrame {
                                                     .addComponent(jLabel23))))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(lblTrangThai1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1070, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(btnThem1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(141, 141, 141)
-                        .addComponent(btnSua1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(138, 138, 138)
-                        .addComponent(btnLamMoi1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnThem1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(141, 141, 141)
+                                .addComponent(btnSua1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(138, 138, 138)
+                                .addComponent(btnLamMoi1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1070, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(111, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -513,12 +540,12 @@ public class QuanLyUuDai extends javax.swing.JFrame {
                             .addComponent(cboNamEnd1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel24)))
                     .addComponent(lblTrangThai1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(66, 66, 66)
+                .addGap(63, 63, 63)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnThem1)
                     .addComponent(btnLamMoi1)
                     .addComponent(btnSua1))
-                .addGap(65, 65, 65)
+                .addGap(68, 68, 68)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -556,7 +583,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
 
     private void tblBang1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBang1MouseClicked
         // TODO add your handling code here:
-       
+
         showDetail();
     }//GEN-LAST:event_tblBang1MouseClicked
 
@@ -615,14 +642,15 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             }
         });
     }
-     public JPanel getMainPanel() {
+
+    public JPanel getMainPanel() {
         return jPanelQLUD; // Hoặc tên panel chính trong QLUD
     }
-    
+
     public JPanel getJPanelQLUD() {
         return jPanelQLUD;
     }
-    
+
     public JPanel getJPanel1() {
         return jPanel1; // Nếu có panel1
     }
