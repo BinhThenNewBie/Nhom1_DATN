@@ -85,7 +85,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public void initTable() {
         modelUuDai = new DefaultTableModel();
-        String[] colsUuDai = new String[]{"Giá trị", "Áp dụng HD trên"};
+        String[] colsUuDai = new String[]{"Giá trị", "Áp dụng HD từ"};
         modelUuDai.setColumnIdentifiers(colsUuDai);
         tblUuDai.setModel(modelUuDai);
 
