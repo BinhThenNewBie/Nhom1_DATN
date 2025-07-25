@@ -4,7 +4,7 @@
  */
 package view;
 
-import DAO.HoaDonDAO;
+import DAO.HoaDonDAO111;
 import Model.ChiTietHoaDon;
 import Model.HoaDon;
 import java.awt.Color;
@@ -28,7 +28,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
 
     DefaultTableModel model;
     DefaultTableModel modelCTHD;
-    HoaDonDAO hdd = new HoaDonDAO();
+    HoaDonDAO111 hdd = new HoaDonDAO111();
 
     public QuanLyHoaDon() {
         initComponents();
@@ -83,7 +83,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
             return; // Không có hàng nào được chọn, thoát luôn
         }
 
-        String ID_HD = model.getValueAt(i, 0).toString(); // Lấy ID từ dòng đã chọn trong bảng
+        String ID_HD = model.getValueAt(i, 0).toString(); 
         List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
         for (ChiTietHoaDon cthd : lstcthd) {
             modelCTHD.addRow(new Object[]{

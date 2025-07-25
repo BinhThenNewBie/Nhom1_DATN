@@ -5,7 +5,6 @@
 package DAO;
 
 import DBconnect.DBconnect;
-import Model.ChiTietHoaDon;
 import Model.HoaDon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,12 +15,9 @@ import java.util.List;
 
 /**
  *
- * @author QuynhAnh2311
+ * @author ADMIN
  */
 public class HoaDonDAO {
-
-    List<HoaDon> lstHDC = new ArrayList<>();
-    List<ChiTietHoaDon> lstHDCT = new ArrayList<>();
 
     public boolean existsMaHD(String maHD) {
         String sql = "SELECT COUNT(*) FROM HOADON WHERE ID_HD = ?";
@@ -37,61 +33,65 @@ public class HoaDonDAO {
         return false;
     }
 
-    public ChiTietHoaDon selectCTHD(String ID_HD, String ID_SP) {
-        String sql = "SELECT * FROM CHITIETHOADON WHERE ID_HD = ? AND ID_SP = ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, ID_HD);
-            ps.setString(2, ID_SP);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                ChiTietHoaDon cthd = new ChiTietHoaDon();
-                cthd.setID_HD(rs.getString("ID_HD"));
-                cthd.setID_SP(rs.getString("ID_SP"));
-                cthd.setTenSP(rs.getString("TENSP"));
-                cthd.setGiaSP(rs.getFloat("GIASP"));
-                cthd.setSoLuong(rs.getInt("SOLUONG"));
-                return cthd;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void clearOrderTemp() {
-        String sql = "DELETE FROM CHITIETHOADON WHERE ID_HD NOT IN (SELECT ID_HD FROM HOADON)";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //CẬP NHẬT
-    public int UpdateSP(String ID_HD, String ID_SP, ChiTietHoaDon cthd) {
-        String sql = "UPDATE CHITIETHOADON SET SOLUONG = ? WHERE ID_HD = ? AND ID_SP = ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setInt(1, cthd.getSoLuong());
-            pstm.setString(2, ID_HD);
-            pstm.setString(3, ID_SP);
-
-            int row = pstm.executeUpdate();
-            if (row > 0) {
-                return 1;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public int updateTongTien(String idHD, float tongTien) {
-        String sql = "UPDATE HOADON SET TONGTIEN = ? WHERE ID_HD = ?";
-
+    // UPDATE HOÁ ĐƠN
+    public int Update_TT_HD(String ID_HD, float tongTien) {
+        String sql = "UPDATE HOADON SET TONGTIEN_HD = ? WHERE ID_HD = ?";
         try (
                 Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setFloat(1, tongTien);
-            ps.setString(2, idHD);
+            ps.setString(2, ID_HD);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int Update_TTUuDai(String ID_HD, float tongTienUuDai) {
+        String sql = "UPDATE HOADON SET TONGTIENUUDAI = ? WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setFloat(1, tongTienUuDai);
+            ps.setString(2, ID_HD);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int Update_TTThanhToan(String ID_HD, float tongThanhToan) {
+        String sql = "UPDATE HOADON SET TONGTHANHTOAN = ? WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setFloat(1, tongThanhToan);
+            ps.setString(2, ID_HD);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int Update_TKhachHang(String ID_HD, float tKhachHang) {
+        String sql = "UPDATE HOADON SET TIENKHACHHANG = ? WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setFloat(1, tKhachHang);
+            ps.setString(2, ID_HD);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int Update_TTraLai(String ID_HD, float tTraLai) {
+        String sql = "UPDATE HOADON SET TIENTRALAI = ? WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setFloat(1, tTraLai);
+            ps.setString(2, ID_HD);
             return ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class HoaDonDAO {
     }
 
     public int updateUuDai(String idHD, String uudai) {
-        String sql = "UPDATE HOADON SET GIATRI = ? WHERE ID_HD = ?";
+        String sql = "UPDATE HOADON SET UUDAI = ? WHERE ID_HD = ?";
 
         try (
                 Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -113,12 +113,12 @@ public class HoaDonDAO {
         }
     }
 
-    public int updatetrangThai(String idHD, String trangThai) {
+    public int updatetrangThai(String idHD, int trangThai) {
         String sql = "UPDATE HOADON SET TRANGTHAI = ? WHERE ID_HD = ?";
 
         try (
                 Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
-            ps.setString(1, trangThai);
+            ps.setInt(1, trangThai);
             ps.setString(2, idHD);
             return ps.executeUpdate();
         } catch (Exception e) {
@@ -127,35 +127,9 @@ public class HoaDonDAO {
         }
     }
 
-    public int UpdateGia(String ID_HD, String ID_SP, float gia) {
-        String sql = "UPDATE CHITIETHOADON SET GIASP = ? WHERE ID_HD = ? AND ID_SP = ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setFloat(1, gia);
-            pstm.setString(2, ID_HD);
-            pstm.setString(3, ID_SP);
-            int row = pstm.executeUpdate();
-            return row; // Trả về số dòng cập nhật được
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    // XÓA
-    public int DeleteSP(String ID_SP, String ID_HD) {
-        String sql = "DELETE FROM CHITIETHOADON WHERE ID_SP = ? AND ID_HD = ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, ID_SP);
-            ps.setString(2, ID_HD);
-            return ps.executeUpdate(); // Trả về số dòng bị ảnh hưởng (1 nếu xoá thành công)
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public int DeleteHD(String ID_HD) {
-        String sql = "DELETE FROM HOADON WHERE ID_HD LIKE?";
+    // DELETE HOA DON
+    public int Delete_HD(String ID_HD) {
+        String sql = "DELETE FROM HOADON WHERE ID_HD = ?";
         try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, ID_HD);
             ps.executeUpdate();
@@ -166,28 +140,20 @@ public class HoaDonDAO {
         return 0;
     }
 
-    public int DeleteCTHD(String ID_HD) {
-        String sql = "DELETE FROM CHITIETHOADON WHERE ID_HD = ?";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, ID_HD);
-            ps.executeUpdate();
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    // LƯU THÔNG TIN VÀO HÓA ĐƠN CHỜ 
-    public int SaveHDCHO(HoaDon hdc) {
-        String sql = "INSERT INTO HOADON VALUES (?, ?, ?, ?, ?, ?)";
+    //SAVE HOÁ ĐƠN 
+    public int Save_HD(HoaDon hd) {
+        String sql = "INSERT INTO HOADON VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setString(1, hdc.getID_HD());
-            pstm.setString(2, hdc.getNgayThangNam());
-            pstm.setString(3, hdc.getThoiGian());
-            pstm.setFloat(4, hdc.getTongTien());
-            pstm.setString(5, hdc.getUuDai());
-            pstm.setString(6, hdc.getTrangThai());
+            pstm.setString(1, hd.getID_HD());
+            pstm.setString(2, hd.getNgayThangNam());
+            pstm.setString(3, hd.getThoiGian());
+            pstm.setFloat(4, hd.getTongTienHD());
+            pstm.setFloat(5, hd.getTongTienUuDai());
+            pstm.setFloat(6, hd.getTongTienThanhToan());
+            pstm.setFloat(7, hd.getTienKhachHang());
+            pstm.setFloat(8, hd.getTienTraLai());
+            pstm.setString(9, hd.getUuDai());
+            pstm.setInt(10, hd.getTrangThai());
             int row = pstm.executeUpdate();
             if (row > 0) {
                 return 1;
@@ -198,155 +164,75 @@ public class HoaDonDAO {
         return 0;
     }
 
-    // LƯU SẢN PHẨM VÀO CHI TIẾT HÓA ĐƠN
-    public int SaveCTHD(ChiTietHoaDon cthd) {
-        String sql = "INSERT INTO CHITIETHOADON VALUES (?, ?, ?, ?, ?)";
-        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setString(1, cthd.getID_HD());
-            pstm.setString(2, cthd.getID_SP());
-            pstm.setString(3, cthd.getTenSP());
-            pstm.setFloat(4, cthd.getGiaSP());
-            pstm.setInt(5, cthd.getSoLuong());
-            int row = pstm.executeUpdate();
-            if (row > 0) {
-                return 1;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public List<String> getIDHDTheoIDSP(String idSP) {
-        List<String> ds = new ArrayList<>();
-        try {
-            String sql = "SELECT DISTINCT ID_HD FROM CHITIETHOADON WHERE ID_SP = ?";
-            Connection con = DBconnect.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, idSP);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ds.add(rs.getString("ID_HD"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ds;
-    }
-
-    // GET ALL ID HÓA ĐƠN
-    public List<ChiTietHoaDon> getAllID_HD(String ID_HD) {
-        List<ChiTietHoaDon> lstHDCT = new ArrayList<>();
-
-        String sql = "SELECT ID_HD, ID_SP, TENSP, GIASP, SOLUONG FROM CHITIETHOADON WHERE ID_HD = ?";
-        try (
-                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
-            ps.setString(1, ID_HD);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ChiTietHoaDon ct = new ChiTietHoaDon();
-                ct.setID_HD(rs.getString("ID_HD"));
-                ct.setID_SP(rs.getString("ID_SP"));
-                ct.setTenSP(rs.getString("TENSP"));
-                ct.setGiaSP(rs.getFloat("GIASP"));
-                ct.setSoLuong(rs.getInt("SOLUONG"));
-                lstHDCT.add(ct); // 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return lstHDCT;
-    }
-
-    /// GET ALL & GET ROW CHI TIẾT HÓA ĐƠN
-    public List<ChiTietHoaDon> getAllCTHD() {
-        String sql = "SELECT * FROM CHITIETHOADON";
-        try (
-                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ChiTietHoaDon cthd = new ChiTietHoaDon();
-                cthd.setID_HD(rs.getString(1));
-                cthd.setID_SP(rs.getString(2));
-                cthd.setTenSP(rs.getString(3));
-                cthd.setGiaSP(rs.getFloat(4));
-                cthd.setSoLuong(rs.getInt(5));
-                lstHDCT.add(cthd);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return lstHDCT;
-    }
-
-    public Object getRowCTHD(ChiTietHoaDon cthd) {
-        Object[] row = new Object[]{
-            cthd.getID_SP(),
-            cthd.getTenSP(),
-            cthd.getGiaSP(),
-            cthd.getSoLuong()
-        };
-        return row;
-    }
-
-    /// GET ALL & GET ROW HÓA ĐƠN CHỜ
-    public List<HoaDon> getALL() {
-        List<HoaDon> lstHDC = new ArrayList<>();
+    // GET ALL & GET ROW
+    public List<HoaDon> getALL_HD() {
+        List<HoaDon> lstHD = new ArrayList<>();
         String sql = "SELECT * FROM HOADON";
         try (Connection con = DBconnect.getConnection(); Statement stm = con.createStatement(); ResultSet rs = stm.executeQuery(sql)) {
             while (rs.next()) {
-                HoaDon hdc = new HoaDon();
-                hdc.setID_HD(rs.getString(1));
-                hdc.setNgayThangNam(rs.getString(2));
-                hdc.setThoiGian(rs.getString(3));
-                hdc.setTongTien(rs.getFloat(4));
-                hdc.setUuDai(rs.getString(5));
-                hdc.setTrangThai(rs.getString(6));
-                lstHDC.add(hdc);
+                HoaDon hd = new HoaDon();
+                hd.setID_HD(rs.getString(1));
+                hd.setNgayThangNam(rs.getString(2));
+                hd.setThoiGian(rs.getString(3));
+                hd.setTongTienHD(rs.getFloat(4));
+                hd.setTongTienUuDai(rs.getFloat(5));
+                hd.setTongTienThanhToan(rs.getFloat(6));
+                hd.setTienKhachHang(rs.getFloat(7));
+                hd.setTienTraLai(rs.getFloat(8));
+                hd.setUuDai(rs.getString(9));
+                hd.setTrangThai(rs.getInt(10));
+                lstHD.add(hd);
             }
         } catch (Exception e) {
             System.out.println("Lỗi: " + e.getMessage());
         }
-        return lstHDC;
+        return lstHD;
     }
 
-    public List<HoaDon> getALLID_hoadon(String ID_HD) {
-        List<HoaDon> lstHDC = new ArrayList<>();
+    public List<HoaDon> getALL_ID_HD(String ID_HD) {
+        List<HoaDon> lstHD = new ArrayList<>();
         String sql = "SELECT * FROM HOADON WHERE ID_HD = ?";
         try (
                 Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setString(1, ID_HD);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                HoaDon hdc = new HoaDon();
-                hdc.setID_HD(rs.getString("ID_HD"));
-                hdc.setNgayThangNam(rs.getString("NGAYTHANGNAM"));
-                hdc.setThoiGian(rs.getString("THOIGIAN"));
-                hdc.setTongTien(rs.getFloat("TONGTIEN"));
-                hdc.setUuDai(rs.getString("GIATRI"));
-                hdc.setTrangThai(rs.getString("TRANGTHAI"));
-                lstHDC.add(hdc);
+                HoaDon hd = new HoaDon();
+                hd.setID_HD(rs.getString("ID_HD"));
+                hd.setNgayThangNam(rs.getString("NGAYTHANGNAM"));
+                hd.setThoiGian(rs.getString("THOIGIAN"));
+                hd.setTongTienHD(rs.getFloat("TONGTIEN_HD"));
+                hd.setTongTienUuDai(rs.getFloat("TONGTIENUUDAI"));
+                hd.setTongTienThanhToan(rs.getFloat("TONGTHANHTOAN"));
+                hd.setTienKhachHang(rs.getFloat("TIENKHACHHANG"));
+                hd.setTienTraLai(rs.getFloat("TIENTRALAI"));
+                hd.setUuDai(rs.getString("UUDAI"));
+                hd.setTrangThai(rs.getInt("TRANGTHAI"));
+                lstHD.add(hd);
             }
         } catch (Exception e) {
             System.out.println("Lỗi: " + e.getMessage());
         }
-        return lstHDC;
+        return lstHD;
     }
 
-    public Object getRowHDCHO(HoaDon hdc) {
+    public Object getRow_HDCHO(HoaDon hd) {
         Object[] row = new Object[]{
-            hdc.getID_HD(),
-            hdc.getTongTien()
+            hd.getID_HD(),
+            hd.getTongTienHD(),
+            hd.getTongTienUuDai()
         };
         return row;
     }
 
-    public Object getRowHDDTT(HoaDon hd) {
+    public Object getRow_HDThanhToan(HoaDon hd) {
         Object[] row = new Object[]{
             hd.getID_HD(),
             hd.getNgayThangNam(),
             hd.getThoiGian(),
-            hd.getTongTien(),
+            hd.getTongTienHD(),
+            hd.getTongTienUuDai(),
+            hd.getTongTienThanhToan(),
             hd.getUuDai()
         };
         return row;

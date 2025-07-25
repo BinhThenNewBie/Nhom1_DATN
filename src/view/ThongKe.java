@@ -1,7 +1,7 @@
 
 package view;
 
-import DAO.HoaDonDAO;
+import DAO.HoaDonDAO111;
 import Model.HoaDon;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class ThongKe extends javax.swing.JFrame {
 
-    private HoaDonDAO hdd = new HoaDonDAO();
+    private HoaDonDAO111 hdd = new HoaDonDAO111();
     private DecimalFormat vndFormat = new DecimalFormat("#,###");
     private DefaultTableModel modelThongKe;
 

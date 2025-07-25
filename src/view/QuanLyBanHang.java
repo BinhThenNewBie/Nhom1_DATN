@@ -4,6 +4,7 @@
  */
 package view;
 
+import DAO.ChiTietHoaDonDAO;
 import DAO.HoaDonDAO;
 import DAO.SanPhamDAO;
 import DAO.UuDaiDAO;
@@ -50,17 +51,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     DefaultTableModel modelHDCho;
     DefaultTableModel modelCTHD;
     ChiTietHoaDon cthd = new ChiTietHoaDon();
-    UuDaiDAO udd = new UuDaiDAO();
-    HoaDonDAO hdd = new HoaDonDAO();
-    SanPhamDAO spd = new SanPhamDAO();
+    UuDaiDAO udDAO = new UuDaiDAO();
+    HoaDonDAO hdDAO = new HoaDonDAO();
+    ChiTietHoaDonDAO cthdDAO = new ChiTietHoaDonDAO();
+    SanPhamDAO spDAO = new SanPhamDAO();
     String strAnh = "";
 
-    /**
-     * Creates new form StaffBanHang
-     */
     public QuanLyBanHang() {
         initComponents();
-        
         initTable();
         fillTableUuDai();
         fillTableHDCho();
@@ -90,7 +88,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         tblUuDai.setModel(modelUuDai);
 
         modelHDCho = new DefaultTableModel();
-        String[] colsHDCho = new String[]{"ID_Hóa Đơn", "Tổng tiền"};
+        String[] colsHDCho = new String[]{"ID_Hóa Đơn", "Tổng HĐ", "Ưu Đãi"};
         modelHDCho.setColumnIdentifiers(colsHDCho);
         tblHoaDon.setModel(modelHDCho);
 
@@ -102,21 +100,28 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public void fillTableHDCho() {
         modelHDCho.setRowCount(0);
-        List<HoaDon> list = hdd.getALL();
-        for (HoaDon hdc : list) {
-            String trangThai = hdc.getTrangThai();
-            if (trangThai.equalsIgnoreCase("Chưa thanh toán")) {
+        List<HoaDon> list = hdDAO.getALL_HD();
+        for (HoaDon hd : list) {
+            int trangThai = hd.getTrangThai();
+            if (trangThai == 0) {
                 modelHDCho.addRow(new Object[]{
-                    hdc.getID_HD(),
-                    formatVND(hdc.getTongTien())
+                    hd.getID_HD(),
+                    formatVND(hd.getTongTienHD()),
+                    formatVND(hd.getTongTienUuDai())
                 });
             }
         }
+        TableColumnModel columnModel = tblChiTietHoaDon.getColumnModel();
+
+        columnModel.getColumn(0).setPreferredWidth(80);  
+        columnModel.getColumn(1).setPreferredWidth(250);  
+        columnModel.getColumn(2).setPreferredWidth(166);  
+        columnModel.getColumn(3).setPreferredWidth(80);
     }
 
     public void fillTableUuDai() {
         modelUuDai.setRowCount(0);
-        for (UuDai ud : udd.getAll()) {
+        for (UuDai ud : udDAO.getAll()) {
             Date today = new Date();
             if (!ud.getNgayKetThuc().before(today)) {
                 modelUuDai.addRow(new Object[]{
@@ -135,7 +140,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tblChiTietHoaDon.getModel();
         model.setRowCount(0);
         String ID_HD = lblMaHD.getText().trim();
-        List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
+        List<ChiTietHoaDon> lstcthd = cthdDAO.getAll_CTHD(ID_HD);
         for (ChiTietHoaDon cthd : lstcthd) {
             model.addRow(new Object[]{
                 cthd.getID_SP(),
@@ -168,7 +173,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
         String loai = cbxLoc.getSelectedItem().toString().trim();
-        List<SanPham> list = spd.getAll();
+        List<SanPham> list = spDAO.getAll();
         if (!loai.equalsIgnoreCase("TẤT CẢ")) {
             list = list.stream()
                     .filter(sp -> sp.getLoaiSanPham().equalsIgnoreCase(loai))
@@ -335,39 +340,39 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     }
 
     public void updateGiaSP() {
-        List<HoaDon> lsthdc = hdd.getALL();
+        List<HoaDon> lsthdc = hdDAO.getALL_HD();
         for (HoaDon hdc : lsthdc) {
             String ID_HD = hdc.getID_HD();
-            List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
+            List<ChiTietHoaDon> lstcthd = cthdDAO.getAll_CTHD(ID_HD);
             float tong = 0;
 
             for (ChiTietHoaDon cthd : lstcthd) {
-                float giaMoi = spd.getGiaByID(cthd.getID_SP());
-                // Cập nhật giá mới cho sản phẩm trong hóa đơn
-                hdd.UpdateGia(ID_HD, cthd.getID_SP(), giaMoi);
+                float giaMoi = spDAO.getGiaByID(cthd.getID_SP());
+                //Cập nhật giá cho sản phẩm
+                cthdDAO.UpdateGia(ID_HD, cthd.getID_SP(), giaMoi);
                 tong += giaMoi * cthd.getSoLuong();
             }
 
-            // Áp dụng ưu đãi nếu có
             String uuDai = hdc.getUuDai();
             float tongSauUuDai = tong;
-
+            float tienUuDai = 0;
             if (!uuDai.equals("0%")) {
                 try {
                     float giam = Float.parseFloat(uuDai.replace("%", "").trim());
                     if (giam > 0) {
                         tongSauUuDai = tong * (1 - giam / 100);
+                        tienUuDai = tong - tongSauUuDai;
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
             }
-
-            // Cập nhật lại tổng tiền cho hóa đơn này
-            hdd.updateTongTien(ID_HD, tongSauUuDai);
+            // cập nhật tiền của hoá đơn, tiền được ưu đãi và thành tiền
+            hdDAO.Update_TT_HD(ID_HD, tong);
+            hdDAO.Update_TTThanhToan(ID_HD, tongSauUuDai);
+            hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
         }
-
-        fillTableHDCho(); // Sau khi cập nhật giá và tổng tiền thì hiển thị lại
+        fillTableHDCho();
     }
 
     private void showDetail(SanPham sp) {
@@ -384,8 +389,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             ImageIcon icon = new ImageIcon("src/Images_SanPham/" + sp.getIMG());
             if (icon.getIconWidth() > 0) {
                 // Sử dụng kích thước cố định thay vì kích thước hiện tại của label
-                int fixedWidth = 156;  // Kích thước cố định từ layout
-                int fixedHeight = 156; // Kích thước cố định (có thể điều chỉnh tỷ lệ)
+                int fixedWidth = 156;
+                int fixedHeight = 156;
 
                 lblAnhSanPham.setIcon(new ImageIcon(icon.getImage().getScaledInstance(
                         fixedWidth, fixedHeight, Image.SCALE_SMOOTH)));
@@ -409,7 +414,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         if (i >= 0) {
             String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
 
-            List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
+            List<HoaDon> listHD = hdDAO.getALL_ID_HD(ID_HD);
             if (!listHD.isEmpty()) {
                 String uudai = listHD.get(0).getUuDai();
                 lblUuDai.setText(uudai + " Được áp dụng");
@@ -419,7 +424,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
             lblMaHD.setText(ID_HD);
 
-            List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
+            List<ChiTietHoaDon> lstcthd = cthdDAO.getAll_CTHD(ID_HD);
             modelCTHD.setRowCount(0);
             for (ChiTietHoaDon cthd : lstcthd) {
                 modelCTHD.addRow(new Object[]{
@@ -450,7 +455,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         String maHD = lblMaHD.getText().trim();
         String maSP = tblChiTietHoaDon.getValueAt(i, 0).toString();
 
-        ChiTietHoaDon cthd = hdd.selectCTHD(maHD, maSP);
+        ChiTietHoaDon cthd = cthdDAO.getAll_ID_HD_SP(maHD, maSP);
         if (cthd == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy chi tiết hóa đơn!");
             return;
@@ -462,7 +467,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         txtSoLuong.setText(String.valueOf(cthd.getSoLuong()));
 
         // Lấy ảnh sản phẩm từ mã SP
-        List<SanPham> spList = spd.getAllID_SP(maSP);
+        List<SanPham> spList = spDAO.getAllID_SP(maSP);
         if (spList == null || spList.isEmpty()) {
             lblAnhSanPham.setText("Không tìm thấy sản phẩm");
             lblAnhSanPham.setIcon(null);
@@ -501,12 +506,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         do {
             int number = 100000 + rnd.nextInt(900000);
             maHD = "HD" + number;
-        } while (hdd.existsMaHD(maHD));
+        } while (hdDAO.existsMaHD(maHD));
         return maHD;
     }
 
     public void createMaHD() {
-        hdd.clearOrderTemp();
+        cthdDAO.clearOrderTemp();
 
         DefaultTableModel model = (DefaultTableModel) tblChiTietHoaDon.getModel();
         String newMaHD = generateMaHD();
@@ -518,11 +523,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         String ngayThangNam = sdfDate.format(now);
         String thoiGian = sdfTime.format(now);
-        float tongTien = 0.0f;
+        float tongTienHD = 0.0f;
+        float ttUuDai = 0.0f;
+        float ttThanhToan = 0.0f;
+        float tKhachTra = 0.0f;
+        float tTraLai = 0.0f;
         String uuDai = "0%";
-        String trangThai = "Chưa thanh toán";
-        HoaDon hd = new HoaDon(newMaHD, ngayThangNam, thoiGian, tongTien, uuDai, trangThai);
-        hdd.SaveHDCHO(hd);
+        int trangThai = 0;
+        HoaDon hd = new HoaDon(newMaHD, ngayThangNam, thoiGian, tongTienHD, ttUuDai, ttThanhToan, tKhachTra, tTraLai, uuDai, trangThai);
+        hdDAO.Save_HD(hd);
 
         lblMaSP.setText("");
         lblUuDai.setText("");
@@ -540,7 +549,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return;
         }
 
-        ChiTietHoaDon cthdCu = hdd.selectCTHD(ID_HD, ID_SP);
+        ChiTietHoaDon cthdCu = cthdDAO.getAll_ID_HD_SP(ID_HD, ID_SP);
         if (cthdCu != null) {
             int soLuongHienTai = cthdCu.getSoLuong();
             int tongSoLuong = soLuongHienTai + soLuong;
@@ -555,7 +564,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             }
 
             cthdCu.setSoLuong(tongSoLuong);
-            hdd.UpdateSP(ID_HD, ID_SP, cthdCu);
+            cthdDAO.UpdateSP(ID_HD, ID_SP, cthdCu);
 
         } else {
             if (soLuong > 50) {
@@ -565,7 +574,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 return;
             }
 
-            for (SanPham sp : spd.getAll()) {
+            for (SanPham sp : spDAO.getAll()) {
                 if (sp.getIDSanPham().equals(ID_SP)) {
                     ChiTietHoaDon cthd = new ChiTietHoaDon();
                     cthd.setID_HD(ID_HD);
@@ -573,19 +582,20 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     cthd.setTenSP(sp.getTenSanPham());
                     cthd.setGiaSP(sp.getGiaTien());
                     cthd.setSoLuong(soLuong);
-                    hdd.SaveCTHD(cthd);
+                    cthdDAO.Save_CTHD(cthd);
                     break;
                 }
             }
         }
 
         float tong = 0;
-        List<ChiTietHoaDon> list = hdd.getAllID_HD(ID_HD);
+        float tienUuDai = 0;
+        List<ChiTietHoaDon> list = cthdDAO.getAll_CTHD(ID_HD);
         for (ChiTietHoaDon ct : list) {
             tong += ct.getGiaSP() * ct.getSoLuong();
         }
 
-        String uuDai = hdd.getALL().stream()
+        String uuDai = hdDAO.getALL_HD().stream()
                 .filter(hd -> hd.getID_HD().equals(ID_HD))
                 .findFirst()
                 .map(hd -> hd.getUuDai())
@@ -596,12 +606,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             try {
                 float giam = Float.parseFloat(uuDai.replace("%", "").trim());
                 tongSauUuDai = tong * (1 - giam / 100);
+                tienUuDai = tong - tongSauUuDai;
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
 
-        hdd.updateTongTien(ID_HD, tongSauUuDai);
+        hdDAO.Update_TT_HD(ID_HD, tong);
+        hdDAO.Update_TTThanhToan(ID_HD, tongSauUuDai);
+        hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
         fillTableHDCho();
         fillTableCTHD();
     }
@@ -612,8 +625,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             int choose = JOptionPane.showConfirmDialog(this, "XÁC NHẬN", "BẠN MUỐN HỦY", JOptionPane.YES_NO_OPTION);
             if (choose == JOptionPane.YES_OPTION) {
                 String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
-                int res1 = hdd.DeleteCTHD(ID_HD);
-                int res2 = hdd.DeleteHD(ID_HD);
+                int res1 = cthdDAO.Delete_CTHD(ID_HD);
+                int res2 = hdDAO.Delete_HD(ID_HD);
                 if (res1 == 1 && res2 == 1) {
                     fillTableHDCho();
                     lblMaHD.setText("");
@@ -638,7 +651,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         String ID_HD = lblMaHD.getText();
 
         //Kiểm tra ưu đãi trước khi xoá
-        String uuDai = hdd.getALL().stream()
+        String uuDai = hdDAO.getALL_HD().stream()
                 .filter(hd -> hd.getID_HD().equals(ID_HD))
                 .findFirst()
                 .map(hd -> hd.getUuDai())
@@ -654,16 +667,16 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return;
         }
 
-        List<ChiTietHoaDon> listSauXoa = hdd.getAllID_HD(ID_HD);
+        List<ChiTietHoaDon> listSauXoa = cthdDAO.getAll_CTHD(ID_HD);
         listSauXoa.removeIf(ct -> ct.getID_SP().equals(ID_SP));
         float tong = 0;
         for (ChiTietHoaDon ct : listSauXoa) {
             tong += ct.getGiaSP() * ct.getSoLuong();
         }
 
-        int result = hdd.DeleteSP(ID_SP, ID_HD);
+        int result = cthdDAO.Delete_SP(ID_SP, ID_HD);
         if (result == 1) {
-            hdd.updateTongTien(ID_HD, tong);
+            hdDAO.Update_TT_HD(ID_HD, tong);
             fillTableHDCho();
             fillTableCTHD();
             JOptionPane.showMessageDialog(this, "Xoá thành công!");
@@ -682,7 +695,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         String ID_HD = lblMaHD.getText();
 
         //Kiểm tra ưu đãi trước khi sửa
-        String uuDai = hdd.getALL().stream()
+        String uuDai = hdDAO.getALL_HD().stream()
                 .filter(hd -> hd.getID_HD().equals(ID_HD))
                 .findFirst()
                 .map(hd -> hd.getUuDai())
@@ -712,7 +725,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         }
 
         ChiTietHoaDon cthd = new ChiTietHoaDon(ID_HD, ID_SP, tenSP, giaSP, soLuong);
-        List<ChiTietHoaDon> listSauSua = hdd.getAllID_HD(ID_HD);
+        List<ChiTietHoaDon> listSauSua = cthdDAO.getAll_CTHD(ID_HD);
         for (ChiTietHoaDon ct : listSauSua) {
             if (ct.getID_SP().equals(ID_SP)) {
                 ct.setSoLuong(soLuong);
@@ -725,9 +738,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             tong += ct.getGiaSP() * ct.getSoLuong();
         }
 
-        int result = hdd.UpdateSP(ID_HD, ID_SP, cthd);
+        int result = cthdDAO.UpdateSP(ID_HD, ID_SP, cthd);
         if (result == 1) {
-            hdd.updateTongTien(ID_HD, tong);
+            hdDAO.Update_TT_HD(ID_HD, tong);
             fillTableHDCho();
             fillTableCTHD();
             JOptionPane.showMessageDialog(this, "Sửa thành công!");
@@ -787,13 +800,13 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return;
         }
 
-        String ID_HD = tblHoaDon.getValueAt(rowHoaDon, 0).toString().trim(); // lấy đúng từ bảng
+        String ID_HD = tblHoaDon.getValueAt(rowHoaDon, 0).toString().trim();
         if (ID_HD.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã hoá đơn không hợp lệ!");
             return;
         }
 
-        List<HoaDon> dsHoaDon = hdd.getALLID_hoadon(ID_HD);
+        List<HoaDon> dsHoaDon = hdDAO.getALL_ID_HD(ID_HD);
         if (dsHoaDon.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn phù hợp.");
             return;
@@ -819,8 +832,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         }
 
         // Lấy thông tin ưu đãi từ bảng
-        String giaTriUuDai = tblUuDai.getValueAt(rowUuDai, 0).toString(); // ví dụ "10%"
-        float dieuKien = unformatCurrency(tblUuDai.getValueAt(rowUuDai, 1).toString()); // ví dụ: 200000
+        String giaTriUuDai = tblUuDai.getValueAt(rowUuDai, 0).toString();
+        float dieuKien = unformatCurrency(tblUuDai.getValueAt(rowUuDai, 1).toString());
         float tongTienHD = unformatCurrency(tblHoaDon.getValueAt(rowHoaDon, 1).toString());
 
         if (tongTienHD < dieuKien) {
@@ -829,7 +842,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         }
 
         // Tính lại tổng tiền chi tiết hóa đơn
-        List<ChiTietHoaDon> chiTiet = hdd.getAllID_HD(ID_HD);
+        List<ChiTietHoaDon> chiTiet = cthdDAO.getAll_CTHD(ID_HD);
         float tongGoc = 0;
         for (ChiTietHoaDon ct : chiTiet) {
             tongGoc += ct.getGiaSP() * ct.getSoLuong();
@@ -837,10 +850,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         float phanTramUuDai = Float.parseFloat(giaTriUuDai.replace("%", "").trim());
         float tongSauUuDai = tongGoc * (1 - phanTramUuDai / 100f);
+        float tienUuDai = tongGoc - tongSauUuDai;
 
-        // Cập nhật DB
-        hdd.updateUuDai(ID_HD, giaTriUuDai);
-        hdd.updateTongTien(ID_HD, tongSauUuDai);
+        hdDAO.updateUuDai(ID_HD, giaTriUuDai);
+        hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
+        hdDAO.Update_TTThanhToan(ID_HD, tongSauUuDai);
         lblUuDai.setText(giaTriUuDai + " Được áp dụng");
         fillTableHDCho();
     }
@@ -851,111 +865,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để xoá ưu đãi");
             return;
         }
-        float tong = 0;
-        List<ChiTietHoaDon> list = hdd.getAllID_HD(ID_HD);
-        for (ChiTietHoaDon ct : list) {
-            tong += ct.getGiaSP() * ct.getSoLuong();
-        }
+        float tienUuDai = 0;
         lblUuDai.setText("");
-        hdd.updateUuDai(ID_HD, "0%");
-        hdd.updateTongTien(ID_HD, tong);
+        hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
+        hdDAO.updateUuDai(ID_HD, "0%");
         fillTableHDCho();
     }
 
-    public void thanhToan() {
-        int i = tblHoaDon.getSelectedRow();
-        if (i < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán");
-            return;
-        }
-        if (tblChiTietHoaDon.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
-            return;
-        }
-        String ID_HD = lblMaHD.getText();
-        List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
-        if (listHD.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!");
-            return;
-        }
-        String thoiGian = listHD.get(0).getThoiGian();
-        String ngayThangNam = listHD.get(0).getNgayThangNam();
-        String uuDai = listHD.get(0).getUuDai();
-        String trangThai = "Đã thanh toán";
-        List<ChiTietHoaDon> ds = hdd.getAllID_HD(ID_HD);
-        float tongTien = 0;
-        for (ChiTietHoaDon ct : ds) {
-            tongTien += ct.getGiaSP() * ct.getSoLuong();
-        }
-        float tienUuDai = 0;
-        float tienHD = tongTien;
-        if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
-            String uuDaiPhanTram = uuDai.replace("%", "").trim();
-            float phanTram = Float.parseFloat(uuDaiPhanTram);
-            tienUuDai = tongTien * (phanTram / 100f);
-            tienHD = tongTien - tienUuDai;
-        }
-
-        // Tạo nội dung hóa đơn
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("HOÁ ĐƠN THANH TOÁN\n");
-        sb.append("_________________________________________\n");
-        sb.append("Mã hóa đơn   : ").append(ID_HD).append("\n");
-        sb.append("Ngày lập     : ").append(ngayThangNam).append("\n");
-        sb.append("Thời gian    : ").append(thoiGian).append("\n\n");
-        sb.append("Danh sách món:\n");
-        sb.append("_________________________________________\n");
-        sb.append(String.format("%-25s %-5s %-15s\n", "Tên món", "SL", "Giá món"));
-        sb.append("_________________________________________\n");
-        for (ChiTietHoaDon ct : ds) {
-            sb.append(String.format("%-25s %-5d %-15s\n", ct.getTenSP(), ct.getSoLuong(), formatVND(ct.getGiaSP())));
-        }
-        sb.append("_________________________________________\n");
-        sb.append("Tổng tiền    : ").append(formatVND(tongTien)).append("\n");
-        if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
-            sb.append("Ưu đãi       : ").append(uuDai).append(" - ").append(formatVND(tienUuDai)).append("\n");
-        } else {
-            sb.append("Ưu đãi       : 0% - 0 VND\n");
-        }
-        sb.append("Thành tiền   : ").append(formatVND(tienHD)).append("\n");
-        sb.append("_________________________________________\n");
-        sb.append("Cảm ơn quý khách, hẹn gặp lại!");
-
-        JTextArea textArea = new JTextArea(sb.toString());
-        textArea.setEditable(false);
-        textArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
-        textArea.setBackground(Color.WHITE);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(400, 500));
-
-        if (JOptionPane.showConfirmDialog(this, scrollPane, "Xác nhận thanh toán",
-                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-            return;
-        }
-        int update = hdd.updatetrangThai(ID_HD, trangThai);
-        if (update == 1) {
-            int print = JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất hóa đơn không?", "In hóa đơn",
-                    JOptionPane.YES_NO_OPTION);
-            if (print == JOptionPane.YES_OPTION) {
-                try {
-                    textArea.print();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi in hóa đơn: " + ex.getMessage());
-                }
-            }
-
-            fillTableHDCho();
-            modelCTHD.setRowCount(0);
-            lblMaHD.setText("");
-            lblMaSP.setText("");
-            lblUuDai.setText("");
-            txtSoLuong.setText("");
-            JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Xác nhận", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Thanh toán thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1044,7 +961,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         .addComponent(lblTittlePnlChiTietHoaDon7)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator12)
-                    .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlChiTietHoaDon7Layout.setVerticalGroup(
@@ -1197,16 +1114,19 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlHoaDonLayout.createSequentialGroup()
+                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 21, Short.MAX_VALUE))
+                    .addGroup(pnlHoaDonLayout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(pnlHoaDonLayout.createSequentialGroup()
                         .addComponent(lblTittlePnlHoaDon)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlHoaDonLayout.createSequentialGroup()
-                        .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(pnlHoaDonLayout.createSequentialGroup()
-                                .addComponent(btnThanhToan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnHuyDon)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnThanhToan)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnHuyDon)
                         .addGap(30, 30, 30))))
         );
         pnlHoaDonLayout.setVerticalGroup(
@@ -1215,8 +1135,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTittlePnlHoaDon)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1447,15 +1367,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addGroup(pnlBanHangLayout.createSequentialGroup()
                         .addComponent(pnlThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlBanHangLayout.createSequentialGroup()
                         .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(pnlHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(pnlHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         pnlBanHangLayout.setVerticalGroup(
             pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1483,7 +1402,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBanHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1515,7 +1436,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        thanhToan();
+
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnHuyDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDonActionPerformed

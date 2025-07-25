@@ -9,21 +9,30 @@ package Model;
  * @author QuynhAnh2311
  */
 public class HoaDon {
+
     private String ID_HD;
     private String ngayThangNam;
     private String thoiGian;
-    private float tongTien;
+    private float tongTienHD;
+    private float tongTienUuDai;
+    private float tongTienThanhToan;
+    private float tienKhachHang;
+    private float tienTraLai;
     private String uuDai;
-    private String trangThai;
-    
+    private int trangThai;
+
     public HoaDon() {
     }
 
-    public HoaDon(String ID_HD, String ngayThangNam, String thoiGian, float tongTien, String uuDai, String trangThai) {
+    public HoaDon(String ID_HD, String ngayThangNam, String thoiGian, float tongTienHD, float tongTienUuDai, float tongTienThanhToan, float tienKhachHang, float tienTraLai, String uuDai, int trangThai) {
         this.ID_HD = ID_HD;
         this.ngayThangNam = ngayThangNam;
         this.thoiGian = thoiGian;
-        this.tongTien = tongTien;
+        this.tongTienHD = tongTienHD;
+        this.tongTienUuDai = tongTienUuDai;
+        this.tongTienThanhToan = tongTienThanhToan;
+        this.tienKhachHang = tienKhachHang;
+        this.tienTraLai = tienTraLai;
         this.uuDai = uuDai;
         this.trangThai = trangThai;
     }
@@ -52,12 +61,44 @@ public class HoaDon {
         this.thoiGian = thoiGian;
     }
 
-    public float getTongTien() {
-        return tongTien;
+    public float getTongTienHD() {
+        return tongTienHD;
     }
 
-    public void setTongTien(float tongTien) {
-        this.tongTien = tongTien;
+    public void setTongTienHD(float tongTienHD) {
+        this.tongTienHD = tongTienHD;
+    }
+
+    public float getTongTienUuDai() {
+        return tongTienUuDai;
+    }
+
+    public void setTongTienUuDai(float tongTienUuDai) {
+        this.tongTienUuDai = tongTienUuDai;
+    }
+
+    public float getTongTienThanhToan() {
+        return tongTienThanhToan;
+    }
+
+    public void setTongTienThanhToan(float tongTienThanhToan) {
+        this.tongTienThanhToan = tongTienThanhToan;
+    }
+
+    public float getTienKhachHang() {
+        return tienKhachHang;
+    }
+
+    public void setTienKhachHang(float tienKhachHang) {
+        this.tienKhachHang = tienKhachHang;
+    }
+
+    public float getTienTraLai() {
+        return tienTraLai;
+    }
+
+    public void setTienTraLai(float tienTraLai) {
+        this.tienTraLai = tienTraLai;
     }
 
     public String getUuDai() {
@@ -68,14 +109,12 @@ public class HoaDon {
         this.uuDai = uuDai;
     }
 
-    public String getTrangThai() {
+    public int getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(int trangThai) {
         this.trangThai = trangThai;
     }
 
-    
-    
 }
