@@ -40,6 +40,7 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import QR.QRCodeGenerator;
 
 /**
  *
@@ -113,9 +114,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         }
         TableColumnModel columnModel = tblChiTietHoaDon.getColumnModel();
 
-        columnModel.getColumn(0).setPreferredWidth(80);  
-        columnModel.getColumn(1).setPreferredWidth(250);  
-        columnModel.getColumn(2).setPreferredWidth(166);  
+        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(1).setPreferredWidth(250);
+        columnModel.getColumn(2).setPreferredWidth(166);
         columnModel.getColumn(3).setPreferredWidth(80);
     }
 
@@ -878,7 +879,149 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         fillTableHDCho();
     }
 
-   
+    public void payment() {
+        int i = tblHoaDon.getSelectedRow();
+        if (i < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn để thanh toán!");
+            return;
+        }
+        if (tblChiTietHoaDon.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào trong hoá đơn!");
+            return;
+        }
+        String ID_HD = lblMaHD.getText();
+        List<HoaDon> lsthd = hdDAO.getALL_ID_HD(ID_HD);
+        if (lsthd.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy hoá đơn!");
+            return;
+        }
+
+        String ngayThangNam = lsthd.get(0).getNgayThangNam();
+        String thoiGian = lsthd.get(0).getThoiGian();
+        float tongTien_HD = lsthd.get(0).getTongTienHD();
+        float tienUuDai = lsthd.get(0).getTongTienUuDai();
+        float thanhTien = lsthd.get(0).getTongTienThanhToan();
+        float tienKhachHang = 0;
+        float tienTraLai = 0;
+        String uuDai = lsthd.get(0).getUuDai();
+        int trangThai = 1;
+
+        String[] options = {"Chuyển khoản", "Tiền mặt", "Huỷ"};
+        int choice = JOptionPane.showOptionDialog(this, "Xác nhận thanh toán", "Chọn phương thức thanh toán",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+        if (choice == 2 || choice == JOptionPane.CLOSED_OPTION) {
+            hdDAO.updatetrangThai(ID_HD, 0);
+            JOptionPane.showMessageDialog(this, "Đã huỷ thanh toán!");
+            return;
+        }
+
+        if (choice == 0) {
+            tienKhachHang = thanhTien;
+            tienTraLai = 0;
+            String bank = "MB";
+            String soTaiKhoan = "0964250706";
+            String tenTaiKhoan = "VAN NGUYEN QUOC BAO";
+            String qrURL = "https://img.vietqr.io/image/" + bank + "-" + soTaiKhoan + "-compact2.png"
+                    + "?amount=" + (int) thanhTien
+                    + "&addInfo=THANHTOAN-" + ID_HD
+                    + "&accountName=" + tenTaiKhoan.replace(" ", "+");
+
+            QR.QRCodeGenerator.showQRCode(qrURL);
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Vui lòng quét mã để thanh toán.\nBạn đã hoàn tất chuyển khoản?",
+                    "Xác nhận thanh toán", JOptionPane.YES_NO_OPTION);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                hdDAO.updatetrangThai(ID_HD, 0);
+                JOptionPane.showMessageDialog(this, "Đã huỷ thanh toán!");
+                return;
+            }
+
+        } else if (choice == 1) {
+            String input = JOptionPane.showInputDialog(this, "Nhập số tiền khách đưa:");
+            if (input == null) {
+                hdDAO.updatetrangThai(ID_HD, 0);
+                return;
+            }
+            try {
+                tienKhachHang = Float.parseFloat(input.replace(",", "").replace("₫", "").trim());
+                if (tienKhachHang < thanhTien) {
+                    JOptionPane.showMessageDialog(this, "Số tiền khách đưa không đủ để thanh toán!");
+                    return;
+                }
+                tienTraLai = tienKhachHang - thanhTien;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!");
+                return;
+            }
+        }
+
+        HoaDon hd = new HoaDon(ID_HD, ngayThangNam, thoiGian, tongTien_HD, tienUuDai, thanhTien,
+                tienKhachHang, tienTraLai, uuDai, trangThai);
+        hdDAO.Update_TKhachHang(ID_HD, tienKhachHang);
+        hdDAO.Update_TTraLai(ID_HD, tienTraLai);
+        hdDAO.updatetrangThai(ID_HD, trangThai);
+
+        StringBuilder hoaDon = new StringBuilder();
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("         HÓA ĐƠN THANH TOÁN\n");
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("Mã hóa đơn  : ").append(ID_HD).append("\n");
+        hoaDon.append("Ngày lập    : ").append(ngayThangNam).append("\n");
+        hoaDon.append("Thời gian   : ").append(thoiGian).append("\n\n");
+        hoaDon.append("Danh sách món:\n");
+        hoaDon.append("________________________________________\n");
+        hoaDon.append(String.format("%-20s %3s %15s\n", "Tên món", "SL", "Giá món (đ)"));
+        hoaDon.append("________________________________________\n");
+
+        for (int row = 0; row < tblChiTietHoaDon.getRowCount(); row++) {
+            String tenMon = tblChiTietHoaDon.getValueAt(row, 1).toString();
+            String soLuong = tblChiTietHoaDon.getValueAt(row, 3).toString();
+            String donGia = tblChiTietHoaDon.getValueAt(row, 5).toString(); 
+            float donGiaFloat = Float.parseFloat(donGia.replace(",", "").replace("₫", "").trim());
+            hoaDon.append(String.format("%-20s %3s %,15.0f\n", tenMon, soLuong, donGiaFloat));
+        }
+
+        hoaDon.append("________________________________________\n");
+        hoaDon.append(String.format("Tổng tiền     : %,15.0f đ\n", tongTien_HD));
+        hoaDon.append(String.format("Ưu đãi        : %s - %,10.0f đ\n", uuDai, tienUuDai));
+        hoaDon.append(String.format("Thành tiền    : %,15.0f đ\n", thanhTien));
+        hoaDon.append("----------------------------------------\n");
+        hoaDon.append(String.format("Tiền khách đưa: %,15.0f đ\n", tienKhachHang));
+        hoaDon.append(String.format("Tiền trả lại  : %,15.0f đ\n", tienTraLai));
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("Cảm ơn quý khách, hẹn gặp lại!\n");
+
+        JTextArea textArea = new JTextArea(hoaDon.toString());
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        textArea.setBackground(Color.WHITE);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(450, 550));
+        if (JOptionPane.showConfirmDialog(this, scrollPane, "Xác nhận thanh toán",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        int print = JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất hóa đơn không?", "In hóa đơn",
+                JOptionPane.YES_NO_OPTION);
+        if (print == JOptionPane.YES_OPTION) {
+            try {
+                textArea.print();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi in hóa đơn: " + ex.getMessage());
+            }
+        }
+
+        fillTableHDCho();
+        modelCTHD.setRowCount(0);
+        lblMaHD.setText("");
+        lblMaSP.setText("");
+        lblUuDai.setText("");
+        txtSoLuong.setText("");
+        JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Xác nhận", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1077,6 +1220,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         btnThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnThanhToan.setForeground(new java.awt.Color(255, 255, 255));
         btnThanhToan.setText("THANH TOÁN");
+        btnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnThanhToanMouseClicked(evt);
+            }
+        });
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThanhToanActionPerformed(evt);
@@ -1491,6 +1639,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         // TODO add your handling code here:
         fillTableMenu();
     }//GEN-LAST:event_btnLocActionPerformed
+
+    private void btnThanhToanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnThanhToanMouseClicked
+        // TODO add your handling code here:
+        payment();
+    }//GEN-LAST:event_btnThanhToanMouseClicked
 
     /**
      * @param args the command line arguments
