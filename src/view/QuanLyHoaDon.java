@@ -4,7 +4,8 @@
  */
 package view;
 
-import DAO.HoaDonDAO111;
+import DAO.ChiTietHoaDonDAO;
+import DAO.HoaDonDAO;
 import Model.ChiTietHoaDon;
 import Model.HoaDon;
 import java.awt.Color;
@@ -28,7 +29,8 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
 
     DefaultTableModel model;
     DefaultTableModel modelCTHD;
-    HoaDonDAO111 hdd = new HoaDonDAO111();
+    HoaDonDAO hdd = new HoaDonDAO();
+    ChiTietHoaDonDAO cthdd = new ChiTietHoaDonDAO();
 
     public QuanLyHoaDon() {
         initComponents();
