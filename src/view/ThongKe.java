@@ -1,7 +1,7 @@
 
 package view;
 
-import DAO.HoaDonDAO111;
+import DAO.HoaDonDAO;
 import Model.HoaDon;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class ThongKe extends javax.swing.JFrame {
 
-    private HoaDonDAO111 hdd = new HoaDonDAO111();
+    private HoaDonDAO hdd = new HoaDonDAO();
     private DecimalFormat vndFormat = new DecimalFormat("#,###");
     private DefaultTableModel modelThongKe;
 
@@ -205,7 +205,7 @@ public class ThongKe extends javax.swing.JFrame {
 
     private void loadThongKe() {
         try {
-            List<HoaDon> allHoaDon = hdd.getALL();
+            List<HoaDon> allHoaDon = hdd.getALL_HD();
             List<HoaDon> filteredHoaDon = filterHoaDonByPeriod(allHoaDon);
 
             // Update stats cards
@@ -222,6 +222,9 @@ public class ThongKe extends javax.swing.JFrame {
         }
     }
 
+    
+    
+    
     private List<HoaDon> filterHoaDonByPeriod(List<HoaDon> hoaDonList) {
         String selectedPeriod = (String) cmbThongKe.getSelectedItem();
         List<HoaDon> filtered = new ArrayList<>();
@@ -231,7 +234,7 @@ public class ThongKe extends javax.swing.JFrame {
         String today = sdf.format(cal.getTime());
 
         for (HoaDon hd : hoaDonList) {
-            if (!"Đã thanh toán".equalsIgnoreCase(hd.getTrangThai())) {
+            if (hd.getTrangThai() == 0) {
                 continue;
             }
 
@@ -319,7 +322,7 @@ public class ThongKe extends javax.swing.JFrame {
         // Calculate total revenue for filtered period
         float tongDoanhThu = 0;
         for (HoaDon hd : filteredHoaDon) {
-            tongDoanhThu += hd.getTongTien();
+            tongDoanhThu += hd.getTongTienHD();
         }
 
         // Calculate total bills for filtered period
@@ -334,7 +337,7 @@ public class ThongKe extends javax.swing.JFrame {
         String today = sdf.format(new Date());
 
         for (HoaDon hd : allHoaDon) {
-            if ("Đã thanh toán".equalsIgnoreCase(hd.getTrangThai())
+            if (hd.getTrangThai() == 1
                     && hd.getNgayThangNam().equals(today)) {
                 hoaDonHomNay++;
             }
@@ -375,7 +378,7 @@ public class ThongKe extends javax.swing.JFrame {
             float doanhThu = 0;
 
             for (HoaDon hd : dailyHoaDon) {
-                doanhThu += hd.getTongTien();
+                doanhThu += hd.getTongTienHD();
             }
 
             float doanhThuTB = soHoaDon > 0 ? doanhThu / soHoaDon : 0;
