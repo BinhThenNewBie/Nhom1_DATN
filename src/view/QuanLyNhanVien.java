@@ -155,9 +155,14 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
         String SDT = txtSdt.getText().trim();
         String IMG = txtAnh.getText().trim();
         String chucVu = txtChucvu.getText().trim();
-
+        
+        //Kiểm tra tên
+        if (!hoTen.matches("^[\\\\p{L}\\\\s]+$")) {
+            JOptionPane.showMessageDialog(this, "Tên phải nhập bằng chữ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         // Kiểm tra dữ liệu đầu vào
-        if (ID_NV.isEmpty() || hoTen.isEmpty() || SDT.isEmpty()) {
+        if (ID_NV.isEmpty() || hoTen.isEmpty() || SDT.isEmpty()|| IMG.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -168,15 +173,6 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
             return;
         }
 
-        // Kiểm tra ID nhân viên đã tồn tại
-        for (Nhanvien nv : nvd.GETALL()) {
-            if (nv.getID_NV().equals(ID_NV)) {
-                JOptionPane.showMessageDialog(this, "ID nhân viên đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        // SỬA LỖI: Tạo object Nhanvien với constructor đúng
         Nhanvien nv = new Nhanvien(ID_NV, hoTen, SDT, chucVu, IMG, "");
         nv.setTrangThai("ACTIVE"); // Set trạng thái mặc định
 
