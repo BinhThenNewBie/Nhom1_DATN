@@ -221,8 +221,36 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải lớn hơn 0");
             return false;
         }
-        if (apDungSo < 10000 || apDungSo > 500000) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 đến 500.000");
+        if (apDungSo < 10000 || apDungSo > 5000000) {
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 VND đến 5.000.000 VND");
+            return false;
+        }
+
+        Date ngayBD = getDateFromComboBox(cboNgayStart1, cboThangStart1, cboNamStart1);
+        Date ngayKT = getDateFromComboBox(cboNgayEnd1, cboThangEnd1, cboNamEnd1);
+        if (ngayBD == null || ngayKT == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc hợp lệ");
+            return false;
+        }
+        if (!ngayBD.before(ngayKT)) {
+            JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc");
+            return false;
+        }
+
+        long millisInDay = 24 * 60 * 60 * 1000L;
+        long diffDays = (ngayKT.getTime() - ngayBD.getTime()) / millisInDay;
+        if (diffDays < 7) {
+            JOptionPane.showMessageDialog(this, "Ưu đãi phải kéo dài ít nhất 7 ngày");
+            return false;
+        }
+        if (diffDays > 90) {
+            JOptionPane.showMessageDialog(this, "Ưu đãi chỉ được kéo dài tối đa 3 tháng (90 ngày)");
+            return false;
+        }
+
+        Date today = new Date();
+        if (ngayKT.before(today)) {
+            JOptionPane.showMessageDialog(this, "Không thể thêm ưu đãi hết hạn");
             return false;
         }
 
