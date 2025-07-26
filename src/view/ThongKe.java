@@ -226,45 +226,55 @@ public class ThongKe extends javax.swing.JFrame {
     
     
     private List<HoaDon> filterHoaDonByPeriod(List<HoaDon> hoaDonList) {
-        String selectedPeriod = (String) cmbThongKe.getSelectedItem();
-        List<HoaDon> filtered = new ArrayList<>();
+    String selectedPeriod = (String) cmbThongKe.getSelectedItem();
+    List<HoaDon> filtered = new ArrayList<>();
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf.format(cal.getTime());
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String today = sdf.format(cal.getTime());
 
-        for (HoaDon hd : hoaDonList) {
-            if (hd.getTrangThai() == 0) {
-                continue;
-            }
+    
+    System.out.println("Selected period: '" + selectedPeriod + "'");
+    System.out.println("Total HoaDon list size: " + hoaDonList.size());
 
-            boolean shouldInclude = false;
+    for (HoaDon hd : hoaDonList) {
+        if (hd.getTrangThai() == 0) {
+            continue;
+        }
+        
+        boolean shouldInclude = false;
 
-            switch (selectedPeriod) {
-                case "Tất cả":
-                    shouldInclude = true;
-                    break;
-                case "Hôm nay":
-                    shouldInclude = hd.getNgayThangNam().equals(today);
-                    break;
-                case "Tuần này":
-                    shouldInclude = isThisWeek(hd.getNgayThangNam());
-                    break;
-                case "Tháng này":
-                    shouldInclude = isThisMonth(hd.getNgayThangNam());
-                    break;
-                case "Năm này":
-                    shouldInclude = isThisYear(hd.getNgayThangNam());
-                    break;
-            }
-
-            if (shouldInclude) {
-                filtered.add(hd);
-            }
+        switch (selectedPeriod) {
+            case "TẤT CẢ":
+                shouldInclude = true;
+                break;
+            case "HÔM NAY":
+                shouldInclude = hd.getNgayThangNam().equals(today);
+                break;
+            case "TUẦN NÀY":
+                shouldInclude = isThisWeek(hd.getNgayThangNam());
+                break;
+            case "THÁNG NÀY":
+                shouldInclude = isThisMonth(hd.getNgayThangNam());
+                break;
+            case "NĂM NAY":
+                shouldInclude = isThisYear(hd.getNgayThangNam());
+                break;
+            default:
+                // Fallback: if no match, show all data
+                System.out.println("No matching case found for: '" + selectedPeriod + "'");
+                shouldInclude = true;
+                break;
         }
 
-        return filtered;
+        if (shouldInclude) {
+            filtered.add(hd);
+        }
     }
+
+    System.out.println("Filtered list size: " + filtered.size());
+    return filtered;
+}
 
     private boolean isThisWeek(String dateStr) {
         try {
