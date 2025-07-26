@@ -14,8 +14,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import javax.swing.JPanel;
 
 /**
