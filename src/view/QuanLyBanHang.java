@@ -978,7 +978,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         for (int row = 0; row < tblChiTietHoaDon.getRowCount(); row++) {
             String tenMon = tblChiTietHoaDon.getValueAt(row, 1).toString();
             String soLuong = tblChiTietHoaDon.getValueAt(row, 3).toString();
-            String donGia = tblChiTietHoaDon.getValueAt(row, 5).toString(); 
+            String donGia = tblChiTietHoaDon.getValueAt(row, 2).toString(); 
             float donGiaFloat = Float.parseFloat(donGia.replace(",", "").replace("₫", "").trim());
             hoaDon.append(String.format("%-20s %3s %,15.0f\n", tenMon, soLuong, donGiaFloat));
         }
