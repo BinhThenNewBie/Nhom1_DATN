@@ -46,7 +46,7 @@ public class Admin extends javax.swing.JFrame {
             lblTime.setText(time);
         });
         timer.start();
-        this.setSize(1700, 1000);
+        this.setSize(1920, 1080);
         setLocationRelativeTo(null);
         initDefaultElement();
 
@@ -451,11 +451,11 @@ public class Admin extends javax.swing.JFrame {
                 .addComponent(btnTKDT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54)
                 .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblexit, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32))
+                .addGap(49, 49, 49))
         );
 
         mainPanel.setBackground(new java.awt.Color(234, 232, 232));
