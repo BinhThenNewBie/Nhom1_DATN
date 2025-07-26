@@ -223,8 +223,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải lớn hơn 0");
             return false;
         }
-        if (apDungSo < 10000 || apDungSo > 500000) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 đến 500.000");
+        if (apDungSo < 10000 || apDungSo > 5000000) {
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 VND đến 5.000.000 VND");
             return false;
         }
 
