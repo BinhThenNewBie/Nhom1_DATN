@@ -213,7 +213,7 @@ public class SanPhamDAO {
             tienVND,
             sp.getLoaiSanPham(),
             sp.getIMG(),
-            sp.getTrangThai() == 1 ? "Đang hoạt động" : "Đã khóa"
+            sp.getTrangThai() == 1 ? "ĐANG BÁN" : "ĐÃ KHOÁ"
         };
     }
 

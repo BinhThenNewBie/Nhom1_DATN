@@ -3,7 +3,9 @@ package view;
 import DAO.SanPhamDAO;
 import Model.SanPham;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +48,28 @@ public class QuanLySanPham extends javax.swing.JFrame {
         // Set kích thước
         jPanel3.setPreferredSize(new Dimension(1240, 350)); // Panel trên cao 350px
         jPanel1.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
+
+        // Đổi màu nền bảng
+tblBang.setBackground(new Color(230, 230, 230)); // màu nền bảng
+
+// Đổi màu viền của tiêu đề cột
+tblBang.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
+tblBang.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
+tblBang.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16)); // font đậm
+
+// Đổi màu hàng được chọn
+tblBang.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
+tblBang.setSelectionForeground(Color.WHITE);             // chữ khi chọn
+
+// Đổi màu đường lưới (nếu có)
+tblBang.setGridColor(Color.GRAY);
+
+// Đổi màu chữ trong bảng
+tblBang.setForeground(Color.BLACK); // màu chữ
+tblBang.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // font chữ
+
+// Đặt độ cao hàng
+tblBang.setRowHeight(30);
 
         loadTatCa();
         initTable();
@@ -866,6 +890,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
             }
         });
 
+        tblBang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tblBang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
