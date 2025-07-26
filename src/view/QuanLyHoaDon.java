@@ -4,6 +4,7 @@
  */
 package view;
 
+import DAO.ChiTietHoaDonDAO;
 import DAO.HoaDonDAO;
 import Model.ChiTietHoaDon;
 import Model.HoaDon;
@@ -29,10 +30,11 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
     DefaultTableModel model;
     DefaultTableModel modelCTHD;
     HoaDonDAO hdd = new HoaDonDAO();
+    ChiTietHoaDonDAO cthdd = new ChiTietHoaDonDAO();
 
     public QuanLyHoaDon() {
         initComponents();
-        
+
         initTable();
         fillTable();
         fillTableCTHD();
@@ -46,7 +48,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
 
     public void initTable() {
         model = new DefaultTableModel();
-        String[] cols = new String[]{"ID_HD", "Ngày Tháng Năm", "Thời Gian", "Tổng tiền", "Ưu đãi"};
+        String[] cols = new String[]{"ID_HD", "Ngày Tháng Năm", "Thời Gian", "Tổng HĐ", "Tiền Ưu Đãi", "Thành Tiền", "Ưu Đãi"};
         model.setColumnIdentifiers(cols);
         tblHoaDon.setModel(model);
 
@@ -58,33 +60,38 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
 
     public void fillTable() {
         model.setRowCount(0);
-        List<HoaDon> list = hdd.getALL();
-        for (HoaDon hdc : list) {
-            String trangThai = hdc.getTrangThai();
-            if (trangThai.equalsIgnoreCase("Đã thanh toán")) {
+        List<HoaDon> list = hdd.getALL_HD();
+        for (HoaDon hd : list) {
+            int trangThai = hd.getTrangThai();
+            if (trangThai == 1) {
                 model.addRow(new Object[]{
-                    hdc.getID_HD(),
-                    hdc.getNgayThangNam(),
-                    hdc.getThoiGian(),
-                    formatVND(hdc.getTongTien()),
-                    hdc.getUuDai()
+                    hd.getID_HD(),
+                    hd.getNgayThangNam(),
+                    hd.getThoiGian(),
+                    hd.getTongTienHD(),
+                    hd.getTongTienUuDai(),
+                    hd.getTongTienThanhToan(),
+                    hd.getUuDai()
                 });
             }
         }
         TableColumnModel columnModel = tblCTHD.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(1).setPreferredWidth(200);
+
+        columnModel.getColumn(0).setPreferredWidth(80);
+        columnModel.getColumn(1).setPreferredWidth(250);
+        columnModel.getColumn(2).setPreferredWidth(166);
+        columnModel.getColumn(3).setPreferredWidth(80);
     }
 
     public void fillTableCTHD() {
         modelCTHD.setRowCount(0);
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
-            return; // Không có hàng nào được chọn, thoát luôn
+            return;
         }
 
-        String ID_HD = model.getValueAt(i, 0).toString(); // Lấy ID từ dòng đã chọn trong bảng
-        List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
+        String ID_HD = model.getValueAt(i, 0).toString();
+        List<ChiTietHoaDon> lstcthd = cthdd.getAll_CTHD(ID_HD);
         for (ChiTietHoaDon cthd : lstcthd) {
             modelCTHD.addRow(new Object[]{
                 cthd.getID_SP(),
@@ -100,7 +107,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         if (i >= 0) {
             String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
             lblMaHD.setText(ID_HD);
-            List<ChiTietHoaDon> lstcthd = hdd.getAllID_HD(ID_HD);
+            List<ChiTietHoaDon> lstcthd = cthdd.getAll_CTHD(ID_HD);
             modelCTHD.setRowCount(0);
 
             for (ChiTietHoaDon cthd : lstcthd) {
@@ -117,60 +124,55 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
     public void add() {
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn!");
+            return;
+        }
+
+        if (!txtArea.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng xoá hoá đơn cũ để thêm mới");
             return;
         }
 
         String ID_HD = lblMaHD.getText();
-        List<HoaDon> listHD = hdd.getALLID_hoadon(ID_HD);
-        String thoiGian = listHD.get(0).getThoiGian();
-        String ngayThangNam = listHD.get(0).getNgayThangNam();
-        String uuDai = listHD.get(0).getUuDai();
-        String trangThai = listHD.get(0).getTrangThai();
+        List<HoaDon> hd = hdd.getALL_ID_HD(ID_HD);
+        String ngayThangNam = hd.get(0).getNgayThangNam();
+        String thoiGian = hd.get(0).getThoiGian();
+        float tienHD = hd.get(0).getTongTienHD();
+        float tienUuDai = hd.get(0).getTongTienUuDai();
+        float tienThanhToan = hd.get(0).getTongTienThanhToan();
+        float tienKhach = hd.get(0).getTienKhachHang();
+        float tienTraLai = hd.get(0).getTienTraLai();
+        String uuDai = hd.get(0).getUuDai();
 
-        List<ChiTietHoaDon> ds = hdd.getAllID_HD(ID_HD);
-        float tongTien = 0;
+        StringBuilder hoaDon = new StringBuilder();
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("         HÓA ĐƠN THANH TOÁN\n");
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("Mã hóa đơn  : ").append(ID_HD).append("\n");
+        hoaDon.append("Ngày lập    : ").append(ngayThangNam).append("\n");
+        hoaDon.append("Thời gian   : ").append(thoiGian).append("\n\n");
+        hoaDon.append("Danh sách món:\n");
+        hoaDon.append("________________________________________\n");
+        hoaDon.append(String.format("%-20s %3s %15s\n", "Tên món", "SL", "Giá món (đ)"));
+        hoaDon.append("________________________________________\n");
+        List<ChiTietHoaDon> ds = cthdd.getAll_CTHD(ID_HD);
         for (ChiTietHoaDon ct : ds) {
-            tongTien += ct.getGiaSP() * ct.getSoLuong();
+            hoaDon.append(String.format("%-25s %-5d %-15s\n", ct.getTenSP(), ct.getSoLuong(), formatVND(ct.getGiaSP())));
         }
-        float tienUuDai = 0;
-        float tienHD = tongTien;
-        if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
-            String uuDaiPhanTram = uuDai.replace("%", "").trim();
-            float phanTram = Float.parseFloat(uuDaiPhanTram);
-            tienUuDai = tongTien * (phanTram / 100f);
-            tienHD = tongTien - tienUuDai;
-        }
+        hoaDon.append("________________________________________\n");
+        hoaDon.append(String.format("%-15s : %,15.0f đ\n", "Tổng tiền", tienHD));
+        hoaDon.append(String.format("%-15s : %-5s %,10.0f đ\n", "Ưu đãi", uuDai, tienUuDai));
+        hoaDon.append(String.format("%-15s : %,15.0f đ\n", "Thành tiền", tienThanhToan));
+        hoaDon.append("----------------------------------------\n");
+        hoaDon.append(String.format("%-15s : %,15.0f đ\n", "Tiền khách đưa", tienKhach));
+        hoaDon.append(String.format("%-15s : %,15.0f đ\n", "Tiền trả lại", tienTraLai));
+        hoaDon.append("________________________________________\n");
+        hoaDon.append("Cảm ơn quý khách, hẹn gặp lại!\n");
 
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("HOÁ ĐƠN THANH TOÁN\n");
-        sb.append("_________________________________________\n");
-        sb.append("Mã hóa đơn   : ").append(ID_HD).append("\n");
-        sb.append("Ngày lập     : ").append(ngayThangNam).append("\n");
-        sb.append("Thời gian    : ").append(thoiGian).append("\n\n");
-        sb.append("Danh sách món:\n");
-        sb.append("_________________________________________\n");
-        sb.append(String.format("%-25s %-5s %-15s\n", "Tên món", "SL", "Giá món"));
-        sb.append("_________________________________________\n");
-        for (ChiTietHoaDon ct : ds) {
-            sb.append(String.format("%-25s %-5d %-15s\n", ct.getTenSP(), ct.getSoLuong(), formatVND(ct.getGiaSP())));
-        }
-        sb.append("_________________________________________\n");
-        sb.append("Tổng tiền    : ").append(formatVND(tongTien)).append("\n");
-        if (!uuDai.equalsIgnoreCase("") && !uuDai.equals("0%")) {
-            sb.append("Ưu đãi       : ").append(uuDai).append(" - ").append(formatVND(tienUuDai)).append("\n");
-        } else {
-            sb.append("Ưu đãi       : 0% - 0 VND\n");
-        }
-        sb.append("Thành tiền   : ").append(formatVND(tienHD)).append("\n");
-        sb.append("_________________________________________\n");
-        sb.append("Cảm ơn quý khách, hẹn gặp lại!");
-
-        txtArea.setText(sb.toString());
-        txtArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        txtArea.setText(hoaDon.toString());
         txtArea.setEditable(false);
-        txtArea.setBackground(Color.white);
+        txtArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+
     }
 
     public void clear() {
@@ -180,7 +182,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
     }
 
     public void printHD() {
-        String txt = txtArea.getText(); 
+        String txt = txtArea.getText();
         if (txt.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không có nội dung để in!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
@@ -188,7 +190,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         try {
             txtArea.print();
         } catch (PrinterException ex) {
-            ex.printStackTrace(); 
+            ex.printStackTrace();
         }
     }
 
@@ -250,8 +252,8 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
             pnlXuatHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlXuatHoaDonLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
+                .addGap(18, 18, 18)
                 .addComponent(btnPrint)
                 .addGap(34, 34, 34))
         );
@@ -310,6 +312,11 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
         btnAdd.setText("ADD");
+        btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddMouseClicked(evt);
+            }
+        });
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
@@ -345,11 +352,11 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
                         .addComponent(btnAdd))
                     .addComponent(lblTittleHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblMaHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 77, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlXuatLayout = new javax.swing.GroupLayout(pnlXuat);
@@ -396,7 +403,6 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        add();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
@@ -408,6 +414,11 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         // TODO add your handling code here:
         printHD();
     }//GEN-LAST:event_btnPrintMouseClicked
+
+    private void btnAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddMouseClicked
+        // TODO add your handling code here:
+        add();
+    }//GEN-LAST:event_btnAddMouseClicked
 
     /**
      * @param args the command line arguments
@@ -444,9 +455,9 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         });
     }
 
-   public JPanel getPanelQLHD() {
-    return pnlXuat;
-}
+    public JPanel getPanelQLHD() {
+        return pnlXuat;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
