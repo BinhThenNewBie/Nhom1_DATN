@@ -107,9 +107,9 @@ public class Admin extends javax.swing.JFrame {
             ));
 
             // Đặt kích thước để đồng nhất
-            btn.setPreferredSize(new Dimension(280, 55));
-            btn.setMinimumSize(new Dimension(280, 55));
-            btn.setMaximumSize(new Dimension(280, 55));
+            btn.setPreferredSize(new Dimension(260, 55));
+            btn.setMinimumSize(new Dimension(260, 55));
+            btn.setMaximumSize(new Dimension(260, 55));
 
             // Gán listener cho hiệu ứng hover + click
             btn.addMouseListener(new java.awt.event.MouseAdapter() {
