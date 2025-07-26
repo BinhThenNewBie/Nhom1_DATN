@@ -363,34 +363,30 @@ public void checkEmailTrungAdminStaff() {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(82, 82, 82)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1055, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMokhoa)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(1003, 1003, 1003)
-                            .addComponent(btnMokhoa))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(82, 82, 82)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel17)
-                                        .addComponent(jLabel16)
-                                        .addComponent(jLabel14)
-                                        .addComponent(lblBatDau1))
-                                    .addGap(127, 127, 127)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtID)
-                                        .addComponent(txtPass)
-                                        .addComponent(txtEmail1)
-                                        .addComponent(cboVaitro, 0, 445, Short.MAX_VALUE)))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(140, 140, 140)
-                                    .addComponent(btnKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(144, 144, 144)
-                                    .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(159, 159, 159))
+                                .addComponent(jLabel17)
+                                .addComponent(jLabel16)
+                                .addComponent(jLabel14)
+                                .addComponent(lblBatDau1))
+                            .addGap(127, 127, 127)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtID)
+                                .addComponent(txtPass)
+                                .addComponent(txtEmail1)
+                                .addComponent(cboVaitro, 0, 445, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(140, 140, 140)
+                            .addComponent(btnKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(144, 144, 144)
+                            .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1377, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(393, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,9 +414,9 @@ public void checkEmailTrungAdminStaff() {
                     .addComponent(btnKhoa))
                 .addGap(38, 38, 38)
                 .addComponent(btnMokhoa)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanelQLTKLayout = new javax.swing.GroupLayout(jPanelQLTK);
@@ -430,7 +426,7 @@ public void checkEmailTrungAdminStaff() {
             .addGroup(jPanelQLTKLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanelQLTKLayout.setVerticalGroup(
             jPanelQLTKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +442,7 @@ public void checkEmailTrungAdminStaff() {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanelQLTK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1518, Short.MAX_VALUE))
+                .addGap(0, 1052, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -457,11 +453,6 @@ public void checkEmailTrungAdminStaff() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMokhoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMokhoaActionPerformed
-        // TODO add your handling code here:
-        moKhoaTaiKhoan();
-    }//GEN-LAST:event_btnMokhoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
@@ -482,6 +473,11 @@ public void checkEmailTrungAdminStaff() {
         // TODO add your handling code here:
         showdetail();
     }//GEN-LAST:event_tblBangMouseClicked
+
+    private void btnMokhoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMokhoaActionPerformed
+        // TODO add your handling code here:
+        moKhoaTaiKhoan();
+    }//GEN-LAST:event_btnMokhoaActionPerformed
 public JPanel getMainPanel() {
      return jPanel1;
 }
