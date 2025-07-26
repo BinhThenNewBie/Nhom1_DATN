@@ -50,26 +50,26 @@ public class QuanLySanPham extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
 
         // Đổi màu nền bảng
-tblBang.setBackground(new Color(230, 230, 230)); // màu nền bảng
+        tblBang.setBackground(new Color(230, 230, 230)); // màu nền bảng
 
-// Đổi màu viền của tiêu đề cột
-tblBang.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
-tblBang.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
-tblBang.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16)); // font đậm
+        // Đổi màu viền của tiêu đề cột
+        tblBang.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
+        tblBang.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
+        tblBang.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16)); // font đậm
 
-// Đổi màu hàng được chọn
-tblBang.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
-tblBang.setSelectionForeground(Color.WHITE);             // chữ khi chọn
+        // Đổi màu hàng được chọn
+        tblBang.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
+        tblBang.setSelectionForeground(Color.WHITE);             // chữ khi chọn
 
-// Đổi màu đường lưới (nếu có)
-tblBang.setGridColor(Color.GRAY);
+        // Đổi màu đường lưới (nếu có)
+        tblBang.setGridColor(Color.GRAY);
 
-// Đổi màu chữ trong bảng
-tblBang.setForeground(Color.BLACK); // màu chữ
-tblBang.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // font chữ
+        // Đổi màu chữ trong bảng
+        tblBang.setForeground(Color.BLACK); // màu chữ
+        tblBang.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // font chữ
 
-// Đặt độ cao hàng
-tblBang.setRowHeight(30);
+        // Đặt độ cao hàng
+        tblBang.setRowHeight(30);
 
         loadTatCa();
         initTable();
@@ -95,92 +95,115 @@ tblBang.setRowHeight(30);
 
     public void showdetail() {
         int i = tblBang.getSelectedRow();
-        if (i >= 0 && i < list.size()) {
-            SanPham sp = list.get(i);
+        if (i == -1 || list == null || list.isEmpty() || i >= list.size()) {
+            return;
+        }
 
-            lblID.setText(sp.getIDSanPham());
-            txtTensp.setText(sp.getTenSanPham());
-            txtGiatien.setText(String.valueOf(sp.getGiaTien()));
-            cboLoai.setSelectedItem(sp.getLoaiSanPham());
-            strAnh = sp.getIMG();
-           
-            if (strAnh == null || strAnh.trim().isEmpty() || strAnh.equalsIgnoreCase("NO IMAGE")) {
-                lblAnh.setText("Hình Ảnh Không tồn tại");
-                lblAnh.setIcon(null);
-            } else {
-                try {
-                    String duongDanAnhDayDu = "src/Images_SanPham/" + strAnh;
-                    File file = new File(duongDanAnhDayDu);
-                    if (!file.exists()) {
-                        lblAnh.setText("Không tìm thấy ảnh");
-                        lblAnh.setIcon(null);
-                        return;
-                    }
-                    ImageIcon icon = new ImageIcon(duongDanAnhDayDu);
-                    Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
-                    lblAnh.setIcon(new ImageIcon(img));
-                    lblAnh.setText("");
-                } catch (Exception e) {
-                    lblAnh.setText("Ảnh Bị Lỗi");
+        SanPham sp = list.get(i);
+
+        lblID.setText(sp.getIDSanPham());
+        txtTensp.setText(sp.getTenSanPham());
+        txtGiatien.setText(String.valueOf(sp.getGiaTien()));
+        cboLoai.setSelectedItem(sp.getLoaiSanPham());
+        strAnh = sp.getIMG();
+
+        // Xử lý hiển thị ảnh
+        if (strAnh == null || strAnh.trim().isEmpty() || strAnh.equalsIgnoreCase("NO IMAGE")) {
+            lblAnh.setText("Hình Ảnh Không tồn tại");
+            lblAnh.setIcon(null);
+        } else {
+            try {
+                String duongDanAnhDayDu = "src/Images_SanPham/" + strAnh;
+                File file = new File(duongDanAnhDayDu);
+                if (!file.exists()) {
+                    lblAnh.setText("Không tìm thấy ảnh");
                     lblAnh.setIcon(null);
+                    return;
                 }
+                ImageIcon icon = new ImageIcon(duongDanAnhDayDu);
+                Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+                lblAnh.setIcon(new ImageIcon(img));
+                lblAnh.setText("");
+            } catch (Exception e) {
+                lblAnh.setText("Ảnh Bị Lỗi");
+                lblAnh.setIcon(null);
             }
+        }
 
-            int trangThai = sp.getTrangThai();
-            if (trangThai == 0) {
-                btnThemSP.setEnabled(false);
-                btnMoKhoa.setEnabled(true);
-                btnSuaSP.setEnabled(false);
-                btnLamMoiSP.setEnabled(false);
-                btnTaoMa.setEnabled(false);
-                khoaSP.setEnabled(false);
-                btnTimKiem.setEnabled(false);
-                btnLoc.setEnabled(false);
-                lblID.setEnabled(false);
-                lblAnh.setEnabled(false);
-                cboLoai.setEnabled(false);
-                cboLocSP.setEnabled(false);
-                txtTensp.setEnabled(false);
-                txtGiatien.setEnabled(false);
-                txtTimkiem.setEnabled(false);
-            } else {
-                btnThemSP.setEnabled(true);
-                btnMoKhoa.setEnabled(false);
-                btnSuaSP.setEnabled(true);
-                btnLamMoiSP.setEnabled(true);
-                btnTaoMa.setEnabled(true);
-                khoaSP.setEnabled(true);
-                btnTimKiem.setEnabled(true);
-                btnLoc.setEnabled(true);
-                lblID.setEnabled(true);
-                lblAnh.setEnabled(true);
-                cboLoai.setEnabled(true);
-                cboLocSP.setEnabled(true);
-                txtTensp.setEnabled(true);
-                txtGiatien.setEnabled(true);
-                txtTimkiem.setEnabled(true);
-            }
+        // Xử lý trạng thái UI dựa vào trạng thái sản phẩm
+        int trangThai = sp.getTrangThai();
+        boolean isLocked = (trangThai == 0);
+
+        // Cập nhật trạng thái các nút và field
+        btnThemSP.setEnabled(!isLocked);
+        btnMoKhoa.setEnabled(isLocked);
+        btnSuaSP.setEnabled(!isLocked);
+        btnLamMoiSP.setEnabled(!isLocked);
+        btnTaoMa.setEnabled(!isLocked);
+        khoaSP.setEnabled(!isLocked);
+        btnTimKiem.setEnabled(!isLocked);
+        btnLoc.setEnabled(!isLocked);
+
+        // Cập nhật trạng thái các component input
+        lblID.setEnabled(!isLocked);
+        lblAnh.setEnabled(!isLocked);
+        cboLoai.setEnabled(!isLocked);
+        cboLocSP.setEnabled(!isLocked);
+        txtTensp.setEnabled(!isLocked);
+        txtGiatien.setEnabled(!isLocked);
+        txtTimkiem.setEnabled(!isLocked);
+    }
+
+    public void loadTatCa() {
+        list = spDao.getAll(); // Cập nhật list
+        tableModel.setRowCount(0);
+
+        for (SanPham sp : list) {
+            tableModel.addRow(spDao.getRow(sp));
+        }
+
+        // Reset selection sau khi load
+        if (tblBang.getRowCount() > 0) {
+            tblBang.clearSelection();
         }
     }
 
     public void timKiemKetHop() {
         String tuKhoa = txtTimkiem.getText().trim();
         if (tuKhoa.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập từ khóa để tìm kiếm!");
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập ID hoặc tên để tìm kiếm!");
             return;
         }
 
         list = spDao.timKiemKetHop(tuKhoa);
         if (list.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm theo ID hoặc tên!");
+            // Nếu không tìm thấy, load lại tất cả
+            loadTatCa();
         } else {
             loadTable(list);
-            tblBang.setRowSelectionInterval(0, 0);
-            showdetail();
+            if (tblBang.getRowCount() > 0) {
+                tblBang.setRowSelectionInterval(0, 0);
+                showdetail();
+            }
         }
     }
-   
-    
+
+    public void locTheoLoai() {
+        String loai = cboLocSP.getSelectedItem().toString();
+
+        if (loai.equalsIgnoreCase("TẤT CẢ")) {
+            loadTatCa();
+        } else {
+            list = spDao.locTheoLoai(loai);
+            loadTable(list);
+        }
+
+        // Clear selection sau khi lọc
+        if (tblBang.getRowCount() > 0) {
+            tblBang.clearSelection();
+        }
+    }
 
     public void loadTable(List<SanPham> sanPhamList) {
         DefaultTableModel model = (DefaultTableModel) tblBang.getModel();
@@ -192,36 +215,11 @@ tblBang.setRowHeight(30);
                 sp.getGiaTien(),
                 sp.getLoaiSanPham(),
                 sp.getIMG(),
-                sp.getTrangThai() == 1 ? "Đang hoạt động" : "Đã khóa"
+                sp.getTrangThai() == 1 ? "ĐANG BÁN" : "ĐÃ KHOÁ"
             });
         }
     }
 
-    public void locTheoLoai() {
-        String loai = cboLocSP.getSelectedItem().toString();
-        tableModel.setRowCount(0);
-
-        if (loai.equalsIgnoreCase("Tất cả")) {
-            list = spDao.getAll();
-        } else {
-            list = spDao.locTheoLoai(loai);
-        }
-
-        for (SanPham sp : list) {
-            tableModel.addRow(spDao.getRow(sp));
-        }
-    }
-
-    public void loadTatCa() {
-        tableModel.setRowCount(0);
-        list = spDao.getAll();
-
-        for (SanPham sp : list) {
-            tableModel.addRow(spDao.getRow(sp));
-        }
-    }
-
-// Thêm phương thức khóa sản phẩm
     public void khoaSanPham() {
         int i = tblBang.getSelectedRow();
         if (i == -1) {
@@ -229,19 +227,40 @@ tblBang.setRowHeight(30);
             return;
         }
 
-        SanPham sp = spDao.getAll().get(i);
+        // Lấy sản phẩm từ danh sách hiện tại (list) thay vì gọi spDao.getAll()
+        SanPham sp;
+        if (list == null || list.isEmpty()) {
+            // Nếu list rỗng thì load lại từ database
+            list = spDao.getAll();
+        }
+
+        if (i >= list.size()) {
+            JOptionPane.showMessageDialog(this, "Chỉ số không hợp lệ!");
+            return;
+        }
+
+        sp = list.get(i);
+
         if (sp.getTrangThai() == 0) {
             JOptionPane.showMessageDialog(this, "Sản phẩm đã bị khóa!");
             return;
         }
 
-        int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn khóa sản phẩm này?",
+        int chon = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc muốn khóa sản phẩm: " + sp.getTenSanPham() + "?",
                 "Xác Nhận Khóa", JOptionPane.YES_NO_OPTION);
+
         if (chon == JOptionPane.YES_OPTION) {
             boolean result = spDao.khoaSanPham(sp.getIDSanPham());
             if (result) {
                 JOptionPane.showMessageDialog(this, "Khóa sản phẩm thành công!");
-                fillTable();
+                // Cập nhật lại danh sách và bảng
+                loadTatCa(); // Load lại toàn bộ dữ liệu
+                // Giữ nguyên dòng được chọn nếu có thể
+                if (i < tblBang.getRowCount()) {
+                    tblBang.setRowSelectionInterval(i, i);
+                    showdetail();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Khóa sản phẩm thất bại!");
             }
@@ -255,14 +274,24 @@ tblBang.setRowHeight(30);
             return;
         }
 
-        String timKiem = txtTimkiem.getText().trim();
         SanPham sp;
 
+        // Kiểm tra xem đang ở chế độ tìm kiếm hay không
+        String timKiem = txtTimkiem.getText().trim();
+
         if (timKiem.isEmpty()) {
-            sp = spDao.getAll().get(i);
+            // Không có tìm kiếm - lấy từ list hiện tại
+            if (list == null || list.isEmpty()) {
+                list = spDao.getAll();
+            }
+            if (i >= list.size()) {
+                JOptionPane.showMessageDialog(this, "Chỉ số không hợp lệ!");
+                return;
+            }
+            sp = list.get(i);
         } else {
-            List<SanPham> list = spDao.getSPByTen(timKiem);
-            if (list.isEmpty() || i >= list.size()) {
+            // Có tìm kiếm - lấy từ kết quả tìm kiếm
+            if (list == null || list.isEmpty() || i >= list.size()) {
                 JOptionPane.showMessageDialog(this, "Không thể lấy thông tin sản phẩm!");
                 return;
             }
@@ -274,46 +303,32 @@ tblBang.setRowHeight(30);
             return;
         }
 
-        int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn mở khóa sản phẩm này?",
+        int chon = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc muốn mở khóa sản phẩm: " + sp.getTenSanPham() + "?",
                 "Xác Nhận Mở Khóa", JOptionPane.YES_NO_OPTION);
+
         if (chon == JOptionPane.YES_OPTION) {
             boolean result = spDao.moKhoaSanPham(sp.getIDSanPham());
             if (result) {
                 JOptionPane.showMessageDialog(this, "Mở khóa sản phẩm thành công!");
-                fillTable();
+                // Cập nhật lại danh sách và bảng
+                if (timKiem.isEmpty()) {
+                    loadTatCa(); // Load lại toàn bộ dữ liệu
+                } else {
+                    timKiemKetHop(); // Load lại kết quả tìm kiếm
+                    return; // Thoát vì timKiemKetHop() đã xử lý selection
+                }
+
+                // Giữ nguyên dòng được chọn nếu có thể
+                if (i < tblBang.getRowCount()) {
+                    fillTable();
+                    tblBang.setRowSelectionInterval(i, i);
+                    showdetail();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Mở khóa sản phẩm thất bại!");
             }
         }
-    }
-
-// Thêm phương thức kiểm tra trạng thái khóa
-    private boolean kiemTraSanPhamBiKhoa() {
-        int i = tblBang.getSelectedRow();
-        if (i == -1) {
-            return false; // Không có sản phẩm nào được chọn
-        }
-
-        String timKiem = txtTimkiem.getText().trim();
-        SanPham sp;
-
-        if (timKiem.isEmpty()) {
-            // Không tìm kiếm, dùng getAll()
-            sp = spDao.getAll().get(i);
-        } else {
-            // Đang tìm kiếm theo tên
-            List<SanPham> list = spDao.getSPByTen(timKiem);
-            if (list.isEmpty() || i >= list.size()) {
-                return false;
-            }
-            sp = list.get(i);
-        }
-
-        if (sp.getTrangThai() == 0) {
-            JOptionPane.showMessageDialog(this, "Sản phẩm này đã bị khóa! Không thể thực hiện thao tác.");
-            return true;
-        }
-        return false;
     }
 
     private boolean validatethemSanPham() {
@@ -505,9 +520,6 @@ tblBang.setRowHeight(30);
     }
 
     private void themSanPham() {
-        if (kiemTraSanPhamBiKhoa()) {
-            return;
-        }
         if (!validatethemSanPham()) {
             return;
         }
@@ -537,11 +549,6 @@ tblBang.setRowHeight(30);
         int i = tblBang.getSelectedRow();
         if (i == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!");
-            return;
-        }
-
-        // Kiểm tra xem sản phẩm có bị khóa không
-        if (kiemTraSanPhamBiKhoa()) {
             return;
         }
 
@@ -645,7 +652,6 @@ tblBang.setRowHeight(30);
         strAnh = "";
         lblAnh.setText("");
         lblAnh.setIcon(null);
-        fillTable();
     }
 
     /**
