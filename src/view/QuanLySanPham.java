@@ -241,7 +241,6 @@ tblBang.setRowHeight(30);
             boolean result = spDao.khoaSanPham(sp.getIDSanPham());
             if (result) {
                 JOptionPane.showMessageDialog(this, "Khóa sản phẩm thành công!");
-                showdetail();
                 fillTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Khóa sản phẩm thất bại!");
