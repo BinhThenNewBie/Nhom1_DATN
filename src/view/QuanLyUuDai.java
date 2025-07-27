@@ -7,7 +7,9 @@ package view;
 import DAO.UuDaiDAO;
 import Model.UuDai;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +42,28 @@ public class QuanLyUuDai extends javax.swing.JFrame {
 
         // Set kích thước
         jPanel1.setPreferredSize(new Dimension(240, 350));
+
+        // Đổi màu nền bảng
+        tblBang1.setBackground(new Color(230, 230, 230)); // màu nền bảng
+
+        // Đổi màu viền của tiêu đề cột
+        tblBang1.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
+        tblBang1.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
+        tblBang1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16)); // font đậm
+
+        // Đổi màu hàng được chọn
+        tblBang1.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
+        tblBang1.setSelectionForeground(Color.WHITE);             // chữ khi chọn
+
+        // Đổi màu đường lưới (nếu có)
+        tblBang1.setGridColor(Color.GRAY);
+
+        // Đổi màu chữ trong bảng
+        tblBang1.setForeground(Color.BLACK); // màu chữ
+        tblBang1.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // font chữ
+
+        // Đặt độ cao hàng
+        tblBang1.setRowHeight(30);
         initTable();
         fillTable();
     }
@@ -191,8 +215,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được âm");
             return false;
         }
-        if (giaTriSo < 5 || giaTriSo > 80) {
-            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 80%");
+        if (giaTriSo < 5 || giaTriSo > 60) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 60%");
             return false;
         }
         txtGiatri1.setText(giaTriSo + "%");

@@ -7,7 +7,9 @@ package view;
 import DAO.NhanvienDAO;
 import Model.Nhanvien;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -45,6 +47,28 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
     // Set kích thước
     jPanel4.setPreferredSize(new Dimension(1240, 350)); // Panel trên cao 350px
     jPanel1.setPreferredSize(new Dimension(1240, 50)); 
+    
+    // Đổi màu nền bảng
+tblNhanvien.setBackground(new Color(230, 230, 230)); // màu nền bảng
+
+// Đổi màu viền của tiêu đề cột
+tblNhanvien.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
+tblNhanvien.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
+tblNhanvien.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16)); // font đậm
+
+// Đổi màu hàng được chọn
+tblNhanvien.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
+tblNhanvien.setSelectionForeground(Color.WHITE);             // chữ khi chọn
+
+// Đổi màu đường lưới (nếu có)
+tblNhanvien.setGridColor(Color.GRAY);
+
+// Đổi màu chữ trong bảng
+tblNhanvien.setForeground(Color.BLACK); // màu chữ
+tblNhanvien.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // font chữ
+
+// Đặt độ cao hàng
+tblNhanvien.setRowHeight(30);
         initTable();
         fillTable();
     }

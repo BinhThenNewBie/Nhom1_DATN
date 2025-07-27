@@ -332,7 +332,7 @@ public class ThongKe extends javax.swing.JFrame {
         // Calculate total revenue for filtered period
         float tongDoanhThu = 0;
         for (HoaDon hd : filteredHoaDon) {
-            tongDoanhThu += hd.getTongTienHD();
+            tongDoanhThu += hd.getTongTienThanhToan();
         }
 
         // Calculate total bills for filtered period
@@ -388,7 +388,7 @@ public class ThongKe extends javax.swing.JFrame {
             float doanhThu = 0;
 
             for (HoaDon hd : dailyHoaDon) {
-                doanhThu += hd.getTongTienHD();
+                doanhThu += hd.getTongTienThanhToan();
             }
 
             float doanhThuTB = soHoaDon > 0 ? doanhThu / soHoaDon : 0;
