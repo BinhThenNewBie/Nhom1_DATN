@@ -215,8 +215,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị ưu đãi không được âm");
             return false;
         }
-        if (giaTriSo < 5 || giaTriSo > 80) {
-            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 80%");
+        if (giaTriSo < 5 || giaTriSo > 60) {
+            JOptionPane.showMessageDialog(this, "Giá trị ưu đãi phải từ 5% đến 60%");
             return false;
         }
         txtGiatri1.setText(giaTriSo + "%");

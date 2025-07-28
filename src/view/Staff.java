@@ -6,7 +6,10 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -20,7 +23,20 @@ public class Staff extends javax.swing.JFrame {
      */
     public Staff() {
         initComponents();
-                this.setSize(1655, 1000);
+        //lấy kích thước của màn hình theo máy
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+
+        // ước chừng thanh taskbar tầm 80px
+        int taskbarHeight = 80;
+
+        // lấy kích thước màn hình trừ đi thanh taskbar
+        int width = screenSize.width;
+        int height = screenSize.height - taskbarHeight;
+
+        // set cho form không bị lệch
+        this.setSize(width, height);
+        this.setLocationRelativeTo(null);
 
         setLocationRelativeTo(null);
         setupButtonStyle(btnLogOut);
