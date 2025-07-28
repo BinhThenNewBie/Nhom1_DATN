@@ -148,36 +148,38 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             });
         }
     }
-
+    
     public void fillTableMenu() {
-        // Xoá tất cả các component con khỏi panel menu để cbi làm mới
         pnlMenu.removeAll();
-
-        // Kích thước của một sản phẩm
         int itemWidth = 130;
         int itemHeight = 190;
 
-        // ContentPanel: Panel chúa tất cả item sản phẩm
-        // GridBagLayout: Layout cho phép xếp itém theo dạng linh hoạt
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(Color.WHITE);
-        //Tạo khoảng cách 10px ở 4 phía
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // GridBagConstraints: Đối tượng điều khiển cách các component được đặt trong GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        // Căn itém về phía trên-trái
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
         String loai = cbxLoc.getSelectedItem().toString().trim();
+        String keyword = txtTimKiem.getText().trim().toLowerCase();
+
         List<SanPham> list = spDAO.getAll();
+
+        // Lọc theo loại nếu không chọn "TẤT CẢ"
         if (!loai.equalsIgnoreCase("TẤT CẢ")) {
             list = list.stream()
                     .filter(sp -> sp.getLoaiSanPham().equalsIgnoreCase(loai))
                     .collect(Collectors.toList());
         }
-        //filter để lọc, collect để thu thập kết quả
+
+        // Lọc theo từ khoá nếu có nhập
+        if (!keyword.isEmpty()) {
+            list = list.stream()
+                    .filter(sp -> sp.getIDSanPham().toLowerCase().contains(keyword)
+                    || sp.getTenSanPham().toLowerCase().contains(keyword))
+                    .collect(Collectors.toList());
+        }
 
         int col = 0;
         int row = 0;
@@ -187,20 +189,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             }
 
             JPanel panel = new JPanel();
-            // Xếp các thành phần theo chiều dọc
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            // Đặt kích thước 140x200px
             panel.setPreferredSize(new Dimension(itemWidth, itemHeight));
             panel.setBackground(Color.WHITE);
-            // Viền đen
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            // Khoảng trống 5px phía trên
             panel.add(Box.createVerticalStrut(5));
 
-            // SwingConstants.CENTER: Căn giữa text
             JLabel lblMa = new JLabel(sp.getIDSanPham(), SwingConstants.CENTER);
             lblMa.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            // CENTER_ALIGMENT: Căn giữa trong BoxLayout
             lblMa.setAlignmentX(Component.CENTER_ALIGNMENT);
             lblMa.setPreferredSize(new Dimension(itemWidth, 35));
 
@@ -211,7 +207,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             try {
                 ImageIcon icon = new ImageIcon("src/Images_SanPham/" + sp.getIMG());
                 Image img = icon.getImage();
-                // SCALE_SMOOTH: resize ảnh mượt mà
                 Image scaledImg = img.getScaledInstance(95, 95, Image.SCALE_SMOOTH);
                 lblImage.setIcon(new ImageIcon(scaledImg));
             } catch (Exception e) {
@@ -229,7 +224,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             lblTen.setAlignmentX(Component.CENTER_ALIGNMENT);
             lblTen.setForeground(Color.red);
             lblTen.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-            // Nếu tên > 15 ký tự, cắt còn 20 ký tự + "..." 
             if (sp.getTenSanPham().length() > 15) {
                 lblTen.setText(sp.getTenSanPham().substring(0, 16) + "...");
             }
@@ -248,41 +242,35 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             panel.add(bottom);
 
             panel.addMouseListener(new MouseAdapter() {
-                // Di chuột vào nền xám nhạt viền xanh
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     panel.setBackground(new Color(240, 240, 240));
                     panel.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 150), 2));
                 }
 
-                // khi di chuột ra nền trắng viền đen
                 @Override
                 public void mouseExited(MouseEvent e) {
                     panel.setBackground(Color.WHITE);
                     panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 }
 
-                // showdetail khi ấn vào sản phẩm
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     showDetail(sp);
                 }
             });
-            // Đổi con trỏ thành hình bàn tay
             panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-            // Vị trí trên grid
             gbc.gridx = col;
             gbc.gridy = row;
             contentPanel.add(panel, gbc);
-
             col++;
             if (col >= 5) {
                 col = 0;
                 row++;
             }
         }
-        // Thêm panel trắng để đủ dòng cuối
+
         if (col != 0) {
             for (int i = col; i < 5; i++) {
                 JPanel panelTrang = new JPanel();
@@ -290,53 +278,41 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 panelTrang.setMinimumSize(new Dimension(itemWidth, itemHeight));
                 panelTrang.setMaximumSize(new Dimension(itemWidth, itemHeight));
                 panelTrang.setBackground(Color.WHITE);
-
                 gbc.gridx = i;
                 gbc.gridy = row;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.weightx = 1.0;
-
                 contentPanel.add(panelTrang, gbc);
             }
         }
 
-        // LƯU KÍCH THƯỚC GỐC CỦA PANEL
         Dimension originalSize = pnlMenu.getSize();
         Point originalLocation = pnlMenu.getLocation();
-
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(null);
-
-        // CỐ ĐỊNH KÍCH THƯỚC SCROLLPANE
         scrollPane.setPreferredSize(originalSize);
         scrollPane.setMinimumSize(originalSize);
         scrollPane.setMaximumSize(originalSize);
 
-        // CỐ ĐỊNH LAYOUT VÀ KÍCH THƯỚC PANEL
         pnlMenu.setLayout(new BorderLayout());
         pnlMenu.setPreferredSize(originalSize);
         pnlMenu.setMinimumSize(originalSize);
         pnlMenu.setMaximumSize(originalSize);
         pnlMenu.setSize(originalSize);
         pnlMenu.setBounds(originalLocation.x, originalLocation.y, originalSize.width, originalSize.height);
-
         pnlMenu.add(scrollPane, BorderLayout.CENTER);
 
-        // CỐ ĐỊNH VỊ TRÍ VÀ CUỘN VỀ ĐẦU
         SwingUtilities.invokeLater(() -> {
             pnlMenu.setBounds(originalLocation.x, originalLocation.y, originalSize.width, originalSize.height);
             scrollPane.getVerticalScrollBar().setValue(0);
             scrollPane.getHorizontalScrollBar().setValue(0);
         });
-
         pnlMenu.revalidate();
         pnlMenu.repaint();
-
     }
-
     public void updateGiaSP() {
         List<HoaDon> lsthdc = hdDAO.getALL_HD(); 
         for (HoaDon hdc : lsthdc) {
@@ -1080,8 +1056,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        btnAdd = new javax.swing.JButton();
-        btnPrint = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         txtTimKiem = new javax.swing.JTextField();
         btnFind = new javax.swing.JButton();
@@ -1599,16 +1573,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        btnAdd.setBackground(new java.awt.Color(31, 51, 86));
-        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("ADD");
-
-        btnPrint.setBackground(new java.awt.Color(31, 51, 86));
-        btnPrint.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnPrint.setForeground(new java.awt.Color(255, 255, 255));
-        btnPrint.setText("PRINT");
-
         btnClear.setBackground(new java.awt.Color(31, 51, 86));
         btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnClear.setForeground(new java.awt.Color(255, 255, 255));
@@ -1619,16 +1583,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(btnAdd)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                .addComponent(btnPrint)
-                .addGap(41, 41, 41)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnClear)
                 .addGap(25, 25, 25))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1637,10 +1597,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnPrint)
-                    .addComponent(btnClear))
+                .addComponent(btnClear)
                 .addGap(15, 15, 15))
         );
 
@@ -1648,6 +1605,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         btnFind.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFind.setForeground(new java.awt.Color(255, 255, 255));
         btnFind.setText("FIND");
+        btnFind.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFindMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlBanHangLayout = new javax.swing.GroupLayout(pnlBanHang);
         pnlBanHang.setLayout(pnlBanHangLayout);
@@ -1804,6 +1766,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         payment();
     }//GEN-LAST:event_btnThanhToanMouseClicked
 
+    private void btnFindMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseClicked
+        // TODO add your handling code here:
+        fillTableMenu();
+    }//GEN-LAST:event_btnFindMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1852,14 +1819,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnApDung;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnHuyDon;
     private javax.swing.JButton btnHuyUuDai;
-    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnTaoHoaDon;
     private javax.swing.JButton btnThanhToan;
