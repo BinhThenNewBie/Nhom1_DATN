@@ -23,18 +23,18 @@ public class Staff extends javax.swing.JFrame {
      */
     public Staff() {
         initComponents();
-
+        //lấy kích thước của màn hình theo máy
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
 
-        // Ước lượng chiều cao thanh taskbar & title bar (~80px)
+        // ước chừng thanh taskbar tầm 80px
         int taskbarHeight = 80;
 
-        //Trừ ra taskbar/title bar
+        // lấy kích thước màn hình trừ đi thanh taskbar
         int width = screenSize.width;
         int height = screenSize.height - taskbarHeight;
 
-        //Thiết lập kích thước cửa sổ
+        // set cho form không bị lệch
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
 
