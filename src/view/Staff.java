@@ -278,18 +278,7 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutMouseClicked
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        btnLogOut.setBackground(Color.decode("#4E6688"));
-        btnLogOut.setForeground(Color.decode("#FFFFFF"));
-        btnLogOut.setFocusPainted(false);
-        btnLogOut.setBorderPainted(false);
-        btnLogOut.setContentAreaFilled(false);
-        btnLogOut.setOpaque(true);
-
-        btnQLBH.setBackground(Color.decode("#1c2e4a"));
-        btnQLBH.setForeground(Color.decode("#FFFFFF"));
-
-        btnQLHD.setBackground(Color.decode("#1c2e4a"));
-        btnQLHD.setForeground(Color.decode("#FFFFFF"));
+        
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
@@ -298,18 +287,7 @@ public class Staff extends javax.swing.JFrame {
 
     private void btnQLBHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLBHActionPerformed
         // TODO add your handling code here:
-        btnQLBH.setBackground(Color.decode("#4E6688"));
-        btnQLBH.setForeground(Color.decode("#FFFFFF"));
-        btnQLBH.setFocusPainted(false);
-        btnQLBH.setBorderPainted(false);
-        btnQLBH.setContentAreaFilled(false);
-        btnQLBH.setOpaque(true);
-
-        btnLogOut.setBackground(Color.decode("#1c2e4a"));
-        btnLogOut.setForeground(Color.decode("#FFFFFF"));
-
-        btnQLHD.setBackground(Color.decode("#1c2e4a"));
-        btnQLHD.setForeground(Color.decode("#FFFFFF"));
+        
     }//GEN-LAST:event_btnQLBHActionPerformed
 
     private void btnQLBHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLBHMouseClicked
@@ -329,19 +307,7 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQLHDMouseClicked
 
     private void btnQLHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLHDActionPerformed
-        // TODO add your handling code here:
-        btnQLHD.setBackground(Color.decode("#4E6688"));
-        btnQLHD.setForeground(Color.decode("#FFFFFF"));
-        btnQLHD.setFocusPainted(false);
-        btnQLHD.setBorderPainted(false);
-        btnQLHD.setContentAreaFilled(false);
-        btnQLHD.setOpaque(true);
-
-        btnLogOut.setBackground(Color.decode("#1c2e4a"));
-        btnLogOut.setForeground(Color.decode("#FFFFFF"));
-
-        btnQLBH.setBackground(Color.decode("#1c2e4a"));
-        btnQLBH.setForeground(Color.decode("#FFFFFF"));
+        
     }//GEN-LAST:event_btnQLHDActionPerformed
 
     /**
