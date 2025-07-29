@@ -482,7 +482,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
 
         // 2.3 Không được là biểu thức như 10+1, 10-1, 10*2, 100/5
         if (giaStr.contains("+") || giaStr.contains("*") || giaStr.contains("/")) {
-            JOptionPane.showMessageDialog(this, "Giá tiền phải là số dương!");
+            JOptionPane.showMessageDialog(this, "Giá tiền phải là số nguyên dương hợp lệ!");
             return false;
         }
         // 2.4 Phải là số nguyên dương và trong khoảng 10.000 – 500.000
@@ -490,7 +490,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
             int gia = Integer.parseInt(giaStr);
 
             if (gia <= 0) {
-                JOptionPane.showMessageDialog(this, "Giá tiền phải là số dương!");
+                JOptionPane.showMessageDialog(this, "Giá tiền phải là số nguyên dương hợp lệ!");
                 return false;
             }
 
