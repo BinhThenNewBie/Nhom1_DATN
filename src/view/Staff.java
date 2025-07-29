@@ -35,7 +35,7 @@ public class Staff extends javax.swing.JFrame {
         int height = screenSize.height - taskbarHeight;
 
         // set cho form không bị lệch
-        this.setSize(width, height);
+        this.setSize(1920, 1080);
         this.setLocationRelativeTo(null);
 
         setLocationRelativeTo(null);
@@ -278,7 +278,7 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutMouseClicked
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        
+
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void lblExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblExitMouseClicked
@@ -287,7 +287,7 @@ public class Staff extends javax.swing.JFrame {
 
     private void btnQLBHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLBHActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnQLBHActionPerformed
 
     private void btnQLBHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQLBHMouseClicked
@@ -307,7 +307,7 @@ public class Staff extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQLHDMouseClicked
 
     private void btnQLHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLHDActionPerformed
-        
+
     }//GEN-LAST:event_btnQLHDActionPerformed
 
     /**
