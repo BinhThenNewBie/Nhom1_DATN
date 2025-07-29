@@ -69,7 +69,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
     }
 
     public void initTable() {
-        String[] cols = {"ID ƯU ĐÃI", "GIÁ TRỊ", "ÁP DỤNG VỚI", "NGÀY BẮT ĐẦU", "NGÀY KẾT THÚC", "TRẠNG THÁI"};
+        String[] cols = {"ID ƯU ĐÃI", "GIÁ TRỊ", "ÁP DỤNG TỪ", "NGÀY BẮT ĐẦU", "NGÀY KẾT THÚC", "TRẠNG THÁI"};
         tableModel.setColumnIdentifiers(cols);
         tblBang1.setModel(tableModel);
     }
@@ -223,30 +223,30 @@ public class QuanLyUuDai extends javax.swing.JFrame {
 
         String apdung = txtApDung1.getText().trim();
         if (apdung.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được để trống");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được để trống");
             return false;
         }
         if (apdung.matches(".*[a-zA-Z]+.*")) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa chữ cái");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa chữ cái");
             return false;
         }
         if (apdung.matches(".*[^0-9].*")) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa ký tự đặc biệt");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa ký tự đặc biệt");
             return false;
         }
         float apDungSo;
         try {
             apDungSo = Float.parseFloat(apdung);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không hợp lệ");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không hợp lệ");
             return false;
         }
         if (apDungSo <= 0) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải lớn hơn 0");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ phải lớn hơn 0");
             return false;
         }
         if (apDungSo < 10000 || apDungSo > 5000000) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 VND đến 5.000.000 VND");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ phải từ 10.000 VND đến 5.000.000 VND");
             return false;
         }
 
@@ -353,7 +353,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
         txtApDung1.setFont(new java.awt.Font("Segoe UI Light", 1, 12)); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
-        jLabel17.setText("ÁP DỤNG VỚI");
+        jLabel17.setText("ÁP DỤNG TỪ");
 
         btnThem1.setBackground(new java.awt.Color(31, 51, 86));
         btnThem1.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N

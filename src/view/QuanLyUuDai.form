@@ -278,7 +278,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="14" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#xc1;P D&#x1ee4;NG V&#x1eda;I"/>
+                <Property name="text" type="java.lang.String" value="&#xc1;P D&#x1ee4;NG T&#x1eea;"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnThem1">
