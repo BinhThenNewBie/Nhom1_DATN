@@ -545,104 +545,129 @@ public class QuanLySanPham extends javax.swing.JFrame {
     }
 
     private void suaSanPham() {
-        // Kiểm tra xem có chọn sản phẩm không
-        int i = tblBang.getSelectedRow();
-        if (i == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!");
-            return;
-        }
-
-        // Validate dữ liệu nhập
-        if (!validateSuaSanPham()) {
-            return;
-        }
-
-        // Lấy sản phẩm gốc để so sánh
-        String timKiem = txtTimkiem.getText().trim();
-        SanPham spGoc;
-        if (timKiem.isEmpty()) {
-            spGoc = spDao.getAll().get(i);
-        } else {
-            List<SanPham> list = spDao.getSPByTen(timKiem);
-            spGoc = list.get(i);
-        }
-
-        // Kiểm tra xem có thay đổi gì không
-        String tenMoi = txtTensp.getText().trim();
-        String giaStrMoi = txtGiatien.getText().trim().replace(",", "").replace(".", "");
-        if (giaStrMoi.startsWith("+")) {
-            giaStrMoi = giaStrMoi.substring(1);
-        }
-        float giaMoi = Float.parseFloat(giaStrMoi);
-        String loaiMoi = cboLoai.getSelectedItem().toString();
-        String anhMoi = strAnh;
-
-        // So sánh với dữ liệu gốc
-        boolean coThayDoi = false;
-        if (!spGoc.getTenSanPham().equals(tenMoi)) {
-            coThayDoi = true;
-        }
-        if (spGoc.getGiaTien() != giaMoi) {
-            coThayDoi = true;
-        }
-        if (!spGoc.getLoaiSanPham().equals(loaiMoi)) {
-            coThayDoi = true;
-        }
-        if (!spGoc.getIMG().equals(anhMoi)) {
-            coThayDoi = true;
-        }
-
-        // Nếu không có thay đổi gì
-        if (!coThayDoi) {
-            JOptionPane.showMessageDialog(this, "Không có thay đổi nào để lưu!");
-            return;
-        }
-
-        int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn lưu các thay đổi này?",
-                "Xác Nhận", JOptionPane.YES_NO_OPTION);
-        if (chon == JOptionPane.YES_OPTION) {
-            try {
-                // Lấy dữ liệu từ form
-                String ID = lblID.getText().trim();
-                String ten = txtTensp.getText().trim();
-
-                // Xử lý giá tiền giống như trong validation
-                String giaStr = txtGiatien.getText().trim().replace(",", "").replace(".", "");
-                if (giaStr.startsWith("+")) {
-                    giaStr = giaStr.substring(1);
-                }
-
-                float gia = Float.parseFloat(giaStr);
-                String loaiSanPham = cboLoai.getSelectedItem().toString();
-                String anh = strAnh;
-
-                // Tạo đối tượng sản phẩm mới
-                SanPham sp = new SanPham();
-                sp.setIDSanPham(ID);
-                sp.setTenSanPham(ten);
-                sp.setGiaTien(gia);
-                sp.setLoaiSanPham(loaiSanPham);
-                sp.setIMG(anh);
-                sp.setTrangThai(spGoc.getTrangThai()); // Giữ nguyên trạng thái cũ
-
-                // Gọi DAO để update
-                int result = spDao.suaSanPham(sp, ID);
-                if (result == 1) {
-                    fillTable();
-                    JOptionPane.showMessageDialog(this, "Sửa sản phẩm thành công!");
-                    // Load lại bảng
-                    lamMoiForm(); // Reset form sau khi sửa thành công
-                } else {
-                    JOptionPane.showMessageDialog(this, "Sửa sản phẩm thất bại!");
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Lỗi định dạng số: " + e.getMessage());
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi sửa sản phẩm: " + e.getMessage());
-            }
-        }
-
+    // Kiểm tra xem có chọn sản phẩm không
+    int i = tblBang.getSelectedRow();
+    if (i == -1) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!");
+        return;
     }
+
+    // Validate dữ liệu nhập
+    if (!validateSuaSanPham()) {
+        return;
+    }
+
+    // Lấy sản phẩm gốc để so sánh - SỬA LẠI PHẦN NÀY
+    SanPham spGoc;
+    String timKiem = txtTimkiem.getText().trim();
+    
+    // Đảm bảo list luôn được cập nhật từ database
+    if (timKiem.isEmpty()) {
+        list = spDao.getAll(); // Refresh list từ DB
+        if (i >= list.size()) {
+            JOptionPane.showMessageDialog(this, "Chỉ số không hợp lệ!");
+            return;
+        }
+        spGoc = list.get(i);
+    } else {
+        list = spDao.timKiemKetHop(timKiem); // Refresh search results
+        if (i >= list.size()) {
+            JOptionPane.showMessageDialog(this, "Chỉ số không hợp lệ!");
+            return;
+        }
+        spGoc = list.get(i);
+    }
+
+    // Kiểm tra xem có thay đổi gì không
+    String tenMoi = txtTensp.getText().trim();
+    String giaStrMoi = txtGiatien.getText().trim().replace(",", "").replace(".", "");
+    if (giaStrMoi.startsWith("+")) {
+        giaStrMoi = giaStrMoi.substring(1);
+    }
+    float giaMoi = Float.parseFloat(giaStrMoi);
+    String loaiMoi = cboLoai.getSelectedItem().toString();
+    String anhMoi = strAnh;
+
+    // So sánh với dữ liệu gốc
+    boolean coThayDoi = false;
+    if (!spGoc.getTenSanPham().equals(tenMoi)) {
+        coThayDoi = true;
+    }
+    if (spGoc.getGiaTien() != giaMoi) {
+        coThayDoi = true;
+    }
+    if (!spGoc.getLoaiSanPham().equals(loaiMoi)) {
+        coThayDoi = true;
+    }
+    if (!spGoc.getIMG().equals(anhMoi)) {
+        coThayDoi = true;
+    }
+
+    // Nếu không có thay đổi gì
+    if (!coThayDoi) {
+        JOptionPane.showMessageDialog(this, "Không có thay đổi nào để lưu!");
+        return;
+    }
+
+    int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn lưu các thay đổi này?",
+            "Xác Nhận", JOptionPane.YES_NO_OPTION);
+    if (chon == JOptionPane.YES_OPTION) {
+        try {
+            // Lấy dữ liệu từ form
+            String ID = lblID.getText().trim();
+            String ten = txtTensp.getText().trim();
+
+            // Xử lý giá tiền giống như trong validation
+            String giaStr = txtGiatien.getText().trim().replace(",", "").replace(".", "");
+            if (giaStr.startsWith("+")) {
+                giaStr = giaStr.substring(1);
+            }
+
+            float gia = Float.parseFloat(giaStr);
+            String loaiSanPham = cboLoai.getSelectedItem().toString();
+            String anh = strAnh;
+
+            // Tạo đối tượng sản phẩm mới
+            SanPham sp = new SanPham();
+            sp.setIDSanPham(ID);
+            sp.setTenSanPham(ten);
+            sp.setGiaTien(gia);
+            sp.setLoaiSanPham(loaiSanPham);
+            sp.setIMG(anh);
+            sp.setTrangThai(spGoc.getTrangThai()); // Giữ nguyên trạng thái cũ
+
+            // Gọi DAO để update
+            int result = spDao.suaSanPham(sp, ID);
+            if (result == 1) {
+                JOptionPane.showMessageDialog(this, "Sửa sản phẩm thành công!");
+                
+                // QUAN TRỌNG: Refresh dữ liệu theo đúng trạng thái hiện tại
+                if (timKiem.isEmpty()) {
+                    // Không có tìm kiếm - load tất cả
+                    loadTatCa();
+                } else {
+                    // Có tìm kiếm - load lại kết quả tìm kiếm
+                    timKiemKetHop();
+                    return; // Exit vì timKiemKetHop() đã xử lý selection
+                }
+                
+                // Giữ nguyên selection và refresh detail
+                if (i < tblBang.getRowCount()) {
+                    tblBang.setRowSelectionInterval(i, i);
+                    showdetail(); // Refresh detail với dữ liệu mới
+                }
+                
+                lamMoiForm(); // Reset form sau khi sửa thành công
+            } else {
+                JOptionPane.showMessageDialog(this, "Sửa sản phẩm thất bại!");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi định dạng số: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi sửa sản phẩm: " + e.getMessage());
+        }
+    }
+}
 
     private void lamMoiForm() {
         lblID.setText("");
