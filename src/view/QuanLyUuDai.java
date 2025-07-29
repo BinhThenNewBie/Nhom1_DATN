@@ -223,30 +223,30 @@ public class QuanLyUuDai extends javax.swing.JFrame {
 
         String apdung = txtApDung1.getText().trim();
         if (apdung.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được để trống");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được để trống");
             return false;
         }
         if (apdung.matches(".*[a-zA-Z]+.*")) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa chữ cái");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa chữ cái");
             return false;
         }
         if (apdung.matches(".*[^0-9].*")) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không được chứa ký tự đặc biệt");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa ký tự đặc biệt");
             return false;
         }
         float apDungSo;
         try {
             apDungSo = Float.parseFloat(apdung);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với không hợp lệ");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không hợp lệ");
             return false;
         }
         if (apDungSo <= 0) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải lớn hơn 0");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ phải lớn hơn 0");
             return false;
         }
         if (apDungSo < 10000 || apDungSo > 5000000) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng với phải từ 10.000 VND đến 5.000.000 VND");
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ phải từ 10.000 VND đến 5.000.000 VND");
             return false;
         }
 
