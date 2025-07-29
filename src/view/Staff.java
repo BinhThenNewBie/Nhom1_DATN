@@ -35,7 +35,7 @@ public class Staff extends javax.swing.JFrame {
         int height = screenSize.height - taskbarHeight;
 
         // set cho form không bị lệch
-        this.setSize(1920, 1080);
+        this.setSize(1920, 1045);
         this.setLocationRelativeTo(null);
 
         setLocationRelativeTo(null);
