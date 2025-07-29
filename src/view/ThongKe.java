@@ -1,4 +1,3 @@
-
 package view;
 
 import DAO.HoaDonDAO;
@@ -139,12 +138,21 @@ public class ThongKe extends javax.swing.JFrame {
         pnlMain.add(pnlHeader, BorderLayout.NORTH);
 
         JPanel pnlContent = new JPanel(new BorderLayout(5, 5));
-        pnlContent.setBackground(new Color(240, 248, 255));
-        pnlContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Đổi layout từ BorderLayout sang BoxLayout theo trục dọc
+        pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
 
-        pnlContent.add(pnlStats, BorderLayout.NORTH);
-        pnlContent.add(pnlControls, BorderLayout.CENTER);
-        pnlContent.add(pnlTable, BorderLayout.SOUTH);
+        // Giới hạn chiều cao cho các phần phía trên bảng
+        pnlStats.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+        pnlControls.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        pnlTable.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        pnlTable.setPreferredSize(new Dimension(1200, 600));
+
+        // Thêm các panel lần lượt
+        pnlContent.add(pnlStats);
+        pnlContent.add(Box.createVerticalStrut(10)); // khoảng cách giữa các phần
+        pnlContent.add(pnlControls);
+        pnlContent.add(Box.createVerticalStrut(10));
+        pnlContent.add(pnlTable);
 
         pnlMain.add(pnlContent, BorderLayout.CENTER);
 
@@ -222,59 +230,55 @@ public class ThongKe extends javax.swing.JFrame {
         }
     }
 
-    
-    
-    
     private List<HoaDon> filterHoaDonByPeriod(List<HoaDon> hoaDonList) {
-    String selectedPeriod = (String) cmbThongKe.getSelectedItem();
-    List<HoaDon> filtered = new ArrayList<>();
+        String selectedPeriod = (String) cmbThongKe.getSelectedItem();
+        List<HoaDon> filtered = new ArrayList<>();
 
-    Calendar cal = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String today = sdf.format(cal.getTime());
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(cal.getTime());
 
-    
-    System.out.println("Selected period: '" + selectedPeriod + "'");
-    System.out.println("Total HoaDon list size: " + hoaDonList.size());
+        System.out.println("Selected period: '" + selectedPeriod + "'");
+        System.out.println("Total HoaDon list size: " + hoaDonList.size());
 
-    for (HoaDon hd : hoaDonList) {
-        if (hd.getTrangThai() == 0) {
-            continue;
+        for (HoaDon hd : hoaDonList) {
+            if (hd.getTrangThai() == 0) {
+                continue;
+            }
+
+            boolean shouldInclude = false;
+
+            switch (selectedPeriod) {
+                case "TẤT CẢ":
+                    shouldInclude = true;
+                    break;
+                case "HÔM NAY":
+                    shouldInclude = hd.getNgayThangNam().equals(today);
+                    break;
+                case "TUẦN NÀY":
+                    shouldInclude = isThisWeek(hd.getNgayThangNam());
+                    break;
+                case "THÁNG NÀY":
+                    shouldInclude = isThisMonth(hd.getNgayThangNam());
+                    break;
+                case "NĂM NAY":
+                    shouldInclude = isThisYear(hd.getNgayThangNam());
+                    break;
+                default:
+                    // Fallback: if no match, show all data
+                    System.out.println("No matching case found for: '" + selectedPeriod + "'");
+                    shouldInclude = true;
+                    break;
+            }
+
+            if (shouldInclude) {
+                filtered.add(hd);
+            }
         }
-        
-        boolean shouldInclude = false;
 
-        switch (selectedPeriod) {
-            case "TẤT CẢ":
-                shouldInclude = true;
-                break;
-            case "HÔM NAY":
-                shouldInclude = hd.getNgayThangNam().equals(today);
-                break;
-            case "TUẦN NÀY":
-                shouldInclude = isThisWeek(hd.getNgayThangNam());
-                break;
-            case "THÁNG NÀY":
-                shouldInclude = isThisMonth(hd.getNgayThangNam());
-                break;
-            case "NĂM NAY":
-                shouldInclude = isThisYear(hd.getNgayThangNam());
-                break;
-            default:
-                // Fallback: if no match, show all data
-                System.out.println("No matching case found for: '" + selectedPeriod + "'");
-                shouldInclude = true;
-                break;
-        }
-
-        if (shouldInclude) {
-            filtered.add(hd);
-        }
+        System.out.println("Filtered list size: " + filtered.size());
+        return filtered;
     }
-
-    System.out.println("Filtered list size: " + filtered.size());
-    return filtered;
-}
 
     private boolean isThisWeek(String dateStr) {
         try {
