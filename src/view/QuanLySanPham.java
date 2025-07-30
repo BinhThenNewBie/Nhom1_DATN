@@ -46,8 +46,8 @@ public class QuanLySanPham extends javax.swing.JFrame {
         jPanelQLSP.add(jPanel1, BorderLayout.CENTER); // Panel table ở dưới
 
         // Set kích thước
-        jPanel3.setPreferredSize(new Dimension(1240, 350)); // Panel trên cao 350px
-        jPanel1.setPreferredSize(new Dimension(1240, 150)); // Panel dưới cao 630px
+        jPanel3.setPreferredSize(new Dimension(1240, 380)); // Panel trên cao 350px
+        jPanel1.setPreferredSize(new Dimension(1240, 250)); // Panel dưới cao 630px
 
         // Đổi màu nền bảng
         tblBang.setBackground(new Color(230, 230, 230)); // màu nền bảng
@@ -899,13 +899,13 @@ public class QuanLySanPham extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(khoaSP)
                     .addComponent(btnSuaSP)
                     .addComponent(btnThemSP)
                     .addComponent(btnLamMoiSP))
-                .addGap(46, 46, 46))
+                .addGap(31, 31, 31))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
