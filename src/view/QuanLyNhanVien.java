@@ -176,7 +176,6 @@ tblNhanvien.setRowHeight(30);
     }
 
     public void them() {
-        // Validation input
         String ID_NV = txtIdnv.getText().trim();
         String hoTen = txtTennv.getText().trim();
         String SDT = txtSdt.getText().trim();

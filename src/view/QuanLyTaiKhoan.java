@@ -10,6 +10,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -55,12 +58,12 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         tblBang.setRowHeight(30);
         initTable();
         fillTable();
-        checkEmailTrungAdminStaff();
+        checkEmailTrung();
     }
 
     public void initTable() {
         tableModel = new DefaultTableModel();
-        String[] cols = new String[]{"ID TÀI KHOẢN", "PASSWORD", "EMAIL", "VAI TRÒ", "TRẠNG THÁI"};
+        String[] cols = new String[]{"ID TÀI KHOẢN", "ID NHÂN VIÊN","TÊN NHÂN VIÊN", "MẬT KHẨU","EMAIL", "VAI TRÒ", "TRẠNG THÁI"};
         tableModel.setColumnIdentifiers(cols);
         tblBang.setModel(tableModel);
     }
@@ -74,47 +77,56 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     }
 
     public void showdetail() {
-        int chon = tblBang.getSelectedRow();
-        if (chon >= 0) {
-            Taikhoan tk = tkd.GETALL().get(chon);
-            txtID.setText(tk.getID_TK());
-            txtIdnv.setText(tk.getPass());
-            txtPass.setText(tk.getEmail());
-            cboVaitro.setSelectedItem(tk.getVaiTro());
+    int chon = tblBang.getSelectedRow();
+    if (chon >= 0) {
+        Taikhoan tk = tkd.GETALL().get(chon);
+        
+        // SỬA LẠI ĐÚNG THỨ TỰ
+        txtID.setText(tk.getID_TK());        
+        txtIdnv.setText(tk.getID_NV());    
+        txtTentk.setText(tk.getTenNV());    
+        txtPass.setText(tk.getPass());   
+        txtEmail.setText(tk.getEmail());    
+        cboVaitro.setSelectedItem(tk.getVaiTro());
 
-            String trangThai = tk.getTrangThai();
-            String vaiTro = tk.getVaiTro();
+        String trangThai = tk.getTrangThai();
+        String vaiTro = tk.getVaiTro();
 
-            // Logic hiển thị button dựa trên trạng thái
-            if ("LOCKED".equalsIgnoreCase(trangThai)) {
-                btnKhoa.setEnabled(false);
-                btnMokhoa.setEnabled(true);
-                btnSua.setEnabled(false);
-                txtPass.setEnabled(false);
+        // Logic hiển thị button dựa trên trạng thái
+        if ("LOCKED".equalsIgnoreCase(trangThai)) {
+            btnKhoa.setEnabled(false);
+            btnMokhoa.setEnabled(true);
+            btnSua.setEnabled(false);
+            txtPass.setEnabled(false);
+            txtID.setEnabled(false);
+            txtTentk.setEnabled(false);
+            txtIdnv.setEnabled(false);
+            btnLamMoi.setEnabled(false);
+        } else {
+            btnKhoa.setEnabled(true);
+            btnMokhoa.setEnabled(false);
+            btnSua.setEnabled(true);
+            btnLamMoi.setEnabled(true);
+
+            // Nếu là STAFF, chỉ cho phép sửa email 
+            if ("STAFF".equalsIgnoreCase(vaiTro)) {
+                txtPass.setEnabled(false);    // STAFF không được sửa password
                 txtID.setEnabled(false);
                 txtIdnv.setEnabled(false);
-                btnLamMoi.setEnabled(false);
+                txtTentk.setEnabled(false);
+                txtEmail.setEnabled(true);    // Chỉ cho phép sửa email
             } else {
-                btnKhoa.setEnabled(true);
-                btnMokhoa.setEnabled(false);
-                btnSua.setEnabled(true);
-                btnLamMoi.setEnabled(true);
-
-                // Nếu là STAFF, chỉ cho phép sửa email 
-                if ("STAFF".equalsIgnoreCase(vaiTro)) {
-                    txtPass.setEnabled(true);
-                    txtID.setEnabled(false);
-                    txtIdnv.setEnabled(false);
-                } else {
-                    // Nếu là ADMIN, cho phép sửa tất cả
-                    txtPass.setEnabled(true);
-                    txtID.setEnabled(true);
-                    txtIdnv.setEnabled(true);
-                }
+                // Nếu là ADMIN, cho phép sửa tất cả
+                txtPass.setEnabled(true);
+                txtID.setEnabled(true);
+                txtIdnv.setEnabled(true);
+                txtTentk.setEnabled(true);
+                txtEmail.setEnabled(true);
             }
         }
-        checkEmailTrungAdminStaff();
     }
+    checkEmailTrung();
+}
 
     public void lammoi() {
         txtID.setText("");
@@ -122,74 +134,106 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         txtIdnv.setText("");
         cboVaitro.setSelectedItem(0);
     }
+public void them(){
+        String ID_TK = txtTentk.getText().trim();
+        String ID_NV = txtIdnv.getText().trim();
+        String hoTen = txtTentk.getText().trim();
+        String pass = txtPass.getText().trim();
+        String email = txtEmail.getText().trim();
+        String vaiTro = (String) cboVaitro.getSelectedItem();
+        
+        //Kiểm tra tên
+        if (!hoTen.matches("^[\\p{L}\\s]+$")) {
+        JOptionPane.showMessageDialog(this, "Tên phải nhập bằng chữ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        // Kiểm tra dữ liệu đầu vào
+        if (ID_NV.isEmpty() || hoTen.isEmpty() || ID_TK.isEmpty()|| pass.isEmpty()||email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    public void sua() {
-        int chon = tblBang.getSelectedRow();
-        if (chon >= 0) {
-            Taikhoan chontk = tkd.GETALL().get(chon);
-
-            String vaiTroHienTai = chontk.getVaiTro();
-
-            int sua = JOptionPane.showConfirmDialog(this, "Bạn muốn sửa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-            if (sua == JOptionPane.YES_OPTION) {
-                String Email = txtPass.getText().trim();
-
-                // Validation dữ liệu
-                if (Email.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Vui lòng nhập email!");
-                    return;
-                }
-                // Kiểm tra định dạng email
-                if (!Email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        // kiểm tra định dạng email
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
                     JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
                     return;
                 }
-
-                // Lấy email của ADMIN và STAFF
-                String emailAdmin = tkd.getEmailByRole("ADMIN");
-                String emailStaff = tkd.getEmailByRole("STAFF");
-
-                // Kiểm tra email nhập có trùng với ADMIN hoặc STAFF khác không
-                if ("ADMIN".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailStaff)) {
-                    JOptionPane.showMessageDialog(this, "Email này đang trùng với STAFF! Vui lòng nhập email khác.");
-                    return;
-                }
-                if ("STAFF".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailAdmin)) {
-                    JOptionPane.showMessageDialog(this, "Email này đang trùng với ADMIN! Vui lòng nhập email khác.");
-                    return;
-                }
-                int result = 0;
-
-                // Nếu là STAFF, chỉ sửa email
-                if ("STAFF".equalsIgnoreCase(vaiTroHienTai)) {
-                    result = tkd.suaStaff(chontk.getID_TK(), Email);
-                } else {
-                    // Nếu là ADMIN, sửa tất cả
-                    String IDTK = txtID.getText().trim();
-                    String Pass = txtIdnv.getText().trim();
-                    String vaiTro = cboVaitro.getSelectedItem().toString(); // Lấy vai trò từ combobox
-
-                    if (IDTK.isEmpty() || Pass.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-                        return;
-                    }
-
-                    String trangThai = chontk.getTrangThai();
-                    Taikhoan tk = new Taikhoan(IDTK, Pass, Email, vaiTro, trangThai);
-                    result = tkd.sua(chontk.getID_TK(), tk);
-                }
-
-                if (result == 1) {
-                    fillTable();
-                    JOptionPane.showMessageDialog(this, "Sửa thành công!");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi sửa!");
-                }
+        for (Taikhoan x: tkd.GETALL()) {
+            if(x.getEmail() != null && x.getEmail().equalsIgnoreCase(email)&& !x.getID_NV().equals(ID_NV)){
+                JOptionPane.showMessageDialog(this,"EMail này đã được dùng bởi nhân viên có mã: "+x.getID_NV(),
+                        "Lỗi email trùng",JOptionPane.ERROR_MESSAGE );
+                txtEmail.requestFocus();
+                return;
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần sửa!");
         }
+
+        Taikhoan nv = new Taikhoan(ID_TK, ID_NV, ID_NV, pass, email, vaiTro, vaiTro);
+        nv.setTrangThai("ACTIVE"); // Set trạng thái mặc định
+
+        int result = tkd.them(nv);
+        if (result == 1) {
+            fillTable();
+            JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi thêm nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+}
+    public void sua() {
+    int chon = tblBang.getSelectedRow();
+    if (chon >= 0) {
+        Taikhoan chontk = tkd.GETALL().get(chon);
+
+        String vaiTroHienTai = chontk.getVaiTro();
+
+        int sua = JOptionPane.showConfirmDialog(this, "Bạn muốn sửa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (sua == JOptionPane.YES_OPTION) {
+            String Email = txtEmail.getText().trim(); 
+
+            // Validation dữ liệu
+            if (Email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập email!");
+                return;
+            }
+            // Kiểm tra định dạng email
+            if (!Email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
+                return;
+            }
+
+            int result = 0;
+
+            // Nếu là STAFF, chỉ sửa email
+            if ("STAFF".equalsIgnoreCase(vaiTroHienTai)) {
+                result = tkd.suaStaff(chontk.getID_TK(), Email);
+            } else {
+                // Nếu là ADMIN, sửa tất cả
+                String IDTK = txtID.getText().trim();
+                String IDNV = txtIdnv.getText().trim();
+                String tenTK = txtTentk.getText().trim();
+                String Pass = txtPass.getText().trim(); // SỬA: lấy từ txtPass
+                String vaiTro = cboVaitro.getSelectedItem().toString(); // Lấy vai trò từ combobox
+
+                if (IDTK.isEmpty() || Pass.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+                    return;
+                }
+
+                String trangThai = chontk.getTrangThai();
+                Taikhoan tk = new Taikhoan(IDTK, IDNV, tenTK, Pass, Email, vaiTro, trangThai);
+                result = tkd.sua(chontk.getID_TK(), tk);
+            }
+
+            if (result == 1) {
+                fillTable();
+                JOptionPane.showMessageDialog(this, "Sửa thành công!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi sửa!");
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần sửa!");
     }
+}
 
     public void moKhoaTaiKhoan() {
         int chon = tblBang.getSelectedRow();
@@ -251,27 +295,57 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         }
     }
 
-    public void checkEmailTrungAdminStaff() {
-        String emailAdmin = tkd.getEmailByRole("ADMIN");
-        String emailStaff = tkd.getEmailByRole("STAFF");
+    public void checkEmailTrung() {
+    List<Taikhoan> danhSach = tkd.GETALL();
+    Map<String, Integer> demEmail = new HashMap<>();
 
-        if (emailAdmin != null && emailStaff != null && emailAdmin.equalsIgnoreCase(emailStaff)) {
-            // Enable tất cả các control liên quan
-            btnSua.setEnabled(true);
+    // Đếm số lần xuất hiện của mỗi email
+    for (Taikhoan tk : danhSach) {
+        String email = tk.getEmail();
+        if (email != null && !email.isBlank()) {
+            email = email.trim().toLowerCase(); // Chuẩn hóa email
+            demEmail.put(email, demEmail.getOrDefault(email, 0) + 1);
+        }
+    }
+
+    // Kiểm tra có email nào trùng không
+    for (Map.Entry<String, Integer> entry : demEmail.entrySet()) {
+        if (entry.getValue() > 1) {
+            // Có email bị trùng
+            String emailTrung = entry.getKey();
+            
+            // Vô hiệu hóa các thành phần
+            btnThem.setEnabled(false);
+            txtTentk.setEnabled(false);
+            txtID.setEnabled(false);
+            txtPass.setEnabled(false);
+            txtIdnv.setEnabled(false);
             btnKhoa.setEnabled(false);
             btnMokhoa.setEnabled(false);
             btnLamMoi.setEnabled(false);
-            txtID.setEnabled(false);
-            txtIdnv.setEnabled(false);
-            txtPass.setEnabled(true);
-            cboVaitro.setEnabled(false);
+            
+            txtEmail.setText(emailTrung); // Gợi ý email bị trùng
 
-            txtPass.setText(emailAdmin); // Hoặc emailStaff đều như nhau
             JOptionPane.showMessageDialog(this,
-                    "Email của ADMIN và STAFF đang bị trùng: " + emailAdmin
-                    + ". Vui lòng đổi email để tiếp tục sử dụng!");
+                    "Phát hiện email bị trùng: " + emailTrung
+                    + "\nVui lòng sửa lại để tiếp tục sử dụng!",
+                    "Trùng Email", JOptionPane.WARNING_MESSAGE);
+            return;
         }
     }
+
+    // Nếu không có email trùng => bật lại các thành phần
+        btnThem.setEnabled(true);
+        txtTentk.setEnabled(true);
+        txtIdnv.setEnabled(true);
+        txtID.setEnabled(true);
+        txtPass.setEnabled(true);
+        txtEmail.setEnabled(true);
+        btnKhoa.setEnabled(true);
+        btnMokhoa.setEnabled(true);
+        btnLamMoi.setEnabled(true);
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -431,11 +505,14 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLabel14)
                                                 .addComponent(jLabel19)))
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(lblBatDau1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING))
-                                    .addGap(60, 60, 60)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(26, 26, 26)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel16)
+                                                .addComponent(jLabel18)
+                                                .addComponent(jLabel17)
+                                                .addComponent(lblBatDau1))))
+                                    .addGap(59, 59, 59)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(txtIdnv, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -466,25 +543,23 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                     .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(30, 30, 30))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtIdnv, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtIdnv, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtTentk, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel18))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16))
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel17))
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(45, 45, 45))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel17)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBatDau1)
