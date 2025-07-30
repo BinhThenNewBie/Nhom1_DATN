@@ -30,9 +30,10 @@ public class NhanvienDAO {
                 Nhanvien nv = new Nhanvien();
                 nv.setID_NV(rs.getString(1));
                 nv.setHoTen(rs.getString(2));
-                nv.setChucVu(rs.getString(3));
+                nv.setVaiTro(rs.getString(3));
                 nv.setSDT(rs.getString(4));
-                nv.setIMG(rs.getString(5));
+                nv.setEmail(rs.getString(5));
+                nv.setIMG(rs.getString(6));
                 String trangThai = rs.getString("TRANGTHAI");
                 nv.setTrangThai(trangThai != null ? trangThai : "ACTIVE");
                 Listnv.add(nv);
@@ -44,25 +45,27 @@ public class NhanvienDAO {
     public Object[] GETROW(Nhanvien nv){
     String ID_NV = nv.getID_NV();
     String hoTen = nv.getHoTen();
-    String chucVu = nv.getChucVu();
+    String vaiTro = nv.getVaiTro();
     String SDT = nv.getSDT();
+    String email = nv.getEmail();
     String IMG = nv.getIMG();
     String trangThai = nv.getTrangThai();
-    Object[] rows = new Object[]{ID_NV, hoTen, chucVu, SDT,IMG, trangThai};
+    Object[] rows = new Object[]{ID_NV, hoTen, vaiTro, SDT,email,IMG, trangThai};
     return rows;
 }
     public int Themnv(Nhanvien nv){
-        String sql="INSERT INTO NHANVIEN (ID_NV, HOTEN, VAITRO, SDT, IMG, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql="INSERT INTO NHANVIEN (ID_NV, HOTEN, VAITRO, SDT,EMAIL, IMG, TRANGTHAI) VALUES (?, ?, ?, ?,?, ?, ?)";
         Connection conn = DBconnect.getConnection();
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(sql);
             pstm.setString(1, nv.getID_NV());
             pstm.setString(2, nv.getHoTen());
-            pstm.setString(3, nv.getChucVu());
+            pstm.setString(3, nv.getVaiTro());
             pstm.setString(4, nv.getSDT());
-            pstm.setString(5, nv.getIMG());
-            pstm.setString(6, nv.getTrangThai() != null ? nv.getTrangThai() : "ACTIVE");
+            pstm.setString(5, nv.getEmail());
+            pstm.setString(6, nv.getIMG());
+            pstm.setString(7, nv.getTrangThai() != null ? nv.getTrangThai() : "ACTIVE");
             
             if(pstm.executeUpdate() > 0){
                 System.out.println("Thêm nhân viên mới thành công!");
@@ -74,17 +77,18 @@ public class NhanvienDAO {
         return 0;
     }
     public int suanv(Nhanvien nv, String idnv){
-        String sql="UPDATE NHANVIEN SET HOTEN=?, VAITRO=?, SDT=?, IMG=?, TRANGTHAI=? WHERE ID_NV = ?";
+        String sql="UPDATE NHANVIEN SET HOTEN=?, VAITRO=?, SDT=?,EMAIL=?, IMG=?, TRANGTHAI=? WHERE ID_NV = ?";
         Connection conn = DBconnect.getConnection();
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(sql);
             pstm.setString(1, nv.getHoTen());
-            pstm.setString(2, nv.getChucVu());
+            pstm.setString(2, nv.getVaiTro());
             pstm.setString(3, nv.getSDT());
-            pstm.setString(4, nv.getIMG());
-            pstm.setString(5, nv.getTrangThai() != null ? nv.getTrangThai() : "ACTIVE");
-            pstm.setString(6, idnv);
+            pstm.setString(4, nv.getEmail());
+            pstm.setString(5, nv.getIMG());
+            pstm.setString(6, nv.getTrangThai() != null ? nv.getTrangThai() : "ACTIVE");
+            pstm.setString(7, idnv);
             
             if(pstm.executeUpdate() > 0){
                 System.out.println("Sửa nhân viên thành công!");

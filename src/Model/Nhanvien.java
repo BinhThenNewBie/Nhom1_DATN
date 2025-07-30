@@ -9,18 +9,17 @@ package Model;
  * @author nmttt
  */
 public class Nhanvien {
-    private String ID_NV, hoTen, SDT, chucVu, IMG,trangThai;
+    private String ID_NV, hoTen, vaiTro,SDT,email, IMG,trangThai;
 
     public Nhanvien() {
     }
-    
-    
 
-    public Nhanvien(String ID_NV, String hoTen, String SDT, String chucVu, String IMG, String trangThai) {
+    public Nhanvien(String ID_NV, String hoTen, String vaiTro, String SDT, String email, String IMG, String trangThai) {
         this.ID_NV = ID_NV;
         this.hoTen = hoTen;
+        this.vaiTro = vaiTro;
         this.SDT = SDT;
-        this.chucVu = chucVu;
+        this.email = email;
         this.IMG = IMG;
         this.trangThai = trangThai;
     }
@@ -41,6 +40,14 @@ public class Nhanvien {
         this.hoTen = hoTen;
     }
 
+    public String getVaiTro() {
+        return vaiTro;
+    }
+
+    public void setVaiTro(String vaiTro) {
+        this.vaiTro = vaiTro;
+    }
+
     public String getSDT() {
         return SDT;
     }
@@ -49,12 +56,12 @@ public class Nhanvien {
         this.SDT = SDT;
     }
 
-    public String getChucVu() {
-        return chucVu;
+    public String getEmail() {
+        return email;
     }
 
-    public void setChucVu(String chucVu) {
-        this.chucVu = chucVu;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getIMG() {
@@ -73,5 +80,8 @@ public class Nhanvien {
         this.trangThai = trangThai;
     }
     
+    
+
+        
     
 }
