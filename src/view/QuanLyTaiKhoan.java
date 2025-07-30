@@ -77,6 +77,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     }
 
     public void showdetail() {
+        checkEmailTrung();
     int chon = tblBang.getSelectedRow();
     if (chon >= 0) {
         Taikhoan tk = tkd.GETALL().get(chon);
@@ -99,8 +100,10 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             btnLamMoi.setEnabled(false);
             txtPass.setEnabled(false);
             txtID.setEnabled(false);
+            cboVaitro.setEnabled(false);
             txtTentk.setEnabled(false);
             txtIdnv.setEnabled(false);
+            txtEmail.setEnabled(false);
             btnLamMoi.setEnabled(false);
         } else {
             btnKhoa.setEnabled(true);
@@ -113,6 +116,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             txtIdnv.setEnabled(true);
             txtTentk.setEnabled(true);
             txtEmail.setEnabled(true);
+            cboVaitro.setEnabled(true);
         }
         }
     }
