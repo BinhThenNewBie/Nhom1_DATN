@@ -77,11 +77,11 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     }
 
     public void showdetail() {
+        checkEmailTrung();
     int chon = tblBang.getSelectedRow();
     if (chon >= 0) {
         Taikhoan tk = tkd.GETALL().get(chon);
         
-        // SỬA LẠI ĐÚNG THỨ TỰ
         txtID.setText(tk.getID_TK());        
         txtIdnv.setText(tk.getID_NV());    
         txtTentk.setText(tk.getTenNV());    
@@ -92,41 +92,35 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         String trangThai = tk.getTrangThai();
         String vaiTro = tk.getVaiTro();
 
-        // Logic hiển thị button dựa trên trạng thái
         if ("LOCKED".equalsIgnoreCase(trangThai)) {
             btnKhoa.setEnabled(false);
             btnMokhoa.setEnabled(true);
+            btnThem.setEnabled(false);
             btnSua.setEnabled(false);
+            btnLamMoi.setEnabled(false);
             txtPass.setEnabled(false);
             txtID.setEnabled(false);
+            cboVaitro.setEnabled(false);
             txtTentk.setEnabled(false);
             txtIdnv.setEnabled(false);
+            txtEmail.setEnabled(false);
             btnLamMoi.setEnabled(false);
         } else {
             btnKhoa.setEnabled(true);
             btnMokhoa.setEnabled(false);
+            btnThem.setEnabled(true);
             btnSua.setEnabled(true);
             btnLamMoi.setEnabled(true);
-
-            // Nếu là STAFF, chỉ cho phép sửa email 
-            if ("STAFF".equalsIgnoreCase(vaiTro)) {
-                txtPass.setEnabled(false);    // STAFF không được sửa password
-                txtID.setEnabled(false);
-                txtIdnv.setEnabled(false);
-                txtTentk.setEnabled(false);
-                txtEmail.setEnabled(true);    // Chỉ cho phép sửa email
-            } else {
-                // Nếu là ADMIN, cho phép sửa tất cả
-                txtPass.setEnabled(true);
-                txtID.setEnabled(true);
-                txtIdnv.setEnabled(true);
-                txtTentk.setEnabled(true);
-                txtEmail.setEnabled(true);
-            }
+            txtPass.setEnabled(true);
+            txtID.setEnabled(true);
+            txtIdnv.setEnabled(true);
+            txtTentk.setEnabled(true);
+            txtEmail.setEnabled(true);
+            cboVaitro.setEnabled(true);
+        }
         }
     }
-    checkEmailTrung();
-}
+
 
     public void lammoi() {
         txtID.setText("");
@@ -446,7 +440,6 @@ public void them(){
 
         cboVaitro.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
         cboVaitro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "STAFF" }));
-        cboVaitro.setEnabled(false);
 
         tblBang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
