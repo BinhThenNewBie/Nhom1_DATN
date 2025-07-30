@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -18,11 +17,14 @@ import javax.swing.JPanel;
  */
 public class Staff extends javax.swing.JFrame {
 
+
     /**
      * Creates new form Staff
      */
     public Staff() {
         initComponents();
+
+        lblAccount.setText("    " + Login.emailLogin);
         //lấy kích thước của màn hình theo máy
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
@@ -108,7 +110,7 @@ public class Staff extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        lblAccount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblAccount.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         lblAccount.setForeground(new java.awt.Color(21, 35, 56));
         lblAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/MainForm_Admin/image/staff_logo.png"))); // NOI18N
         lblAccount.setText("    STAFF");
