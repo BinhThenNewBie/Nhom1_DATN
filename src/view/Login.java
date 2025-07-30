@@ -4,7 +4,9 @@
  */
 package view;
 
+import DAO.NhanvienDAO;
 import DAO.TaikhoanDAO;
+import Model.Nhanvien;
 import Model.Taikhoan;
 import java.util.List;
 import javax.swing.JFrame;
@@ -15,6 +17,8 @@ import javax.swing.JOptionPane;
  * @author PC Của Bình
  */
 public class Login extends javax.swing.JFrame {
+
+    public static String emailLogin = "";
 
     /**
      * Creates new form Login
@@ -40,12 +44,12 @@ public class Login extends javax.swing.JFrame {
 
         if (usernamein.isEmpty() || passwordStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Xin vui lòng nhập đầy đủ thông tin", "Error", JOptionPane.ERROR_MESSAGE);
-            
-        }else{
+
+        } else {
             check = true;
         }
         return check;
-        
+
     }
 
     public void kttk() { // kiểm tra kiểm tra xem tài khoản có trong csdl không
@@ -59,6 +63,13 @@ public class Login extends javax.swing.JFrame {
         for (Taikhoan tk : dstk) {
             if (usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())) {
                 loginSuccess = true;
+
+                // luu lại tên nhân viên
+                String TenNV = TimNhanVienTheoEmail(usernamein);
+                if (TenNV != null) {
+                    Login.emailLogin = TenNV;
+                    System.err.println("Đăng nhập bởi: " + TenNV);
+                }
 
                 if (tk.getVaiTro().equals("ADMIN")) {
                     Admin ad = new Admin();
@@ -79,13 +90,23 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    
-    public void Login(){
-        if(txttrong() == true){
+    public void Login() {
+        if (txttrong() == true) {
             kttk();
         }
     }
-    
+
+    public String TimNhanVienTheoEmail(String email) {
+        TaikhoanDAO tkDAO = new TaikhoanDAO();
+        List<Taikhoan> dsNV = tkDAO.GETALL();
+        for (Taikhoan tk : dsNV) {
+            if (tk.getEmail().equalsIgnoreCase(email)) {
+                return tk.getTenNV();
+            }
+        }
+        return null;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -200,6 +221,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+
         Login();
     }//GEN-LAST:event_btnLoginActionPerformed
 

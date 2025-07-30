@@ -1037,16 +1037,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         lblTittleUuDai = new javax.swing.JLabel();
         lblUuDai = new javax.swing.JLabel();
         lblAnhSanPham = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jTextField1 = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jSeparator6 = new javax.swing.JSeparator();
         btnTienTraLai = new javax.swing.JButton();
+        lblTienTraLai = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
         lblTittlePnlMenu = new javax.swing.JLabel();
@@ -1366,18 +1364,10 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setBackground(new java.awt.Color(31, 51, 86));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("NGƯỜI PHỤ TRÁCH:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("TIỀN KHÁCH ĐƯA:");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -1391,6 +1381,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         btnTienTraLai.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnTienTraLai.setForeground(new java.awt.Color(255, 255, 255));
         btnTienTraLai.setText("TRẢ LẠI");
+
+        lblTienTraLai.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout pnlThongTinLayout = new javax.swing.GroupLayout(pnlThongTin);
         pnlThongTin.setLayout(pnlThongTinLayout);
@@ -1428,10 +1420,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
                         .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlThongTinLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(11, 11, 11)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(pnlThongTinLayout.createSequentialGroup()
                                 .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlThongTinLayout.createSequentialGroup()
                                         .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1456,15 +1444,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                         .addGap(13, 13, 13)
                                         .addComponent(btnTienTraLai, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlThongTinLayout.createSequentialGroup()
-                                        .addGap(24, 24, 24)
-                                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jTextField1)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jRadioButton2)
-                                        .addGap(34, 34, 34)))))
+                                        .addGap(34, 34, 34))
+                                    .addGroup(pnlThongTinLayout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextField1)
+                                            .addComponent(lblTienTraLai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                         .addGap(15, 15, 15))
                     .addComponent(jSeparator6)))
         );
@@ -1501,25 +1489,24 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTienTraLai))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addGap(24, 24, 24))
+                .addGap(30, 30, 30)
+                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlThongTinLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnTienTraLai)
+                            .addComponent(lblTienTraLai))
+                        .addGap(29, 29, 29)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButton1)
+                            .addComponent(jRadioButton2))
+                        .addGap(24, 24, 24))
+                    .addGroup(pnlThongTinLayout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         lblTime.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1833,10 +1820,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     private javax.swing.JButton btnXoa;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbxLoc;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
@@ -1856,6 +1840,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     private javax.swing.JLabel lblAnhSanPham;
     private javax.swing.JLabel lblMaHD;
     private javax.swing.JLabel lblMaSP;
+    private javax.swing.JLabel lblTienTraLai;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblTittleMaHD;
     private javax.swing.JLabel lblTittleMaSP;
