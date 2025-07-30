@@ -41,7 +41,7 @@ public class Admin extends javax.swing.JFrame {
     public Admin() {
         initComponents();
         
-        lblAccount.setText("    " + Login.emailLogin);
+        lblAccount.setText(Login.emailLogin);
         
         Timer timer = new Timer(0, (e) -> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

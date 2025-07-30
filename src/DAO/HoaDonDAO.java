@@ -73,6 +73,19 @@ public class HoaDonDAO {
         }
     }
 
+    public int Update_PhuongThucThanhToan(String ID_HD, String pttt) {
+        String sql = "UPDATE HOADON SET PHUONGTHUCTHANHTOAN = ? WHERE ID_HD = ?";
+        try (
+                Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setString(1, pttt);
+            ps.setString(2, ID_HD);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public int Update_TKhachHang(String ID_HD, float tKhachHang) {
         String sql = "UPDATE HOADON SET TIENKHACHHANG = ? WHERE ID_HD = ?";
         try (
@@ -142,18 +155,20 @@ public class HoaDonDAO {
 
     //SAVE HOÁ ĐƠN 
     public int Save_HD(HoaDon hd) {
-        String sql = "INSERT INTO HOADON VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO HOADON VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
             pstm.setString(1, hd.getID_HD());
-            pstm.setString(2, hd.getNgayThangNam());
-            pstm.setString(3, hd.getThoiGian());
-            pstm.setFloat(4, hd.getTongTienHD());
-            pstm.setFloat(5, hd.getTongTienUuDai());
-            pstm.setFloat(6, hd.getTongTienThanhToan());
-            pstm.setFloat(7, hd.getTienKhachHang());
-            pstm.setFloat(8, hd.getTienTraLai());
-            pstm.setString(9, hd.getUuDai());
-            pstm.setInt(10, hd.getTrangThai());
+            pstm.setString(2, hd.getNguoiPhuTrach());
+            pstm.setString(3, hd.getNgayThangNam());
+            pstm.setString(4, hd.getThoiGian());
+            pstm.setFloat(5, hd.getTongTienHD());
+            pstm.setFloat(6, hd.getTongTienUuDai());
+            pstm.setFloat(7, hd.getTongTienThanhToan());
+            pstm.setString(8, hd.getPhuongThucThanhToan());
+            pstm.setFloat(9, hd.getTienKhachHang());
+            pstm.setFloat(10, hd.getTienTraLai());
+            pstm.setString(11, hd.getUuDai());
+            pstm.setInt(12, hd.getTrangThai());
             int row = pstm.executeUpdate();
             if (row > 0) {
                 return 1;
@@ -172,15 +187,17 @@ public class HoaDonDAO {
             while (rs.next()) {
                 HoaDon hd = new HoaDon();
                 hd.setID_HD(rs.getString(1));
-                hd.setNgayThangNam(rs.getString(2));
-                hd.setThoiGian(rs.getString(3));
-                hd.setTongTienHD(rs.getFloat(4));
-                hd.setTongTienUuDai(rs.getFloat(5));
-                hd.setTongTienThanhToan(rs.getFloat(6));
-                hd.setTienKhachHang(rs.getFloat(7));
-                hd.setTienTraLai(rs.getFloat(8));
-                hd.setUuDai(rs.getString(9));
-                hd.setTrangThai(rs.getInt(10));
+                hd.setNguoiPhuTrach(rs.getString(2));
+                hd.setNgayThangNam(rs.getString(3));
+                hd.setThoiGian(rs.getString(4));
+                hd.setTongTienHD(rs.getFloat(5));
+                hd.setTongTienUuDai(rs.getFloat(6));
+                hd.setTongTienThanhToan(rs.getFloat(7));
+                hd.setPhuongThucThanhToan(rs.getString(8));
+                hd.setTienKhachHang(rs.getFloat(9));
+                hd.setTienTraLai(rs.getFloat(10));
+                hd.setUuDai(rs.getString(11));
+                hd.setTrangThai(rs.getInt(12));
                 lstHD.add(hd);
             }
         } catch (Exception e) {
@@ -199,11 +216,13 @@ public class HoaDonDAO {
             while (rs.next()) {
                 HoaDon hd = new HoaDon();
                 hd.setID_HD(rs.getString("ID_HD"));
+                hd.setNguoiPhuTrach(rs.getString("NGUOIPHUTRACH"));
                 hd.setNgayThangNam(rs.getString("NGAYTHANGNAM"));
                 hd.setThoiGian(rs.getString("THOIGIAN"));
                 hd.setTongTienHD(rs.getFloat("TONGTIEN_HD"));
                 hd.setTongTienUuDai(rs.getFloat("TONGTIENUUDAI"));
                 hd.setTongTienThanhToan(rs.getFloat("TONGTHANHTOAN"));
+                hd.setPhuongThucThanhToan(rs.getString("PHUONGTHUCTHANHTOAN"));
                 hd.setTienKhachHang(rs.getFloat("TIENKHACHHANG"));
                 hd.setTienTraLai(rs.getFloat("TIENTRALAI"));
                 hd.setUuDai(rs.getString("UUDAI"));
@@ -220,7 +239,8 @@ public class HoaDonDAO {
         Object[] row = new Object[]{
             hd.getID_HD(),
             hd.getTongTienHD(),
-            hd.getTongTienUuDai()
+            hd.getTongTienUuDai(),
+            hd.getTongTienThanhToan()
         };
         return row;
     }
@@ -228,6 +248,7 @@ public class HoaDonDAO {
     public Object getRow_HDThanhToan(HoaDon hd) {
         Object[] row = new Object[]{
             hd.getID_HD(),
+            hd.getNguoiPhuTrach(),
             hd.getNgayThangNam(),
             hd.getThoiGian(),
             hd.getTongTienHD(),
