@@ -11,11 +11,13 @@ package Model;
 public class HoaDon {
 
     private String ID_HD;
+    private String nguoiPhuTrach;
     private String ngayThangNam;
     private String thoiGian;
     private float tongTienHD;
     private float tongTienUuDai;
     private float tongTienThanhToan;
+    private String phuongThucThanhToan;
     private float tienKhachHang;
     private float tienTraLai;
     private String uuDai;
@@ -24,13 +26,15 @@ public class HoaDon {
     public HoaDon() {
     }
 
-    public HoaDon(String ID_HD, String ngayThangNam, String thoiGian, float tongTienHD, float tongTienUuDai, float tongTienThanhToan, float tienKhachHang, float tienTraLai, String uuDai, int trangThai) {
+    public HoaDon(String ID_HD, String nguoiPhuTrach, String ngayThangNam, String thoiGian, float tongTienHD, float tongTienUuDai, float tongTienThanhToan, String phuongThucThanhToan, float tienKhachHang, float tienTraLai, String uuDai, int trangThai) {
         this.ID_HD = ID_HD;
+        this.nguoiPhuTrach = nguoiPhuTrach;
         this.ngayThangNam = ngayThangNam;
         this.thoiGian = thoiGian;
         this.tongTienHD = tongTienHD;
         this.tongTienUuDai = tongTienUuDai;
         this.tongTienThanhToan = tongTienThanhToan;
+        this.phuongThucThanhToan = phuongThucThanhToan;
         this.tienKhachHang = tienKhachHang;
         this.tienTraLai = tienTraLai;
         this.uuDai = uuDai;
@@ -43,6 +47,14 @@ public class HoaDon {
 
     public void setID_HD(String ID_HD) {
         this.ID_HD = ID_HD;
+    }
+
+    public String getNguoiPhuTrach() {
+        return nguoiPhuTrach;
+    }
+
+    public void setNguoiPhuTrach(String nguoiPhuTrach) {
+        this.nguoiPhuTrach = nguoiPhuTrach;
     }
 
     public String getNgayThangNam() {
@@ -83,6 +95,14 @@ public class HoaDon {
 
     public void setTongTienThanhToan(float tongTienThanhToan) {
         this.tongTienThanhToan = tongTienThanhToan;
+    }
+
+    public String getPhuongThucThanhToan() {
+        return phuongThucThanhToan;
+    }
+
+    public void setPhuongThucThanhToan(String phuongThucThanhToan) {
+        this.phuongThucThanhToan = phuongThucThanhToan;
     }
 
     public float getTienKhachHang() {
