@@ -52,8 +52,9 @@ public void showdetail(){
         Taikhoan tk = tkd.GETALL().get(chon);
         txtID.setText(tk.getID_TK());
         txtTentk.setText(tk.getPass());
-        txt
-        txtEmail1.setText(tk.getEmail());
+        txtIdNV.setText(tk.getID_NV());
+        txtEmail.setText(tk.getEmail());
+        txtPass.setText(tk.getPass());
         cboVaitro.setSelectedItem(tk.getVaiTro());
         
         String trangThai = tk.getTrangThai();
@@ -64,10 +65,13 @@ public void showdetail(){
             btnKhoa.setEnabled(false);
             btnMokhoa.setEnabled(true);
             btnSua.setEnabled(false);
-            txtEmail1.setEnabled(false);
+            txtEmail.setEnabled(false);
             txtID.setEnabled(false);
             txtTentk.setEnabled(false);
             btnLamMoi.setEnabled(false);
+            txtIdNV.setEnabled(false);
+            txtTentk.setEnabled(false);
+            txtPass.setEnabled(false);
         } else {
             btnKhoa.setEnabled(true);
             btnMokhoa.setEnabled(false);
@@ -76,14 +80,18 @@ public void showdetail(){
             
             // Nếu là STAFF, chỉ cho phép sửa email 
             if("STAFF".equalsIgnoreCase(vaiTro)){
-                txtEmail1.setEnabled(true);
+                txtEmail.setEnabled(true);
                 txtID.setEnabled(false);
-                txtTentk.setEnabled(false);  
+                txtTentk.setEnabled(false); 
+                txtIdNV.setEnabled(false);
+                txtPass.setEnabled(false);
             } else {
                 // Nếu là ADMIN, cho phép sửa tất cả
-                txtEmail1.setEnabled(true);
+                txtEmail.setEnabled(true);
                 txtID.setEnabled(true);
                 txtTentk.setEnabled(true);
+                txtIdNV.setEnabled(false);
+                txtPass.setEnabled(true);
             }
         }
     }
@@ -118,21 +126,15 @@ public void sua(){
                 JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
                 return;
             }
-            
-            
-             // Lấy email của ADMIN và STAFF
-            String emailAdmin = tkd.getEmailByRole("ADMIN");
-            String emailStaff = tkd.getEmailByRole("STAFF");
-
-            // Kiểm tra email nhập có trùng với ADMIN hoặc STAFF khác không
-            if ("ADMIN".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailStaff)) {
-                JOptionPane.showMessageDialog(this, "Email này đang trùng với STAFF! Vui lòng nhập email khác.");
-                return;
+            for (Taikhoan x : tkd.GETALL()) {
+                if(x.getEmail() != null && x.getEmail().equalsIgnoreCase(Email)){
+                    JOptionPane.showMessageDialog(this, "Email bạn vừa nhập trùng với email của tài khoản có id"+x.getID_TK(),
+                            "Lỗi trùng email",JOptionPane.ERROR_MESSAGE);
+                    txtEmail.requestFocus();
+                    return;
+                }
             }
-            if ("STAFF".equalsIgnoreCase(vaiTroHienTai) && Email.equalsIgnoreCase(emailAdmin)) {
-                JOptionPane.showMessageDialog(this, "Email này đang trùng với ADMIN! Vui lòng nhập email khác.");
-                return;
-            }
+           
             int result = 0;
             
             // Nếu là STAFF, chỉ sửa email
@@ -142,15 +144,16 @@ public void sua(){
                 // Nếu là ADMIN, sửa tất cả
                 String IDTK = txtID.getText().trim();
                 String Pass = txtTentk.getText().trim();
-                String vaiTro = cboVaitro.getSelectedItem().toString(); // Lấy vai trò từ combobox
-                
+                String vaiTro = cboVaitro.getSelectedItem().toString(); 
+                String tenNV= txtTentk.getText().trim();
+                String IDNV= txtIdNV.getText().trim();
                 if(IDTK.isEmpty() || Pass.isEmpty()){
                     JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
                     return;
                 }
                 
                 String trangThai = chontk.getTrangThai();
-                Taikhoan tk = new Taikhoan(IDTK, Pass, Email, vaiTro, trangThai);
+                Taikhoan tk = new Taikhoan(IDTK, IDNV, tenNV, Pass, Email, vaiTro, trangThai);
                 result = tkd.sua(chontk.getID_TK(), tk);
             }
             
@@ -548,7 +551,7 @@ public void checkEmailTrungAdminStaff() {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        them();
+        
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
