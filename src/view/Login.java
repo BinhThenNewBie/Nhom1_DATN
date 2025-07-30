@@ -7,6 +7,7 @@ package view;
 import DAO.TaikhoanDAO;
 import Model.Taikhoan;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +22,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     public void forgotpass() {
