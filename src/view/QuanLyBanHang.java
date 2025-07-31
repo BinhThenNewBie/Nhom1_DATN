@@ -1084,10 +1084,15 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public boolean validateAddHD() {
         int i = tblChiTietHoaDon.getSelectedRow();
+        if (i < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trong hoá đơn!");
+            return false;
+        }
+
         String ID_HD = tblChiTietHoaDon.getValueAt(i, 0).toString();
         List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
 
-        String pttt = hd.get(i).getPhuongThucThanhToan();
+        String pttt = hd.get(0).getPhuongThucThanhToan(); // dùng get(0) thay vì get(i) vì `i` ở đây là index của bảng, không phải danh sách
         if (pttt.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!");
             return false;
@@ -1920,9 +1925,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     private void btnFindMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseClicked
         // TODO add your handling code here:
-        if(!validateFindSP()){
+        if (!validateFindSP()) {
             return;
-        }else{
+        } else {
             fillTableMenu();
         }
     }//GEN-LAST:event_btnFindMouseClicked
