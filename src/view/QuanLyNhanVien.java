@@ -367,7 +367,7 @@ tblNhanvien.setRowHeight(30);
         }
 
         // Duyệt qua tất cả nhân viên và chỉ hiển thị những nhân viên có trạng thái phù hợp
-        for (Nhanvien nv : nvd.GETALL()) {
+        for (Nhanvien nv : nvd.GETALL()) { 
             // Kiểm tra trạng thái của nhân viên
             String trangThaiNV = nv.getTrangThai();
 
@@ -452,7 +452,7 @@ tblNhanvien.setRowHeight(30);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Light", 1, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(31, 51, 86));
-        jLabel9.setText("LỌC NHÂN VIÊN");
+        jLabel9.setText("LỌC TRẠNG THÁI");
 
         cboLoc.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
         cboLoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIVE", "LOCKED", "TẤT CẢ" }));
