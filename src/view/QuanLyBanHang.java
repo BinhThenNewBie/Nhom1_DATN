@@ -359,16 +359,42 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         int i = tblHoaDon.getSelectedRow();
         if (i >= 0) {
             String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
-
+            lblMaHD.setText(ID_HD);
+            txtArea.setText("");
             List<HoaDon> listHD = hdDAO.getALL_ID_HD(ID_HD);
             if (!listHD.isEmpty()) {
-                String uudai = listHD.get(0).getUuDai();
-                lblUuDai.setText(uudai + " Được áp dụng");
+                HoaDon hd = listHD.get(0);
+
+                String uudai = hd.getUuDai();
+                if (uudai == null || uudai.trim().equals("") || uudai.equals("0%")) {
+                    lblUuDai.setText("Không có ưu đãi");
+                } else {
+                    lblUuDai.setText(uudai + " Được áp dụng");
+                }
+
+                String pt = hd.getPhuongThucThanhToan();
+                if (pt != null && !pt.trim().isEmpty()) {
+                    if (pt.equalsIgnoreCase("Tiền mặt")) {
+                        rdoTienMat.setSelected(true);
+                    } else if (pt.equalsIgnoreCase("Chuyển khoản")) {
+                        rdoChuyenKhoan.setSelected(true);
+                    }
+                } else {
+                    buttonGroup1.clearSelection();
+                }
+
+                Float tienKhach = hd.getTienKhachHang();
+                Float tienTra = hd.getTienTraLai();
+
+                txtTienKhachDua.setText(tienKhach != null ? String.valueOf(tienKhach) : "0");
+                lblTienTraLai.setText(tienTra != null ? formatVND(tienTra) : "0");
+
             } else {
                 lblUuDai.setText("Không có ưu đãi");
+                txtTienKhachDua.setText("0");
+                lblTienTraLai.setText("0");
+                buttonGroup1.clearSelection();
             }
-
-            lblMaHD.setText(ID_HD);
 
             List<ChiTietHoaDon> lstcthd = cthdDAO.getAll_CTHD(ID_HD);
             modelCTHD.setRowCount(0);
@@ -952,12 +978,36 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public void Change() {
         int i = tblHoaDon.getSelectedRow();
+        if (i < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một hoá đơn!");
+            return;
+        }
 
         String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
-        float tienKhachDua = Float.parseFloat(txtTienKhachDua.getText());
-        float thanhTien = hdDAO.getALL_ID_HD(ID_HD).get(i).getTongTienThanhToan();
+
+        if (txtTienKhachDua.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền khách đưa!");
+            return;
+        }
+
+        float tienKhachDua;
+        try {
+            tienKhachDua = Float.parseFloat(txtTienKhachDua.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Số tiền khách đưa không hợp lệ!");
+            return;
+        }
+
+        List<HoaDon> listHD = hdDAO.getALL_ID_HD(ID_HD);
+        if (listHD.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn phù hợp!");
+            return;
+        }
+
+        float thanhTien = listHD.get(0).getTongTienThanhToan();  // Lấy phần tử đầu tiên an toàn
         float tienTraLai = tienKhachDua - thanhTien;
         lblTienTraLai.setText(formatVND(tienTraLai));
+
         hdDAO.Update_TKhachHang(ID_HD, tienKhachDua);
         hdDAO.Update_TTraLai(ID_HD, tienTraLai);
     }
@@ -1083,20 +1133,58 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     }
 
     public boolean validateAddHD() {
-        int i = tblChiTietHoaDon.getSelectedRow();
-        if (i < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trong hoá đơn!");
+        int rowCount = tblChiTietHoaDon.getRowCount();
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(this, "Hóa đơn không có món nào!");
             return false;
         }
 
-        String ID_HD = tblChiTietHoaDon.getValueAt(i, 0).toString();
-        List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
+        // Lấy ID_HD từ bảng tblHoaDon
+        int i = tblHoaDon.getSelectedRow();
+        if (i < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán!");
+            return false;
+        }
 
-        String pttt = hd.get(0).getPhuongThucThanhToan(); // dùng get(0) thay vì get(i) vì `i` ở đây là index của bảng, không phải danh sách
-        if (pttt.equals("")) {
+        String ID_HD = tblHoaDon.getValueAt(i, 0).toString().trim();
+        List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
+        if (hd.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn phù hợp! ID_HD: " + ID_HD);
+            return false;
+        }
+
+        String pttt = hd.get(0).getPhuongThucThanhToan();
+        if (pttt == null || pttt.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!");
             return false;
         }
+
+        if (pttt.equalsIgnoreCase("Tiền mặt")) {
+            String tienKhach = txtTienKhachDua.getText().trim();
+            String tienTraLai = lblTienTraLai.getText().trim();
+
+            if (tienKhach.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền khách đưa!");
+                return false;
+            }
+
+            try {
+                float tien = Float.parseFloat(tienKhach);
+                if (tien < 0) {
+                    JOptionPane.showMessageDialog(this, "Tiền khách đưa không hợp lệ!");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Tiền khách đưa phải là số!");
+                return false;
+            }
+
+            if (tienTraLai.isEmpty() || tienTraLai.equals("0") || tienTraLai.equals("0₫")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhấn 'CHANGE' để tính tiền trả lại!");
+                return false;
+            }
+        }
+
         return true;
     }
 
