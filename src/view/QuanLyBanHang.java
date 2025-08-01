@@ -1139,7 +1139,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return false;
         }
 
-        // Lấy ID_HD từ bảng tblHoaDon
         int i = tblHoaDon.getSelectedRow();
         if (i < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để thanh toán!");
@@ -1153,7 +1152,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return false;
         }
 
-        String pttt = hd.get(0).getPhuongThucThanhToan();
+        HoaDon hoaDon = hd.get(0);
+        String pttt = hoaDon.getPhuongThucThanhToan();
         if (pttt == null || pttt.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!");
             return false;
@@ -1162,6 +1162,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         if (pttt.equalsIgnoreCase("Tiền mặt")) {
             String tienKhach = txtTienKhachDua.getText().trim();
             String tienTraLai = lblTienTraLai.getText().trim();
+
+            float tienKhachDB = hoaDon.getTienKhachHang();
+            if (tienKhachDB <= 0) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền khách đưa!");
+                return false;
+            }
 
             if (tienKhach.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền khách đưa!");
