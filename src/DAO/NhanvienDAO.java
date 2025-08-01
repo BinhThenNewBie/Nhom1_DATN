@@ -130,4 +130,36 @@ public class NhanvienDAO {
         }
         return 0;
     }
+    //Kiểm tra mã nhân viên có tồn tại trong csdl không
+   public boolean Kiemtramanv(String ID_NV){
+       String sql="SELECT ID_NV FROM NHANVIEN WHERE ID_NV = ?";
+       try {
+           Connection conn= DBconnect.getConnection();
+           PreparedStatement pstm = conn.prepareStatement(sql);
+           pstm.setString(1, ID_NV);
+           ResultSet rs = pstm.executeQuery();
+           return rs.next();
+       } catch (Exception e) {
+           e.printStackTrace();
+           return false;
+       }
+   }
+   // Lấy tên nhân viên theo mã nhân viên
+   public String getTenNV(String ID_NV){
+       String sql ="SELECT HOTEN FROM NHANVIEN WHERE ID_NV = ?";
+       try {
+           Connection conn = DBconnect.getConnection();
+           PreparedStatement pstm = conn.prepareStatement(sql);
+           
+           pstm.setString(1, ID_NV);
+           ResultSet rs = pstm.executeQuery();
+           if(rs.next()){
+               return rs.getString("HOTEN");
+           }
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+       return null;
+   }
 }
+

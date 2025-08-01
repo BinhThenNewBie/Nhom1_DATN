@@ -5,6 +5,7 @@
 package view;
 
 import DAO.TaikhoanDAO;
+import DAO.NhanvienDAO;
 import Model.Taikhoan;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +26,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
 
     DefaultTableModel tableModel = new DefaultTableModel();
     TaikhoanDAO tkd = new TaikhoanDAO();
+    NhanvienDAO nvd = new NhanvienDAO();
 
     /**
      * Creates new form QuanLyTaiKhoan
@@ -136,17 +138,26 @@ public void them(){
         String email = txtEmail.getText().trim();
         String vaiTro = (String) cboVaitro.getSelectedItem();
         
-        //Kiểm tra tên
-        if (!hoTen.matches("^[\\p{L}\\s]+$")) {
-        JOptionPane.showMessageDialog(this, "Tên phải nhập bằng chữ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
         // Kiểm tra dữ liệu đầu vào
         if (ID_NV.isEmpty() || hoTen.isEmpty() || ID_TK.isEmpty()|| pass.isEmpty()||email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+         
+        //Kiểm tra maxnv có tồn tại trong bảng NHANVIEN không
+        if(!nvd.Kiemtramanv(ID_NV)){
+            JOptionPane.showMessageDialog(this, "Mã nhân viên " + ID_NV + " không tồn tại trong hệ thống!\nVui lòng kiểm tra lại mã nhân viên.", 
+            "Lỗi mã nhân viên", JOptionPane.ERROR_MESSAGE);
+            txtIdnv.requestFocus();
+            return;
+        }
+        
+        
+        //Kiểm tra tên
+        if (!hoTen.matches("^[\\p{L}\\s]+$")) {
+        JOptionPane.showMessageDialog(this, "Tên phải nhập bằng chữ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
         // kiểm tra định dạng email
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
                     JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
@@ -167,6 +178,7 @@ public void them(){
         int result = tkd.them(nv);
         if (result == 1) {
             fillTable();
+            lammoi();
             JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
         } else {
             JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi thêm nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
