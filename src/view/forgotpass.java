@@ -26,9 +26,6 @@ public class forgotpass extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    
-    
-
 
     public void nhanma() {
         ngnhan = txtemailin.getText();
@@ -37,11 +34,11 @@ public class forgotpass extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập Email để nhận mã xác nhận");
         } else {
             Email.sendEmail(ngnhan, tieude, "Mã ở đây: " + ngaunhien);
-            magui = String.valueOf(ngaunhien); 
+            magui = ngaunhien; 
             
         }
     }
-//binhdath06811@gmail.com
+
     public void checkma(){
         String codein = txtcodein.getText();
         if(codein.equals(magui)){

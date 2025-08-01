@@ -29,7 +29,7 @@ public class Email {
         
         for(int i = 0; i < 5; i++){
             int number = rdn.nextInt(10);
-            result += number + " ";
+            result += number ;
         }
         
         
@@ -45,7 +45,7 @@ public class Email {
         // Properties : khai báo các thuộc tính
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
-        props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+        props.put("mail.smtp.port", "587"); // TLS = 587; SSL = 465
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
