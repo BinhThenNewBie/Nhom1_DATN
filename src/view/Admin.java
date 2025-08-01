@@ -40,6 +40,9 @@ public class Admin extends javax.swing.JFrame {
      */
     public Admin() {
         initComponents();
+        
+        lblAccount.setText(Login.emailLogin);
+        
         Timer timer = new Timer(0, (e) -> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = sdf.format(new Date());
@@ -202,7 +205,7 @@ public class Admin extends javax.swing.JFrame {
         lblexit = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         Logo = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblAccount = new javax.swing.JLabel();
         btnQLTK = new javax.swing.JButton();
         btnQLSP = new javax.swing.JButton();
         btnQLKM = new javax.swing.JButton();
@@ -251,10 +254,10 @@ public class Admin extends javax.swing.JFrame {
 
         Logo.setBackground(new java.awt.Color(21, 35, 56));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 1, 26)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/MainForm_Admin/image/trangchu.png"))); // NOI18N
-        jLabel1.setText(" ADMIN");
+        lblAccount.setFont(new java.awt.Font("Segoe UI Light", 1, 20)); // NOI18N
+        lblAccount.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/MainForm_Admin/image/trangchu.png"))); // NOI18N
+        lblAccount.setText(" ADMIN");
 
         javax.swing.GroupLayout LogoLayout = new javax.swing.GroupLayout(Logo);
         Logo.setLayout(LogoLayout);
@@ -262,12 +265,12 @@ public class Admin extends javax.swing.JFrame {
             LogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LogoLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         LogoLayout.setVerticalGroup(
             LogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblAccount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         btnQLTK.setBackground(new java.awt.Color(31, 51, 86));
@@ -436,7 +439,7 @@ public class Admin extends javax.swing.JFrame {
                 .addComponent(btnTKDT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54)
                 .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblexit, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -794,7 +797,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnQLTK;
     private javax.swing.JButton btnTKDT;
     private javax.swing.JButton btnXuatHoaDon;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblAccount;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblexit;
     private javax.swing.JPanel mainPanel;
