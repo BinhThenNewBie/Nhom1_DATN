@@ -6,18 +6,13 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -40,9 +35,9 @@ public class Admin extends javax.swing.JFrame {
      */
     public Admin() {
         initComponents();
-        
+
         lblAccount.setText(Login.emailLogin);
-        
+
         Timer timer = new Timer(0, (e) -> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = sdf.format(new Date());
@@ -52,7 +47,6 @@ public class Admin extends javax.swing.JFrame {
         this.setSize(1920, 1045);
         setLocationRelativeTo(null);
         initDefaultElement();
-
         mainPanel.setLayout(new BorderLayout()); // Sử dụng BorderLayout
     }
 
@@ -176,35 +170,6 @@ public class Admin extends javax.swing.JFrame {
         Logo.setBorder(new EmptyBorder(0, 0, 0, 0));
     }
 
-// Thêm method này để setup layout cho menu nếu cần
-    private void setupMenuLayout() {
-        pnlMenu.setLayout(new BoxLayout(pnlMenu, BoxLayout.Y_AXIS));
-
-        // Thêm khoảng cách giữa các button
-        Component[] components = pnlMenu.getComponents();
-        for (Component comp : components) {
-            if (comp instanceof JButton) {
-                ((JButton) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
-            }
-        }
-    }
-
-// Method để tạo gradient background cho panel (optional)
-    private void setGradientBackground(JPanel panel) {
-        panel.setBackground(null);
-        panel.setOpaque(false);
-
-        // Tạo gradient paint
-        Graphics2D g2d = (Graphics2D) panel.getGraphics();
-        if (g2d != null) {
-            GradientPaint gradient = new GradientPaint(
-                    0, 0, Color.decode("#2c3e50"),
-                    0, panel.getHeight(), Color.decode("#34495e")
-            );
-            g2d.setPaint(gradient);
-            g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
