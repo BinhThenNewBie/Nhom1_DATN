@@ -186,22 +186,7 @@ public class Admin extends javax.swing.JFrame {
         }
     }
 
-// Method để tạo gradient background cho panel (optional)
-    private void setGradientBackground(JPanel panel) {
-        panel.setBackground(null);
-        panel.setOpaque(false);
 
-        // Tạo gradient paint
-        Graphics2D g2d = (Graphics2D) panel.getGraphics();
-        if (g2d != null) {
-            GradientPaint gradient = new GradientPaint(
-                    0, 0, Color.decode("#2c3e50"),
-                    0, panel.getHeight(), Color.decode("#34495e")
-            );
-            g2d.setPaint(gradient);
-            g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
