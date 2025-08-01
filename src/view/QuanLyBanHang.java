@@ -495,7 +495,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         } else if (rdoChuyenKhoan.isSelected()) {
             txtTienKhachDua.setEnabled(false);
             btnTienTraLai.setEnabled(false);
-
+            txtTienKhachDua.setText("0");
             String bank = "MB";
             String soTaiKhoan = "0964250706";
             String tenTaiKhoan = "VAN NGUYEN QUOC BAO";
@@ -1070,6 +1070,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
     public void clear() {
         txtArea.setText("");
+        txtTienKhachDua.setText("");
+        lblTienTraLai.setText("0");
         buttonGroup1.clearSelection();
     }
 
