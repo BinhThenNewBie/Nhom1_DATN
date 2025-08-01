@@ -29,7 +29,7 @@ public class Email {
         
         for(int i = 0; i < 5; i++){
             int number = rdn.nextInt(10);
-            result += number ;
+            result += number;
         }
         
         
