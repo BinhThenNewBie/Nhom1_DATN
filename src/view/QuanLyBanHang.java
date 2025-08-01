@@ -504,7 +504,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     + "?amount=" + (float) tongTien
                     + "&addInfo=THANHTOAN-" + ID_HD
                     + "&accountName=" + tenTaiKhoan.replace(" ", "+");
-            QR.QRCodeGenerator.showQRCode(qrURL);
+            util.QRCodeGenerator.showQRCode(qrURL);
             hdDAO.Update_PhuongThucThanhToan(ID_HD, pttt2);
             hdDAO.Update_TKhachHang(ID_HD, tienKhachHang);
             hdDAO.Update_TTraLai(ID_HD, tienTraLai);
