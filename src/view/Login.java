@@ -4,9 +4,9 @@
  */
 package view;
 
-import DAO.NhanvienDAO;
+
 import DAO.TaikhoanDAO;
-import Model.Nhanvien;
+
 import Model.Taikhoan;
 import java.util.List;
 import javax.swing.JFrame;
