@@ -239,8 +239,8 @@ public class HoaDonDAO {
         Object[] row = new Object[]{
             hd.getID_HD(),
             hd.getTongTienHD(),
-            hd.getTongTienUuDai(),
-            hd.getTongTienThanhToan()
+            hd.getTongTienThanhToan(),
+            hd.getUuDai(),
         };
         return row;
     }
