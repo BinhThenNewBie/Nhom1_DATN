@@ -1099,7 +1099,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         hoaDon.append(String.format("Ưu đãi                : %s - %,10.0f đ\n", uuDai, tienUuDai));
         hoaDon.append(String.format("Thành tiền            : %,15.0f đ\n", thanhTien));
         hoaDon.append("----------------------------------------\n");
-        hoaDon.append("Phương thức thanh toán: ").append(pttt).append("\n");
+        hoaDon.append("Phương thức thanh toán:  _").append(pttt).append("\n");
         hoaDon.append(String.format("Tiền khách đưa        : %,15.0f đ\n", tienKhachHang));
         hoaDon.append(String.format("Tiền trả lại          : %,15.0f đ\n", tienTraLai));
         hoaDon.append("________________________________________\n");
