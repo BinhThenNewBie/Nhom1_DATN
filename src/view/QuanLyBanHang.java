@@ -25,8 +25,11 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.File;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,6 +42,7 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import util.QRCodeGenerator;
 
 /**
  *
@@ -381,10 +385,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         rdoTienMat.setSelected(true);
                         txtTienKhachDua.setEnabled(true);
                         btnTienTraLai.setEnabled(true);
+                        lblTienTraLai.setEnabled(true);
                     } else if (pt.equalsIgnoreCase("Chuyển khoản")) {
                         rdoChuyenKhoan.setSelected(true);
                         txtTienKhachDua.setEnabled(false);
                         btnTienTraLai.setEnabled(false);
+                        lblTienTraLai.setEnabled(false);
                     }
                 } else {
                     buttonGroup1.clearSelection();
@@ -484,14 +490,17 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn!");
             return;
         }
+
         String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
         List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
+        float tongTien = hd.get(0).getTongTienThanhToan();
+
+        float tienKhachHang1 = 0;
+        float tienKhachHang = tongTien;
+        float tienTraLai = 0;
+
         String pttt1 = "Tiền mặt";
         String pttt2 = "Chuyển Khoản";
-        float tongTien = hdDAO.getALL_ID_HD(ID_HD).get(0).getTongTienThanhToan();
-        float tienKhachHang1 = 0;
-        float tienKhachHang = hd.get(0).getTongTienThanhToan();
-        float tienTraLai = 0;
 
         if (rdoTienMat.isSelected()) {
             txtTienKhachDua.setEnabled(true);
@@ -502,18 +511,28 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             txtTienKhachDua.setEnabled(false);
             btnTienTraLai.setEnabled(false);
             txtTienKhachDua.setText("0");
-            String bank = "MB";
-            String soTaiKhoan = "0964250706";
-            String tenTaiKhoan = "VAN NGUYEN QUOC BAO";
 
-            String qrURL = "https://img.vietqr.io/image/" + bank + "-" + soTaiKhoan + "-compact2.png"
-                    + "?amount=" + (float) tongTien
-                    + "&addInfo=THANHTOAN-" + ID_HD
-                    + "&accountName=" + tenTaiKhoan.replace(" ", "+");
-            util.QRCodeGenerator.showQRCode(qrURL);
             hdDAO.Update_PhuongThucThanhToan(ID_HD, pttt2);
             hdDAO.Update_TKhachHang(ID_HD, tienKhachHang);
             hdDAO.Update_TTraLai(ID_HD, tienTraLai);
+
+            String stk = "0964250706";
+            String bankCode = "MB";
+            String noiDung = "THANHTOAN-" + ID_HD;
+
+            String qrUrl = "https://img.vietqr.io/image/" + bankCode + "-" + stk + "-compact2.png"
+                    + "?amount=" + Math.round(tongTien)
+                    + "&addInfo=" + URLEncoder.encode(noiDung, StandardCharsets.UTF_8);
+
+            try {
+                BufferedImage qrImage = QRCodeGenerator.showQRCode(qrUrl);
+                JOptionPane.showMessageDialog(this,
+                        new JLabel(new ImageIcon(qrImage)),
+                        "Quét mã để chuyển khoản",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi tạo QR: " + e.getMessage());
+            }
         }
     }
 
