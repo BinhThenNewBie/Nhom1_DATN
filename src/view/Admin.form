@@ -53,7 +53,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
                   <Component id="lblTime" min="-2" pref="265" max="-2" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
@@ -68,17 +68,17 @@
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="btnDangXuat" min="-2" pref="119" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="btnQLTK" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnQLSP" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnQLKM" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnTKDT" alignment="0" pref="249" max="32767" attributes="0"/>
+                              <Component id="btnXuatHoaDon" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnTKDT" alignment="0" pref="234" max="32767" attributes="0"/>
                               <Component id="btnQLBH" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnQLNV" max="32767" attributes="0"/>
-                              <Component id="btnXuatHoaDon" alignment="1" max="32767" attributes="0"/>
+                              <Component id="btnQLKM" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnQLSP" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnQLTK" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnQLNV" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -103,12 +103,12 @@
                   <Component id="btnTKDT" min="-2" pref="45" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                   <Component id="btnXuatHoaDon" min="-2" pref="45" max="-2" attributes="0"/>
-                  <EmptySpace pref="99" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnDangXuat" min="-2" pref="32" max="-2" attributes="0"/>
+                  <EmptySpace pref="100" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="lblexit" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="btnDangXuat" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
