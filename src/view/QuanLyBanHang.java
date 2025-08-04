@@ -379,8 +379,12 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 if (pt != null && !pt.trim().isEmpty()) {
                     if (pt.equalsIgnoreCase("Tiền mặt")) {
                         rdoTienMat.setSelected(true);
+                        txtTienKhachDua.setEnabled(true);
+                        btnTienTraLai.setEnabled(true);
                     } else if (pt.equalsIgnoreCase("Chuyển khoản")) {
                         rdoChuyenKhoan.setSelected(true);
+                        txtTienKhachDua.setEnabled(false);
+                        btnTienTraLai.setEnabled(false);
                     }
                 } else {
                     buttonGroup1.clearSelection();
@@ -436,7 +440,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return;
         }
 
-        // Set dữ liệu lên giao diện
         lblMaHD.setText(cthd.getID_HD());
         lblMaSP.setText(cthd.getID_SP());
         txtSoLuong.setText(String.valueOf(cthd.getSoLuong()));
@@ -2140,13 +2143,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
