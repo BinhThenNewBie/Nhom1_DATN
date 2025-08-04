@@ -4,31 +4,20 @@
  */
 package util;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-
-import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author ADMIN
  */
 public class QRCodeGenerator {
-    public static void showQRCode(String noiDung) {
-        try {
-            int width = 300;
-            int height = 300;
-            BitMatrix matrix = new MultiFormatWriter().encode(noiDung, BarcodeFormat.QR_CODE, width, height);
-            BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
-
-            ImageIcon icon = new ImageIcon(image);
-            JLabel label = new JLabel(icon);
-            JOptionPane.showMessageDialog(null, label, "Quét mã QR để thanh toán", JOptionPane.PLAIN_MESSAGE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    
+     public static BufferedImage showQRCode(String url) throws IOException {
+        URL imageUrl = new URL(url);
+        return ImageIO.read(imageUrl);
     }
+    
 }

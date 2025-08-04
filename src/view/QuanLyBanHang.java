@@ -25,8 +25,11 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.File;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,6 +42,7 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import util.QRCodeGenerator;
 
 /**
  *
@@ -92,7 +96,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         tblUuDai.setModel(modelUuDai);
 
         modelHDCho = new DefaultTableModel();
-        String[] colsHDCho = new String[]{"ID_Hóa Đơn", "Tổng HĐ", "Ưu Đãi", "Thành Tiền"};
+        String[] colsHDCho = new String[]{"ID_Hóa Đơn", "Tổng HĐ", "Thành Tiền", "Ưu Đãi"};
         modelHDCho.setColumnIdentifiers(colsHDCho);
         tblHoaDon.setModel(modelHDCho);
 
@@ -111,8 +115,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 modelHDCho.addRow(new Object[]{
                     hd.getID_HD(),
                     formatVND(hd.getTongTienHD()),
-                    formatVND(hd.getTongTienUuDai()),
-                    formatVND(hd.getTongTienThanhToan())
+                    formatVND(hd.getTongTienThanhToan()),
+                    hd.getUuDai()
                 });
             }
         }
@@ -362,6 +366,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             lblMaHD.setText(ID_HD);
             txtArea.setText("");
             List<HoaDon> listHD = hdDAO.getALL_ID_HD(ID_HD);
+            float tienUUDAI = listHD.get(0).getTongTienUuDai();
+            lblTienUUdAI.setText(formatVND(tienUUDAI));
+
             if (!listHD.isEmpty()) {
                 HoaDon hd = listHD.get(0);
 
@@ -376,8 +383,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 if (pt != null && !pt.trim().isEmpty()) {
                     if (pt.equalsIgnoreCase("Tiền mặt")) {
                         rdoTienMat.setSelected(true);
+                        txtTienKhachDua.setEnabled(true);
+                        btnTienTraLai.setEnabled(true);
+                        lblTienTraLai.setEnabled(true);
                     } else if (pt.equalsIgnoreCase("Chuyển khoản")) {
                         rdoChuyenKhoan.setSelected(true);
+                        txtTienKhachDua.setEnabled(false);
+                        btnTienTraLai.setEnabled(false);
+                        lblTienTraLai.setEnabled(false);
                     }
                 } else {
                     buttonGroup1.clearSelection();
@@ -386,8 +399,8 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 Float tienKhach = hd.getTienKhachHang();
                 Float tienTra = hd.getTienTraLai();
 
-                txtTienKhachDua.setText(tienKhach != null ? String.valueOf(tienKhach) : "0");
-                lblTienTraLai.setText(tienTra != null ? formatVND(tienTra) : "0");
+                txtTienKhachDua.setText(String.valueOf(tienKhach));
+                lblTienTraLai.setText(formatVND(tienTra));
 
             } else {
                 lblUuDai.setText("Không có ưu đãi");
@@ -433,7 +446,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return;
         }
 
-        // Set dữ liệu lên giao diện
         lblMaHD.setText(cthd.getID_HD());
         lblMaSP.setText(cthd.getID_SP());
         txtSoLuong.setText(String.valueOf(cthd.getSoLuong()));
@@ -478,14 +490,17 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn!");
             return;
         }
+
         String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
         List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
+        float tongTien = hd.get(0).getTongTienThanhToan();
+
+        float tienKhachHang1 = 0;
+        float tienKhachHang = tongTien;
+        float tienTraLai = 0;
+
         String pttt1 = "Tiền mặt";
         String pttt2 = "Chuyển Khoản";
-        float tongTien = hdDAO.getALL_ID_HD(ID_HD).get(0).getTongTienThanhToan();
-        float tienKhachHang1 = 0;
-        float tienKhachHang = hd.get(0).getTongTienThanhToan();
-        float tienTraLai = 0;
 
         if (rdoTienMat.isSelected()) {
             txtTienKhachDua.setEnabled(true);
@@ -496,18 +511,28 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             txtTienKhachDua.setEnabled(false);
             btnTienTraLai.setEnabled(false);
             txtTienKhachDua.setText("0");
-            String bank = "MB";
-            String soTaiKhoan = "0964250706";
-            String tenTaiKhoan = "VAN NGUYEN QUOC BAO";
 
-            String qrURL = "https://img.vietqr.io/image/" + bank + "-" + soTaiKhoan + "-compact2.png"
-                    + "?amount=" + (float) tongTien
-                    + "&addInfo=THANHTOAN-" + ID_HD
-                    + "&accountName=" + tenTaiKhoan.replace(" ", "+");
-            util.QRCodeGenerator.showQRCode(qrURL);
             hdDAO.Update_PhuongThucThanhToan(ID_HD, pttt2);
             hdDAO.Update_TKhachHang(ID_HD, tienKhachHang);
             hdDAO.Update_TTraLai(ID_HD, tienTraLai);
+
+            String stk = "0964250706";
+            String bankCode = "MB";
+            String noiDung = "THANHTOAN-" + ID_HD;
+
+            String qrUrl = "https://img.vietqr.io/image/" + bankCode + "-" + stk + "-compact2.png"
+                    + "?amount=" + Math.round(tongTien)
+                    + "&addInfo=" + URLEncoder.encode(noiDung, StandardCharsets.UTF_8);
+
+            try {
+                BufferedImage qrImage = QRCodeGenerator.showQRCode(qrUrl);
+                JOptionPane.showMessageDialog(this,
+                        new JLabel(new ImageIcon(qrImage)),
+                        "Quét mã để chuyển khoản",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi tạo QR: " + e.getMessage());
+            }
         }
     }
 
@@ -953,27 +978,44 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         hdDAO.updateUuDai(ID_HD, giaTriUuDai);
         hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
         hdDAO.Update_TTThanhToan(ID_HD, tongSauUuDai);
+        showDetailsHDCho();
         lblUuDai.setText(giaTriUuDai + " Được áp dụng");
         fillTableHDCho();
+        JOptionPane.showMessageDialog(this, "Áp dụng thành công!");
     }
 
     public void xoaUuDai() {
-        String ID_HD = lblMaHD.getText();
-        if (ID_HD.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để xoá ưu đãi");
+        int i = tblHoaDon.getSelectedRow();
+        if (i < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hoá đơn để xoá ưu đãi.");
             return;
         }
+
+        String ID_HD = tblHoaDon.getValueAt(i, 0).toString();
+
         List<ChiTietHoaDon> chiTiet = cthdDAO.getAll_CTHD(ID_HD);
         float tongThanhToan = 0;
         for (ChiTietHoaDon ct : chiTiet) {
             tongThanhToan += ct.getGiaSP() * ct.getSoLuong();
         }
+
         float tienUuDai = 0;
-        lblUuDai.setText("");
+        // kiểu tra nếu không có ưu đãi thì báo là không có
+        String uudai = "0%";
+        List<HoaDon> hd = hdDAO.getALL_ID_HD(ID_HD);
+        String uuDAI = hd.get(0).getUuDai();
+        if (uudai.equalsIgnoreCase(uuDAI)) {
+            JOptionPane.showMessageDialog(this, "Không có ưu đãi cần huỷ!");
+            return;
+        }
+        lblUuDai.setText("Không có ưu đãi");
         hdDAO.Update_TTThanhToan(ID_HD, tongThanhToan);
         hdDAO.Update_TTUuDai(ID_HD, tienUuDai);
         hdDAO.updateUuDai(ID_HD, "0%");
+        showDetailsHDCho();
         fillTableHDCho();
+
+        JOptionPane.showMessageDialog(this, "Huỷ áp dụng thành công!");
     }
 
     public void Change() {
@@ -1066,6 +1108,11 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         txtArea.setText(hoaDon.toString());
         txtArea.setEditable(false);
         txtArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+
+        txtTienKhachDua.setEnabled(false);
+        btnTienTraLai.setEnabled(false);
+        rdoChuyenKhoan.setEnabled(false);
+        rdoTienMat.setEnabled(false);
     }
 
     public void clear() {
@@ -1073,6 +1120,10 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         txtTienKhachDua.setText("");
         lblTienTraLai.setText("0");
         buttonGroup1.clearSelection();
+        txtTienKhachDua.setEnabled(true);
+        btnTienTraLai.setEnabled(true);
+        rdoChuyenKhoan.setEnabled(true);
+        rdoTienMat.setEnabled(true);
     }
 
     public void payment() {
@@ -1154,8 +1205,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             return false;
         }
 
-        HoaDon hoaDon = hd.get(0);
-        String pttt = hoaDon.getPhuongThucThanhToan();
+        List<HoaDon> lsthd = hdDAO.getALL_ID_HD(ID_HD);
+        String pttt = lsthd.get(0).getPhuongThucThanhToan();
+        float thanhtien = lsthd.get(0).getTongTienThanhToan();
         if (pttt == null || pttt.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!");
             return false;
@@ -1165,7 +1217,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             String tienKhach = txtTienKhachDua.getText().trim();
             String tienTraLai = lblTienTraLai.getText().trim();
 
-            float tienKhachDB = hoaDon.getTienKhachHang();
+            float tienKhachDB = lsthd.get(0).getTienKhachHang();
             if (tienKhachDB <= 0) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền khách đưa!");
                 return false;
@@ -1191,6 +1243,14 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhấn 'CHANGE' để tính tiền trả lại!");
                 return false;
             }
+            if (tienKhachDB < thanhtien) {
+                JOptionPane.showMessageDialog(this, "Tiền khách đưa không thể thanh toán hoá đơn!");
+                return false;
+            }
+
+        } else {
+            hdDAO.Update_TKhachHang(ID_HD, thanhtien);
+            showDetailsHDCho();
         }
 
         return true;
@@ -1262,6 +1322,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         jSeparator6 = new javax.swing.JSeparator();
         btnTienTraLai = new javax.swing.JButton();
         lblTienTraLai = new javax.swing.JLabel();
+        lblTienUUdAI = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
         lblTittlePnlMenu = new javax.swing.JLabel();
@@ -1316,7 +1377,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         .addComponent(lblTittlePnlChiTietHoaDon7)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator12)
-                    .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlChiTietHoaDon7Layout.setVerticalGroup(
@@ -1483,7 +1544,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHoaDonLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addComponent(btnThanhToan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
                 .addComponent(btnHuyDon)
                 .addGap(51, 51, 51))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHoaDonLayout.createSequentialGroup()
@@ -1624,6 +1685,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
 
         lblTienTraLai.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        lblTienUUdAI.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTienUUdAI.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout pnlThongTinLayout = new javax.swing.GroupLayout(pnlThongTin);
         pnlThongTin.setLayout(pnlThongTinLayout);
         pnlThongTinLayout.setHorizontalGroup(
@@ -1655,7 +1719,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                             .addComponent(lblTittleUuDai)
                             .addGroup(pnlThongTinLayout.createSequentialGroup()
                                 .addGap(19, 19, 19)
-                                .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblTienUUdAI, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
                         .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1668,7 +1734,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                             .addComponent(lblTittleMaSP))
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGap(0, 9, Short.MAX_VALUE)
                                         .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
                                                 .addComponent(lblMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1677,23 +1743,21 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(lblAnhSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlThongTinLayout.createSequentialGroup()
-                                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(rdoTienMat)
-                                    .addComponent(jLabel2)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlThongTinLayout.createSequentialGroup()
-                                        .addGap(13, 13, 13)
-                                        .addComponent(btnTienTraLai, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(rdoChuyenKhoan)
-                                        .addGap(34, 34, 34))
+                                    .addComponent(jLabel2)
                                     .addGroup(pnlThongTinLayout.createSequentialGroup()
-                                        .addGap(24, 24, 24)
-                                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtTienKhachDua)
-                                            .addComponent(lblTienTraLai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                        .addGap(15, 15, 15)
+                                        .addComponent(btnTienTraLai, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(24, 24, 24)
+                                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblTienTraLai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtTienKhachDua))))
                         .addGap(15, 15, 15))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinLayout.createSequentialGroup()
+                        .addComponent(rdoTienMat)
+                        .addGap(40, 40, 40)
+                        .addComponent(rdoChuyenKhoan)
+                        .addGap(49, 49, 49))
                     .addComponent(jSeparator6)))
         );
         pnlThongTinLayout.setVerticalGroup(
@@ -1728,25 +1792,24 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTienUUdAI, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtTienKhachDua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlThongTinLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTienTraLai)
-                            .addComponent(lblTienTraLai))
-                        .addGap(29, 29, 29)
-                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rdoTienMat)
-                            .addComponent(rdoChuyenKhoan))
-                        .addGap(24, 24, 24))
-                    .addGroup(pnlThongTinLayout.createSequentialGroup()
-                        .addComponent(txtTienKhachDua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(lblTienTraLai, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTienTraLai))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdoTienMat)
+                    .addComponent(rdoChuyenKhoan))
+                .addGap(18, 18, 18))
         );
 
         lblTime.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1769,7 +1832,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                     .addComponent(jSeparator2)
                     .addGroup(pnlMenuLayout.createSequentialGroup()
                         .addComponent(lblTittlePnlMenu)
-                        .addGap(0, 731, Short.MAX_VALUE)))
+                        .addGap(0, 712, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -1874,9 +1937,9 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlBanHangLayout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(27, 27, 27)
+                        .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlBanHangLayout.createSequentialGroup()
-                                .addGap(27, 27, 27)
                                 .addComponent(cbxLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(37, 37, 37)
                                 .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1884,21 +1947,20 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(34, 34, 34)
                                 .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBanHangLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addGap(134, 134, 134)
+                                .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlBanHangLayout.createSequentialGroup()
                                 .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(pnlBanHangLayout.createSequentialGroup()
-                                        .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(28, 28, 28)
-                                        .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlBanHangLayout.createSequentialGroup()
                                         .addComponent(pnlThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(22, 22, 22)
-                                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(27, 27, 27))))))
+                                        .addGap(30, 30, 30)
+                                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlBanHangLayout.createSequentialGroup()
+                                        .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(7, 7, 7)))
+                        .addContainerGap(39, Short.MAX_VALUE))))
         );
         pnlBanHangLayout.setVerticalGroup(
             pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1922,7 +1984,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addGroup(pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlHoaDon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlChiTietHoaDon7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlUuDai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlUuDai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
 
@@ -1930,7 +1992,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -2101,13 +2163,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(QuanLyBanHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -2155,6 +2210,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     private javax.swing.JLabel lblMaHD;
     private javax.swing.JLabel lblMaSP;
     private javax.swing.JLabel lblTienTraLai;
+    private javax.swing.JLabel lblTienUUdAI;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblTittleMaHD;
     private javax.swing.JLabel lblTittleMaSP;
