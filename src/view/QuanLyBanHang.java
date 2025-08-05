@@ -78,7 +78,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
         timer.start();
 
     }
-
     private String formatVND(float amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(amount) + " ₫";
@@ -1806,7 +1805,7 @@ public class QuanLyBanHang extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlThongTinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rdoTienMat)
                     .addComponent(rdoChuyenKhoan))
                 .addGap(18, 18, 18))
