@@ -14,12 +14,15 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -169,6 +172,8 @@ tblNhanvien.setRowHeight(30);
         txtTennv.setText("");
         txtSdt.setText("");
         txtChucvu.setText("");
+        txtEmail.setText("");
+        
         txtAnh.setText("");
         lblAnh.setText("ẢNH NHÂN VIÊN");
         lblAnh.setIcon(null);
@@ -773,45 +778,35 @@ tblNhanvien.setRowHeight(30);
 
     private void lblAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMouseClicked
         // TODO add your handling code here:
-        JFileChooser jFC = new JFileChooser("src\\Images_nhanvien");
-        // Thêm filter để chỉ chọn file ảnh
-        jFC.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-            "Image Files", "jpg", "jpeg", "png", "gif", "bmp"));
+        JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Chọn ảnh nhân viên");
+    FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Hình ảnh", "jpg", "jpeg", "png", "gif");
+    fileChooser.setFileFilter(imgFilter);
 
-    int result = jFC.showOpenDialog(this);
+    int result = fileChooser.showOpenDialog(this);
     if (result == JFileChooser.APPROVE_OPTION) {
-        File file = jFC.getSelectedFile();
+        File selectedFile = fileChooser.getSelectedFile();
+        strAnh = selectedFile.getName(); // Lưu tên ảnh vào biến toàn cục để sau này lưu vào CSDL
 
-        // Kiểm tra xem file có tồn tại không
-        if (file != null && file.exists()) {
-            try {
-                // Thiết lập kích thước cố định
-                int IMAGE_WIDTH = 220;
-                int IMAGE_HEIGHT = 240;
-
-                // Đọc ảnh từ file
-                BufferedImage originalImage = ImageIO.read(file);
-
-                // Resize ảnh với kích thước cố định
-                Image resizedImage = originalImage.getScaledInstance(
-                    IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH);
-
-                // Hiển thị ảnh đã resize
-                ImageIcon imageIcon = new ImageIcon(resizedImage);
-                lblAnh.setText("");
-                lblAnh.setIcon(imageIcon);
-
-                // Lưu tên file để sử dụng sau này
-                strAnh = file.getName();
-
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file ảnh: " + ex.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-                lblAnh.setText("Lỗi đọc ảnh");
-                lblAnh.setIcon(null);
-            }
+        // Copy ảnh vào thư mục dự án (src/Images_nhanvien)
+        File destDir = new File("src/Images_nhanvien");
+        if (!destDir.exists()) {
+            destDir.mkdirs();
         }
+
+        File destFile = new File(destDir, strAnh);
+        try {
+            Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi copy ảnh vào dự án: " + e.getMessage());
+            return;
         }
+
+        // Hiển thị ảnh đã chọn lên giao diện
+        ImageIcon icon = new ImageIcon(destFile.getAbsolutePath());
+        Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+        lblAnh.setIcon(new ImageIcon(img));
+    }
     }//GEN-LAST:event_lblAnhMouseClicked
 
     private void txtChucvuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChucvuActionPerformed
