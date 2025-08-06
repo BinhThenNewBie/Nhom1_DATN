@@ -39,8 +39,9 @@ import javax.swing.border.EmptyBorder;
  * @author mit
  */
 public class forgotpass2 extends javax.swing.JFrame {
-    TaikhoanDAO tkDAO = new TaikhoanDAO();    
-    
+
+    TaikhoanDAO tkDAO = new TaikhoanDAO();
+
     // Declare all instance variables
     private JLabel lblTitle, lblMatKhauMoi, lblXacDinhMatKhau;
     private RoundedPasswordField newPasswordField, confirmPasswordField;  // Fixed field names
@@ -53,7 +54,7 @@ public class forgotpass2 extends javax.swing.JFrame {
 
     // Reference fields for backward compatibility (if needed elsewhere in code)
     private JPasswordField txtnewpassword, txtcfnewpassword;
-    
+
     /**
      * Creates new form forgotpass2
      */
@@ -62,15 +63,33 @@ public class forgotpass2 extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Đổi Mật Khẩu");
-        
+
         // Initialize the UI
         setupCustomUI();
-        
+
         // Map new fields to old field references for compatibility
         txtnewpassword = newPasswordField;
         txtcfnewpassword = confirmPasswordField;
     }
- 
+
+    public boolean txttrong() { //kiểm tra nếu ô text trống
+        char[] pass = txtnewpassword.getPassword();
+        char[] passcf = txtcfnewpassword.getPassword();
+        String strpass = new String(pass);
+        String strpasscf = new String(passcf);
+        boolean check = false;
+        if (strpass.isEmpty() && strpasscf.isEmpty()) {
+            return check;
+        }
+        if (strpass.isEmpty() || strpasscf.isEmpty()) {
+            return check;
+        } else {
+            check = true;
+        }
+        return check;
+
+    }
+
     private void setupCustomUI() {
         // Đặt nền tùy chỉnh
         setContentPane(new GradientPanel());
@@ -137,8 +156,7 @@ public class forgotpass2 extends javax.swing.JFrame {
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         headerPanel.add(logoLabel);
         headerPanel.add(Box.createVerticalStrut(10));
-        */
-
+         */
         // Title
         JLabel titleLabel = new JLabel("ĐỔI MẬT KHẨU");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
@@ -209,7 +227,7 @@ public class forgotpass2 extends javax.swing.JFrame {
         confirmPasswordPanel.setOpaque(false);
         confirmPasswordPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
 
-        confirmPasswordField = new RoundedPasswordField(""); 
+        confirmPasswordField = new RoundedPasswordField("");
         confirmPasswordField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
         showConfirmPasswordButton = new JButton("👁️");
@@ -281,6 +299,7 @@ public class forgotpass2 extends javax.swing.JFrame {
 
     //// Thành phần tùy chỉnh
     class GradientPanel extends JPanel {
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -297,6 +316,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     }
 
     class RoundedPanel extends JPanel {
+
         private int radius;
 
         public RoundedPanel(int radius) {
@@ -320,6 +340,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     }
 
     class RoundedTextField extends JTextField {
+
         public RoundedTextField(String placeholder) {
             super(placeholder);
             setPreferredSize(new Dimension(0, 45));
@@ -358,6 +379,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     }
 
     class RoundedPasswordField extends JPasswordField {
+
         public RoundedPasswordField(String placeholder) {
             super(placeholder);
             setPreferredSize(new Dimension(0, 45));
@@ -396,6 +418,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     }
 
     class GradientButton extends JButton {
+
         public GradientButton(String text) {
             super(text);
             setPreferredSize(new Dimension(0, 50));
@@ -424,29 +447,32 @@ public class forgotpass2 extends javax.swing.JFrame {
         }
     }
 
-    public boolean trungpass(){
+    public boolean trungpass() {
         char[] newpass = txtnewpassword.getPassword();
         char[] cfnewpass = txtcfnewpassword.getPassword();
-        
+
         boolean check = Arrays.equals(newpass, cfnewpass);
-        if(!check){
+        if (!check) {
             showMessage("MẬT KHẨU KHÔNG TRÙNG KHỚP", Color.RED);
             // JOptionPane.showMessageDialog(this, "Mật khẩu không trùng khớp");
         }
         return check;
     }
-    
-    public void changepassword(){
-        if(trungpass() == true){
-            String email = forgotpass.ngnhan;
-            String mk = new String(txtcfnewpassword.getPassword());
-            tkDAO.passwordchange(mk, email);
-            showMessage("ĐỔI MẬT KHẨU THÀNH CÔNG", new Color(34, 139, 34));
+
+    public void changepassword() {
+        if (txttrong() == true) {
+            if (trungpass() == true) {
+                String email = forgotpass.ngnhan;
+                String mk = new String(txtcfnewpassword.getPassword());
+                tkDAO.passwordchange(mk, email);
+                showMessage("ĐỔI MẬT KHẨU THÀNH CÔNG", new Color(34, 139, 34));
+            }
+        } else {
+            showMessage("Không được để trống ô nhập", new Color(237, 28, 36));
+
         }
     }
 
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -526,7 +552,7 @@ public class forgotpass2 extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new forgotpass2().setVisible(true);
-                
+
             }
         });
     }
