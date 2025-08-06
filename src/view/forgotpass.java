@@ -5,6 +5,7 @@
 package view;
 
 import DAO.TaikhoanDAO;
+import Model.Taikhoan;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -18,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Cursor;
 import java.awt.BasicStroke;
 import java.awt.geom.RoundRectangle2D;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -213,18 +215,33 @@ public class forgotpass extends javax.swing.JFrame {
         timer.start();
     }
 
+    
+    public boolean checkmail(){
+        List<Taikhoan> dstk = tkDAO.GETALL();
+        boolean check = false;
+        for (Taikhoan tk : dstk) {
+            if(txtemailin.getText().equals(tk.getEmail())){
+                check = true;
+            }
+        }
+        return check;
+    }
+    
     // XỬ LÝ SỰ KIỆN NÚT NHẬN MÃ
     public void nhanma() {
+        
         ngnhan = txtemailin.getText().trim();
         String tieude = "MÃ XÁC NHẬN TÀI KHOẢN, VUI LÒNG KHÔNG CHIA SẺ";
         
         if (txtemailin.getText().isEmpty()) {
             showMessage("VUI LÒNG NHẬP EMAIL ĐỂ NHẬN MÃ XÁC NHẬN!", Color.RED);
             // JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP EMAIL ĐỂ NHẬN MÃ XÁC NHẬN");
-        } else {
+        } if(checkmail() == true) {
             Email.sendEmail(ngnhan, tieude, "MÃ Ở ĐÂY: " + ngaunhien);
             magui = ngaunhien; 
-            showMessage("MÃ XÁC NHẬN ĐÃ ĐƯỢC GỬI ĐÃN EMAIL CỦA BẠN!", new Color(34, 139, 34));
+            showMessage("Bạn sẽ nhận được mã nếu email có liên kết với tài khoản", new Color(34, 139, 34));
+        } if(checkmail() == false){
+            showMessage("Bạn sẽ nhận được mã nếu email có liên kết với tài khoản", new Color(34, 139, 34));
         }
     }
     
