@@ -230,7 +230,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa chữ cái");
             return false;
         }
-        if (apdung.matches(".*[^0-9].*")) {
+        if (apdung.matches(".*[^0-9%\\-].*")) {
             JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không được chứa ký tự đặc biệt");
             return false;
         }
@@ -241,8 +241,8 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ không hợp lệ");
             return false;
         }
-        if (apDungSo <= 0) {
-            JOptionPane.showMessageDialog(this, "Giá trị áp dụng từ phải lớn hơn 0");
+        if (apDungSo < 0) {
+            JOptionPane.showMessageDialog(this, "Giá trị áp dụng không được âm");
             return false;
         }
         if (apDungSo < 10000 || apDungSo > 5000000) {
@@ -268,7 +268,7 @@ public class QuanLyUuDai extends javax.swing.JFrame {
             return false;
         }
         if (diffDays > 90) {
-            JOptionPane.showMessageDialog(this, "Ưu đãi chỉ được kéo dài tối đa 3 tháng (90 ngày)");
+            JOptionPane.showMessageDialog(this, "Ưu đãi chỉ được kéo dài tối đa 3 tháng");
             return false;
         }
 
