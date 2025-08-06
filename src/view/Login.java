@@ -445,6 +445,7 @@ public class Login extends javax.swing.JFrame {
     public void Login() {
         if (txttrong() == true) {
             kttk();
+            this.dispose();
         }
     }
 

@@ -229,7 +229,10 @@ public class forgotpass extends javax.swing.JFrame {
     
     // XỬ LÝ SỰ KIỆN NÚT NHẬN MÃ
     public void nhanma() {
-        
+        if(checktrong() == false){
+            showMessage("Nhập email liên kết với tài khoản để nhận mã!!!", Color.red);
+        }
+        if(checktrong() == true){
         ngnhan = txtemailin.getText().trim();
         String tieude = "MÃ XÁC NHẬN TÀI KHOẢN, VUI LÒNG KHÔNG CHIA SẺ";
         
@@ -243,7 +246,7 @@ public class forgotpass extends javax.swing.JFrame {
         } if(checkmail() == false){
             showMessage("Bạn sẽ nhận được mã nếu email có liên kết với tài khoản", new Color(34, 139, 34));
         }
-    }
+    }}
     
     // XỬ LÝ SỰ KIỆN NÚT XÁC NHẬN
     public void checkma(){
@@ -376,6 +379,17 @@ public class forgotpass extends javax.swing.JFrame {
 
             super.paintComponent(g);
         }
+    }
+    
+    
+    public boolean checktrong(){
+        boolean check = false;
+        if(txtemailin.getText().isEmpty()){
+            return check;
+        }else{
+            check = true;
+        }
+        return check;
     }
     
     

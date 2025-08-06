@@ -465,7 +465,8 @@ public class forgotpass2 extends javax.swing.JFrame {
                 String email = forgotpass.ngnhan;
                 String mk = new String(txtcfnewpassword.getPassword());
                 tkDAO.passwordchange(mk, email);
-                showMessage("ĐỔI MẬT KHẨU THÀNH CÔNG", new Color(34, 139, 34));
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công");
+                this.dispose();
             }
         } else {
             showMessage("Không được để trống ô nhập", new Color(237, 28, 36));
