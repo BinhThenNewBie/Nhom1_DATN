@@ -34,6 +34,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        setSize(720, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setupCustomUI();
@@ -50,7 +51,6 @@ public class Login extends javax.swing.JFrame {
         // Tạo vùng chứa chính
         JPanel mainContainer = createMainContainer();
         add(mainContainer, BorderLayout.CENTER);
-        
 
         // Làm mới giao diện người dùng
         revalidate();
