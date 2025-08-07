@@ -190,7 +190,7 @@ public void them(){
         Taikhoan chontk = tkd.GETALL().get(chon);
 
         String vaiTroHienTai = chontk.getVaiTro();
-
+                     int result = 0;
         int sua = JOptionPane.showConfirmDialog(this, "Bạn muốn sửa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (sua == JOptionPane.YES_OPTION) {
             String Email = txtEmail.getText().trim(); 
@@ -206,18 +206,11 @@ public void them(){
                 return;
             }
 
-            int result = 0;
-
-            // Nếu là STAFF, chỉ sửa email
-            if ("STAFF".equalsIgnoreCase(vaiTroHienTai)) {
-                result = tkd.suaStaff(chontk.getID_TK(), Email);
-            } else {
-                // Nếu là ADMIN, sửa tất cả
                 String IDTK = txtID.getText().trim();
                 String IDNV = txtIdnv.getText().trim();
                 String tenTK = txtTentk.getText().trim();
-                String Pass = txtPass.getText().trim(); // SỬA: lấy từ txtPass
-                String vaiTro = cboVaitro.getSelectedItem().toString(); // Lấy vai trò từ combobox
+                String Pass = txtPass.getText().trim();
+                String vaiTro = cboVaitro.getSelectedItem().toString(); 
 
                 if (IDTK.isEmpty() || Pass.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
@@ -235,7 +228,6 @@ public void them(){
             } else {
                 JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi sửa!");
             }
-        }
     } else {
         JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần sửa!");
     }

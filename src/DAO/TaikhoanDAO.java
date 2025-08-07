@@ -122,26 +122,6 @@ public int them(Taikhoan tk){
         return 0;
     }
     
-    // Sửa tài khoản STAFF (chỉ sửa được email)
-    public int suaStaff(String idTK, String email){
-        String sql = "UPDATE TAIKHOAN SET EMAIL=? WHERE ID_TK = ?";
-        try (Connection con = DBconnect.getConnection();
-             PreparedStatement pstm = con.prepareStatement(sql)) {
-            pstm.setString(1, email);
-            pstm.setString(2, idTK);
-            
-            int result = pstm.executeUpdate();
-            if (result > 0) {
-                System.out.println("Sửa thông tin STAFF thành công!");
-                return 1;
-            }
-        } catch (Exception e) {
-            System.err.println("Error updating staff account: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return 0;
-    }
-    
     // Khóa tài khoản
     public int khoaTaiKhoan(String ID_TK) {
         String sql = "UPDATE TAIKHOAN SET TRANGTHAI = 'LOCKED' WHERE ID_TK = ?";
