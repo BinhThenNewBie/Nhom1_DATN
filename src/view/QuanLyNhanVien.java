@@ -347,7 +347,7 @@ tblNhanvien.setRowHeight(30);
                 int result = nvd.moKhoaTaiKhoan(chontk.getID_NV());
                 if (result == 1) {
                     fillTable();
-                    showdetail(); // Refresh button states
+                    showdetail(); 
                     JOptionPane.showMessageDialog(this, "Mở khóa tài khoản thành công!");
                 } else {
                     JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi mở khóa tài khoản!");
