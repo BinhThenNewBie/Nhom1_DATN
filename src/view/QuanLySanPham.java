@@ -335,7 +335,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
         String id = lblID.getText().trim();
         String tenSP = txtTensp.getText().trim();
         String giaStr = txtGiatien.getText().trim();
-        String loaiSP = (cboLoai.getSelectedItem() != null) ? cboLoai.getSelectedItem().toString().trim() : "";
+
 
         // Check mã sản phẩm
         if (id.isEmpty()) {

@@ -24,10 +24,8 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Timer;
@@ -39,18 +37,19 @@ import util.Email;
  * @author PC Của Bình
  */
 public class forgotpass extends javax.swing.JFrame {
-    TaikhoanDAO tkDAO = new TaikhoanDAO();    
-    
+
+    TaikhoanDAO tkDAO = new TaikhoanDAO();
+
     // Khai báo các biến instance
     private RoundedTextField txtemailin, txtcodein;
     private JButton btnNhanMa, btnXacNhan;
     private JLabel statusLabel;
-    
+
     // Biến xử lý mã xác nhận
     String ngaunhien = Email.ngaunhien();
     String magui; // BIẾN ĐỂ LƯU MÃ GỬI GẦN NHẤT 
     public static String ngnhan; // BIẾN ĐỂ LƯU EMAIL NGƯỜI NHẬN
-    
+
     /**
      * TẠO FORM FORGOTPASS MỚI
      */
@@ -59,11 +58,11 @@ public class forgotpass extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("NHẬN MÃ XÁC NHẬN");
-        
+
         // KHỞI TẠO GIAO DIỆN
         setupCustomUI();
     }
- 
+
     private void setupCustomUI() {
         // ĐẶT NỀN TÙY CHỈNH
         setContentPane(new GradientPanel());
@@ -143,10 +142,10 @@ public class forgotpass extends javax.swing.JFrame {
         JPanel emailPanel = createFieldWithLabel("EMAIL LIÊN KẾT VỚI TÀI KHOẢN");
         txtemailin = new RoundedTextField("");
         txtemailin.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        
+
         emailPanel.add(Box.createVerticalStrut(5));
         emailPanel.add(txtemailin);
-        
+
         fieldsPanel.add(emailPanel);
         fieldsPanel.add(Box.createVerticalStrut(20));
 
@@ -154,10 +153,10 @@ public class forgotpass extends javax.swing.JFrame {
         JPanel codePanel = createFieldWithLabel("MÃ XÁC NHẬN");
         txtcodein = new RoundedTextField("");
         txtcodein.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        
+
         codePanel.add(Box.createVerticalStrut(5));
         codePanel.add(txtcodein);
-        
+
         fieldsPanel.add(codePanel);
 
         return fieldsPanel;
@@ -215,51 +214,69 @@ public class forgotpass extends javax.swing.JFrame {
         timer.start();
     }
 
-    
-    public boolean checkmail(){
+    public boolean checkmail() {
         List<Taikhoan> dstk = tkDAO.GETALL();
         boolean check = false;
         for (Taikhoan tk : dstk) {
-            if(txtemailin.getText().equals(tk.getEmail())){
+            if (txtemailin.getText().equals(tk.getEmail())) {
                 check = true;
             }
         }
         return check;
     }
-    
+
     // XỬ LÝ SỰ KIỆN NÚT NHẬN MÃ
     public void nhanma() {
-        if(checktrong() == false){
+        if (!checktrong()) {
             showMessage("Nhập email liên kết với tài khoản để nhận mã!!!", Color.red);
+            return;
         }
-        if(checktrong() == true){
+
         ngnhan = txtemailin.getText().trim();
         String tieude = "MÃ XÁC NHẬN TÀI KHOẢN, VUI LÒNG KHÔNG CHIA SẺ";
-        
+
         if (txtemailin.getText().isEmpty()) {
-            showMessage("VUI LÒNG NHẬP EMAIL ĐỂ NHẬN MÃ XÁC NHẬN!", Color.RED);
-            // JOptionPane.showMessageDialog(this, "VUI LÒNG NHẬP EMAIL ĐỂ NHẬN MÃ XÁC NHẬN");
-        } if(checkmail() == true) {
+            showMessage("VUI LÒNG NHẬP EMAIL ĐỂ NHẬN MÃ XÁC NHẬN!", Color.red);
+            return;
+        }
+
+        if (checkmail()) {
             Email.sendEmail(ngnhan, tieude, "MÃ Ở ĐÂY: " + ngaunhien);
-            magui = ngaunhien; 
+            magui = ngaunhien;
             showMessage("Bạn sẽ nhận được mã nếu email có liên kết với tài khoản", new Color(34, 139, 34));
-        } if(checkmail() == false){
+        } else {
             showMessage("Bạn sẽ nhận được mã nếu email có liên kết với tài khoản", new Color(34, 139, 34));
         }
-    }}
-    
+
+        // Khóa nút sau khi nhấn
+        btnNhanMa.setEnabled(false);
+
+        // Đếm ngược 60 giây
+        final int[] timeLeft = {60}; //thời gian khóa nút 60s
+        btnNhanMa.setEnabled(false); // khóa nút
+
+        Timer timer = new Timer(1000, e -> {
+            if (--timeLeft[0] <= 0) {
+                ((Timer) e.getSource()).stop();
+                btnNhanMa.setEnabled(true); // mở lại nút
+            }
+        });
+        timer.start();
+
+    }
+
     // XỬ LÝ SỰ KIỆN NÚT XÁC NHẬN
-    public void checkma(){
+    public void checkma() {
         String codein = txtcodein.getText().trim();
-        
-        if(codein.isEmpty()) {
+
+        if (codein.isEmpty()) {
             showMessage("VUI LÒNG NHẬP MÃ XÁC NHẬN!", Color.RED);
             return;
         }
-        
-        if(codein.equals(magui)){
+
+        if (codein.equals(magui)) {
             showMessage("XÁC NHẬN THÀNH CÔNG! CHUYỂN SANG FORM ĐỔI MẬT KHẨU...", new Color(34, 139, 34));
-            
+
             // DELAY RỒI CHUYỂN FORM
             Timer timer = new Timer(1500, e -> {
                 forgotpass2 fgp2 = new forgotpass2();
@@ -276,6 +293,7 @@ public class forgotpass extends javax.swing.JFrame {
 
     //// CÁC COMPONENT TÙY CHỈNH
     class GradientPanel extends JPanel {
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -292,6 +310,7 @@ public class forgotpass extends javax.swing.JFrame {
     }
 
     class RoundedPanel extends JPanel {
+
         private int radius;
 
         public RoundedPanel(int radius) {
@@ -315,6 +334,7 @@ public class forgotpass extends javax.swing.JFrame {
     }
 
     class RoundedTextField extends JTextField {
+
         public RoundedTextField(String placeholder) {
             super(placeholder);
             setPreferredSize(new Dimension(0, 45));
@@ -353,6 +373,7 @@ public class forgotpass extends javax.swing.JFrame {
     }
 
     class GradientButton extends JButton {
+
         public GradientButton(String text) {
             super(text);
             setPreferredSize(new Dimension(0, 50));
@@ -380,19 +401,17 @@ public class forgotpass extends javax.swing.JFrame {
             super.paintComponent(g);
         }
     }
-    
-    
-    public boolean checktrong(){
+
+    public boolean checktrong() {
         boolean check = false;
-        if(txtemailin.getText().isEmpty()){
+        if (txtemailin.getText().isEmpty()) {
             return check;
-        }else{
+        } else {
             check = true;
         }
         return check;
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

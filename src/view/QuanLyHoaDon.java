@@ -9,15 +9,12 @@ import DAO.HoaDonDAO;
 import Model.ChiTietHoaDon;
 import Model.HoaDon;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 

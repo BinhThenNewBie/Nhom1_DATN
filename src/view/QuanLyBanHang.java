@@ -53,7 +53,6 @@ public class QuanLyBanHang extends javax.swing.JFrame {
     DefaultTableModel modelUuDai;
     DefaultTableModel modelHDCho;
     DefaultTableModel modelCTHD;
-    ChiTietHoaDon cthd = new ChiTietHoaDon();
     UuDaiDAO udDAO = new UuDaiDAO();
     HoaDonDAO hdDAO = new HoaDonDAO();
     ChiTietHoaDonDAO cthdDAO = new ChiTietHoaDonDAO();

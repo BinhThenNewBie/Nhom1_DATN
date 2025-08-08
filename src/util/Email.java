@@ -33,7 +33,7 @@ public class Email {
         }
         
         
-        return result.trim(); // Loại bỏ dấu cách cuối
+        return result; 
         
     }
 
@@ -53,7 +53,6 @@ public class Email {
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                // TODO Auto-generated method stub
                 return new PasswordAuthentication(from, password);
             }
         };

@@ -6,8 +6,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -25,16 +23,8 @@ public class Staff extends javax.swing.JFrame {
         initComponents();
 
         lblAccount.setText("    " + Login.emailLogin);
-        //lấy kích thước của màn hình theo máy
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
 
-        // ước chừng thanh taskbar tầm 80px
-        int taskbarHeight = 80;
-
-        // lấy kích thước màn hình trừ đi thanh taskbar
-        int width = screenSize.width;
-        int height = screenSize.height - taskbarHeight;
+      
 
         // set cho form không bị lệch
         this.setSize(1920, 1045);

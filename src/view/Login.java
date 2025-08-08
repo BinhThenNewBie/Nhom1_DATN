@@ -224,14 +224,6 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    private void showMessage(String message, Color color) {
-        statusLabel.setText(message);
-        statusLabel.setForeground(color);
-
-        Timer timer = new Timer(3000, e -> statusLabel.setText(""));
-        timer.setRepeats(false);
-        timer.start();
-    }
 
     //// Thành phần tùy chỉnh
     class GradientPanel extends JPanel {
@@ -447,7 +439,7 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    public String TimNhanVienTheoEmail(String email) {
+    public String TimNhanVienTheoEmail(String email) { //hàm để lấy tên nhân viên qua email
         TaikhoanDAO tkDAO = new TaikhoanDAO();
         List<Taikhoan> dsNV = tkDAO.GETALL();
         for (Taikhoan tk : dsNV) {

@@ -27,10 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
@@ -43,10 +41,7 @@ public class forgotpass2 extends javax.swing.JFrame {
     TaikhoanDAO tkDAO = new TaikhoanDAO();
 
     // Declare all instance variables
-    private JLabel lblTitle, lblMatKhauMoi, lblXacDinhMatKhau;
     private RoundedPasswordField newPasswordField, confirmPasswordField;  // Fixed field names
-    private JButton btnXacNhan;
-    private JPanel cardPanel;
     private JLabel statusLabel;
     private JButton showNewPasswordButton, showConfirmPasswordButton;
     private boolean isNewPasswordVisible = false;
@@ -217,7 +212,7 @@ public class forgotpass2 extends javax.swing.JFrame {
 
         JPanel confirmPasswordLabelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         confirmPasswordLabelPanel.setOpaque(false);
-        JLabel confirmPasswordLabel = new JLabel("XÁC ĐỊNH MẬT KHẨU");
+        JLabel confirmPasswordLabel = new JLabel("XÁC NHẬN MẬT KHẨU");
         confirmPasswordLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         confirmPasswordLabel.setForeground(new Color(20, 35, 56));
         confirmPasswordLabelPanel.add(confirmPasswordLabel);

@@ -11,9 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -91,7 +88,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         cboVaitro.setSelectedItem(tk.getVaiTro());
 
         String trangThai = tk.getTrangThai();
-        String vaiTro = tk.getVaiTro();
+        
 
         if ("LOCKED".equalsIgnoreCase(trangThai)) {
             btnKhoa.setEnabled(false);
@@ -217,7 +214,7 @@ public void them(){
                     return;
                 }
 
-                String trangThai = chontk.getTrangThai();
+
                 Taikhoan tk = new Taikhoan(IDTK, IDNV, tenTK, Pass, Email, vaiTro, "ACTIVE");
                 result = tkd.sua(chontk.getID_TK(), tk);
             }
