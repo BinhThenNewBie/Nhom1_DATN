@@ -394,48 +394,76 @@ public class Login extends javax.swing.JFrame {
         return check;
     }
 
-    public void kttk() { // kiểm tra kiểm tra xem tài khoản có trong csdl không
-        String usernamein = emailField.getText();
-        char[] passwordin = passwordField.getPassword();
-        boolean loginSuccess = false;
-        String passwordStr = new String(passwordin);
-        TaikhoanDAO tkDAO = new TaikhoanDAO();
-        List<Taikhoan> dstk = tkDAO.GETALL();
-
-        for (Taikhoan tk : dstk) {
-            if (usernamein.equals(tk.getEmail()) && passwordStr.equals(tk.getPass())) {
-                loginSuccess = true;
-
-                // luu lại tên nhân viên
-                String TenNV = TimNhanVienTheoEmail(usernamein);
-                if (TenNV != null) {
-                    Login.emailLogin = TenNV;
-                    System.err.println("Đăng nhập bởi: " + TenNV);
-                }
-
-                if (tk.getVaiTro().equals("ADMIN")) {
-                    Admin ad = new Admin();
-                    ad.setVisible(true);
-                } else if (tk.getVaiTro().equals("STAFF")) {
-                    Staff st = new Staff();
-                    st.setVisible(true);
-                }
-
-                break;
+    
+    
+    public void kttk() { // kiểm tra tài khoản đăng nhập
+    String usernamein = emailField.getText().trim();
+    char[] passwordin = passwordField.getPassword();
+    String passwordStr = new String(passwordin);
+    
+    // Validate input first
+    if (usernamein.isEmpty() || passwordStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ email và mật khẩu");
+        return;
+    }
+    
+    TaikhoanDAO tkDAO = new TaikhoanDAO();
+    List<Taikhoan> dstk = tkDAO.GETALL();
+    boolean found = false;
+    
+    for (Taikhoan tk : dstk) {
+        // kt email
+        if (usernamein.equals(tk.getEmail())) {
+            found = true;
+            
+            // kt mật khẩu
+            if (!passwordStr.equals(tk.getPass())) {
+                JOptionPane.showMessageDialog(this, "Vui lòng kiểm tra lại email hoặc mật khẩu");
+                return;
             }
-        }
-
-        if (!loginSuccess) {
-            JOptionPane.showMessageDialog(this, "Sai thông tin đăng nhập!!!");
-        } else if (loginSuccess) {
+            
+            // check tk khóa
+            if (!checktkkhoa()) {
+                JOptionPane.showMessageDialog(this, "Tài khoản đã bị khóa");
+                return;
+            }
+            
+            // nếu toàn bộ kiểm thử đều pass 
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+            
+            // lưu tên người đăng nhập
+            String TenNV = TimNhanVienTheoEmail(usernamein);
+            if (TenNV != null) {
+                Login.emailLogin = TenNV;
+                System.err.println("Đăng nhập bởi: " + TenNV);
+            }
+            
+            // role nào thì đưa vào trang đấy
+            if (tk.getVaiTro().equals("ADMIN")) {
+                Admin ad = new Admin();
+                ad.setVisible(true);
+            } else if (tk.getVaiTro().equals("STAFF")) {
+                Staff st = new Staff();
+                st.setVisible(true);
+            }
+            
+            // đóng cửa sổ
+            this.dispose();
+            break;
         }
     }
+    
+    // trường hợp không có email nào trùng khớp trong database
+    if (!found) {
+        JOptionPane.showMessageDialog(this, "Vui lòng kiểm tra lại email hoặc mật khẩu");
+    }
+}
+
 
     public void Login() {
         if (txttrong() == true) {
             kttk();
-            this.dispose();
+            
         }
     }
 
@@ -450,6 +478,20 @@ public class Login extends javax.swing.JFrame {
         return null;
     }
 
+    public boolean checktkkhoa(){
+        TaikhoanDAO tkDAO = new TaikhoanDAO();
+        String trangthai = tkDAO.gettrangthaitk(emailField.getText());
+        System.out.println(trangthai);
+        boolean check = false;
+        if(trangthai.equals("LOCKED")){
+            return check;
+        }else{
+            check = true;
+        }
+        return check;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

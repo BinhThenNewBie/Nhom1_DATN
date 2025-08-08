@@ -155,7 +155,7 @@ public class TaikhoanDAO {
             if (rs.next()) {
                 return rs.getString("TRANGTHAI"); // Trả về trạng thái nếu tìm thấy email
             } else {
-                return null; // Trả về null nếu không tìm thấy email
+                return null; 
             }
 
         } catch (Exception e) {
