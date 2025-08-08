@@ -264,7 +264,10 @@ public void them(){
         int chon = tblBang.getSelectedRow();
         if (chon >= 0) {
             Taikhoan chontk = tkd.GETALL().get(chon);
-
+            if ("ADMIN".equalsIgnoreCase(chontk.getVaiTro())) {
+            JOptionPane.showMessageDialog(this, "Không thể khóa tài khoản ADMIN!");
+            return;
+        }
             // Kiểm tra nếu tài khoản đã bị khóa
             if ("LOCKED".equals(chontk.getTrangThai())) {
                 JOptionPane.showMessageDialog(this, "Tài khoản đã bị khóa!");
