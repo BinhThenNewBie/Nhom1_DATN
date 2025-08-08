@@ -65,7 +65,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
 
     public void initTable() {
         tableModel = new DefaultTableModel();
-        String[] cols = new String[]{"ID TÀI KHOẢN", "ID NHÂN VIÊN", "MẬT KHẨU","EMAIL", "VAI TRÒ", "TRẠNG THÁI"};
+        String[] cols = new String[]{"ID TÀI KHOẢN", "ID NHÂN VIÊN","TÊN NHÂN VIÊN", "MẬT KHẨU","EMAIL", "VAI TRÒ", "TRẠNG THÁI"};
         tableModel.setColumnIdentifiers(cols);
         tblBang.setModel(tableModel);
     }
