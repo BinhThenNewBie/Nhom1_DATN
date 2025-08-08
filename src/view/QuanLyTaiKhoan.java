@@ -79,6 +79,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     }
 
     public void showdetail() {
+        checkEmailTrung();
     int chon = tblBang.getSelectedRow();
     if (chon >= 0) {
         Taikhoan tk = tkd.GETALL().get(chon);
@@ -116,7 +117,6 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             txtEmail.setEnabled(true);
             cboVaitro.setEnabled(true);
         }
-        checkEmailTrung();
         }
     }
 
@@ -307,10 +307,8 @@ public void them(){
             btnKhoa.setEnabled(false);
             btnMokhoa.setEnabled(false);
             btnLamMoi.setEnabled(false);
-            cboVaitro.setEnabled(false);
-            cboLoc.setEnabled(false);
-            btnloc.setEnabled(false);
-            txtEmail.setText(emailTrung); 
+            
+            txtEmail.setText(emailTrung); // Gợi ý email bị trùng
 
             JOptionPane.showMessageDialog(this,
                     "Phát hiện email bị trùng: " + emailTrung
@@ -329,9 +327,6 @@ public void them(){
         btnKhoa.setEnabled(true);
         btnMokhoa.setEnabled(true);
         btnLamMoi.setEnabled(true);
-        cboVaitro.setEnabled(true);
-            cboLoc.setEnabled(true);
-            btnloc.setEnabled(true);
 }
 public void loc(){
     String trangthailoc = cboLoc.getSelectedItem().toString();
