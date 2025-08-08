@@ -18,21 +18,7 @@ import java.sql.ResultSet;
  */
 
 public class TaikhoanDAO {
-    // lấy email từ sql
-    public String getEmailByRole(String role) {
-    String sql = "SELECT EMAIL FROM TAIKHOAN WHERE VAITRO = ?";
-    try (Connection con = DBconnect.getConnection();
-         PreparedStatement pstm = con.prepareStatement(sql)) {
-        pstm.setString(1, role);
-        ResultSet rs = pstm.executeQuery();
-        if (rs.next()) {
-            return rs.getString("EMAIL");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return null;
-}
+
     // Lấy tất cả tài khoản
     public List<Taikhoan> GETALL(){
         List<Taikhoan> Listtk = new ArrayList<>();
