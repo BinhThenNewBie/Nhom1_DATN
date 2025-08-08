@@ -83,7 +83,7 @@ public int them(Taikhoan tk){
         pstm.setString(4, tk.getPass());
         pstm.setString(5, tk.getEmail());
         pstm.setString(6, tk.getVaiTro());
-        pstm.setString(7, tk.getTrangThai()); // Thêm tham số cho TRANGTHAI
+        pstm.setString(7, tk.getTrangThai()); 
         
         int result = pstm.executeUpdate();
         if (result > 0) {

@@ -79,7 +79,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     }
 
     public void showdetail() {
-        checkEmailTrung();
+        
     int chon = tblBang.getSelectedRow();
     if (chon >= 0) {
         Taikhoan tk = tkd.GETALL().get(chon);
@@ -120,6 +120,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             txtEmail.setEnabled(true);
             cboVaitro.setEnabled(true);
         }
+        checkEmailTrung();
         }
     }
 
@@ -127,6 +128,8 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     public void lammoi() {
         txtID.setText("");
         txtPass.setText("");
+        txtEmail.setText("");
+        txtTentk.setText("");
         txtIdnv.setText("");
         cboVaitro.setSelectedItem(0);
     }
@@ -172,8 +175,8 @@ public void them(){
             }
         }
 
-        Taikhoan nv = new Taikhoan(ID_TK, ID_NV, ID_NV, pass, email, vaiTro, vaiTro);
-        nv.setTrangThai("ACTIVE"); // Set trạng thái mặc định
+        Taikhoan nv = new Taikhoan(ID_TK, ID_NV, ID_NV, pass, email, vaiTro, "ACTIVE");
+        nv.setTrangThai("ACTIVE"); 
 
         int result = tkd.them(nv);
         if (result == 1) {
@@ -218,7 +221,7 @@ public void them(){
                 }
 
                 String trangThai = chontk.getTrangThai();
-                Taikhoan tk = new Taikhoan(IDTK, IDNV, tenTK, Pass, Email, vaiTro, trangThai);
+                Taikhoan tk = new Taikhoan(IDTK, IDNV, tenTK, Pass, Email, vaiTro, "ACTIVE");
                 result = tkd.sua(chontk.getID_TK(), tk);
             }
 
@@ -318,12 +321,14 @@ public void them(){
             txtID.setEnabled(false);
             txtPass.setEnabled(false);
             txtIdnv.setEnabled(false);
+            txtIdnv.setEnabled(false);
             btnKhoa.setEnabled(false);
             btnMokhoa.setEnabled(false);
             btnLamMoi.setEnabled(false);
-            
-            txtEmail.setText(emailTrung); // Gợi ý email bị trùng
-
+            btnloc.setEnabled(false);
+            cboLoc.setEnabled(false);
+            txtEmail.setText(emailTrung); 
+            cboVaitro.setEnabled(false);
             JOptionPane.showMessageDialog(this,
                     "Phát hiện email bị trùng: " + emailTrung
                     + "\nVui lòng sửa lại để tiếp tục sử dụng!",
@@ -342,6 +347,9 @@ public void them(){
         btnKhoa.setEnabled(true);
         btnMokhoa.setEnabled(true);
         btnLamMoi.setEnabled(true);
+        btnloc.setEnabled(true);
+        cboLoc.setEnabled(true);
+        cboVaitro.setEnabled(true);
 }
 public void loc(){
     String trangthailoc = cboLoc.getSelectedItem().toString();
