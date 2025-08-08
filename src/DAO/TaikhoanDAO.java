@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 /**
  *
  * @author ADMIN
@@ -20,7 +21,7 @@ import java.sql.ResultSet;
 public class TaikhoanDAO {
 
     // Lấy tất cả tài khoản
-    public List<Taikhoan> GETALL(){
+    public List<Taikhoan> GETALL() {
         List<Taikhoan> Listtk = new ArrayList<>();
         String sql = "SELECT * FROM TAIKHOAN";
         try {
@@ -45,8 +46,8 @@ public class TaikhoanDAO {
         }
         return Listtk;
     }
-    
-    public Object[] GETROW(Taikhoan tk){
+
+    public Object[] GETROW(Taikhoan tk) {
         String ID_TK = tk.getID_TK();
         String ID_NV = tk.getID_NV();
         String tenNV = tk.getTenNV();
@@ -54,40 +55,37 @@ public class TaikhoanDAO {
         String Email = tk.getEmail();
         String vaiTro = tk.getVaiTro();
         String trangThai = tk.getTrangThai();
-        Object[] rows = new Object[]{ID_TK,ID_NV,tenNV, Pass, Email, vaiTro, trangThai};
+        Object[] rows = new Object[]{ID_TK, ID_NV, tenNV, Pass, Email, vaiTro, trangThai};
         return rows;
     }
-    
 
-public int them(Taikhoan tk){
-    String sql = "INSERT INTO TAIKHOAN (ID_TK, ID_NV, TENNV, PASS, EMAIL, VAITRO, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    try (Connection con = DBconnect.getConnection();
-         PreparedStatement pstm = con.prepareStatement(sql)) {
-        pstm.setString(1, tk.getID_TK());
-        pstm.setString(2, tk.getID_NV());
-        pstm.setString(3, tk.getTenNV());
-        pstm.setString(4, tk.getPass());
-        pstm.setString(5, tk.getEmail());
-        pstm.setString(6, tk.getVaiTro());
-        pstm.setString(7, tk.getTrangThai()); 
-        
-        int result = pstm.executeUpdate();
-        if (result > 0) {
-            System.out.println("Thêm tài khoản thành công!");
-            return 1;
+    public int them(Taikhoan tk) {
+        String sql = "INSERT INTO TAIKHOAN (ID_TK, ID_NV, TENNV, PASS, EMAIL, VAITRO, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
+            pstm.setString(1, tk.getID_TK());
+            pstm.setString(2, tk.getID_NV());
+            pstm.setString(3, tk.getTenNV());
+            pstm.setString(4, tk.getPass());
+            pstm.setString(5, tk.getEmail());
+            pstm.setString(6, tk.getVaiTro());
+            pstm.setString(7, tk.getTrangThai());
+
+            int result = pstm.executeUpdate();
+            if (result > 0) {
+                System.out.println("Thêm tài khoản thành công!");
+                return 1;
+            }
+        } catch (Exception e) {
+            System.err.println("Error adding account: " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        System.err.println("Error adding account: " + e.getMessage());
-        e.printStackTrace();
+        return 0;
     }
-    return 0;
-}
-    
+
     // Sửa tài khoản (dành cho ADMIN)
-    public int sua(String oldIDTK, Taikhoan tk){
+    public int sua(String oldIDTK, Taikhoan tk) {
         String sql = "UPDATE TAIKHOAN SET ID_TK= ?,ID_NV=?,TENNV=?, PASS=?, EMAIL=?, VAITRO=? WHERE ID_TK = ?";
-        try (Connection con = DBconnect.getConnection();
-             PreparedStatement pstm = con.prepareStatement(sql)) {
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
             pstm.setString(1, tk.getID_TK());
             pstm.setString(2, tk.getID_NV());
             pstm.setString(3, tk.getTenNV());
@@ -95,7 +93,7 @@ public int them(Taikhoan tk){
             pstm.setString(5, tk.getEmail());
             pstm.setString(6, tk.getVaiTro());
             pstm.setString(7, oldIDTK);
-            
+
             int result = pstm.executeUpdate();
             if (result > 0) {
                 System.out.println("Sửa tài khoản thành công!");
@@ -107,14 +105,13 @@ public int them(Taikhoan tk){
         }
         return 0;
     }
-    
+
     // Khóa tài khoản
     public int khoaTaiKhoan(String ID_TK) {
         String sql = "UPDATE TAIKHOAN SET TRANGTHAI = 'LOCKED' WHERE ID_TK = ?";
-        try (Connection con = DBconnect.getConnection();
-             PreparedStatement pstm = con.prepareStatement(sql)) {
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
             pstm.setString(1, ID_TK);
-            
+
             int result = pstm.executeUpdate();
             if (result > 0) {
                 System.out.println("Khóa tài khoản thành công!");
@@ -126,14 +123,13 @@ public int them(Taikhoan tk){
         }
         return 0;
     }
-    
+
     // Mở khóa tài khoản
     public int moKhoaTaiKhoan(String ID_TK) {
         String sql = "UPDATE TAIKHOAN SET TRANGTHAI = 'ACTIVE' WHERE ID_TK = ?";
-        try (Connection con = DBconnect.getConnection();
-             PreparedStatement pstm = con.prepareStatement(sql)) {
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
             pstm.setString(1, ID_TK);
-            
+
             int result = pstm.executeUpdate();
             if (result > 0) {
                 System.out.println("Mở khóa tài khoản thành công!");
@@ -145,25 +141,46 @@ public int them(Taikhoan tk){
         }
         return 0;
     }
-    
-    
-     public int passwordchange(String passin, String email){
-    String sql = "UPDATE TAIKHOAN SET PASS = ? WHERE EMAIL = ?";
-    try (Connection con = DBconnect.getConnection();
-         PreparedStatement pstm = con.prepareStatement(sql)) {
-        
-        pstm.setString(1, passin);
-        pstm.setString(2, email);
-        
-        // Execute update và trả về số dòng bị ảnh hưởng
-        int rowsAffected = pstm.executeUpdate();
-        
-        return rowsAffected; // Trả về 1 nếu thành công, 0 nếu không tìm thấy email
-        
-    } catch (Exception e) {
-        e.printStackTrace();
-        return -1; // Trả về -1 nếu có lỗi
-        
+
+    // lấy trạng thái của tài khoản
+    public String gettrangthaitk(String email) {
+        String sql = "SELECT TRANGTHAI FROM TAIKHOAN WHERE EMAIL = ?";
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setString(1, email);
+
+
+            ResultSet rs = pstm.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("TRANGTHAI"); // Trả về trạng thái nếu tìm thấy email
+            } else {
+                return null; // Trả về null nếu không tìm thấy email
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Có lỗi xảy ra"; // Trả về "ERROR" nếu có lỗi xảy ra
+        }
     }
-}
+
+    public int passwordchange(String passin, String email) {
+        String sql = "UPDATE TAIKHOAN SET PASS = ? WHERE EMAIL = ?";
+        try (Connection con = DBconnect.getConnection(); PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setString(1, passin);
+            pstm.setString(2, email);
+
+            // Execute update và trả về số dòng bị ảnh hưởng
+            int rowsAffected = pstm.executeUpdate();
+
+            return rowsAffected; // Trả về 1 nếu thành công, 0 nếu không tìm thấy email
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // Trả về -1 nếu có lỗi
+
+        }
+    }
+
 }
