@@ -19,10 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
-import view.QuanLyNhanVien;
-import view.QuanLySanPham;
-import view.QuanLyTaiKhoan;
-import view.QuanLyUuDai;
+
 
 /**
  *
