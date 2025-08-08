@@ -9,12 +9,19 @@ import DAO.HoaDonDAO;
 import Model.ChiTietHoaDon;
 import Model.HoaDon;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -29,51 +36,77 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
     HoaDonDAO hdd = new HoaDonDAO();
     ChiTietHoaDonDAO cthdd = new ChiTietHoaDonDAO();
 
+    private void improveAllTables() {
+        JTable[] tables = {tblCTHD, tblHoaDon};
+        for (JTable table : tables) {
+            // Font và kích thước
+            table.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            table.setRowHeight(30);
+
+            table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
+            table.getTableHeader().setBackground(new Color(51, 51, 86));
+            table.getTableHeader().setForeground(Color.WHITE);
+            table.getTableHeader().setPreferredSize(new Dimension(0, 35));
+
+            table.getTableHeader().setBorder(BorderFactory.createEmptyBorder());
+            table.getTableHeader().setOpaque(true);
+
+            table.getTableHeader().putClientProperty("JTableHeader.showBorder", false);
+            table.getTableHeader().putClientProperty("JComponent.sizeVariant", "regular");
+            table.getTableHeader().putClientProperty("JTableHeader.showSeparatorLine", false);
+
+            table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                        boolean isSelected, boolean hasFocus, int row, int column) {
+                    super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    setBackground(new Color(31, 51, 86));
+                    setForeground(Color.WHITE);
+                    setFont(new Font("Segoe UI", Font.BOLD, 16));
+                    setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Không có bóng
+                    setOpaque(true);
+                    setHorizontalAlignment(JLabel.CENTER);
+                    return this;
+                }
+            });
+
+            // Màu selection - tắt bóng
+            table.setSelectionBackground(new Color(173, 216, 230));
+            table.setGridColor(new Color(200, 200, 200));
+
+            // TẮT CÁC HIỆU ỨNG BÓNG VÀ FOCUS
+            table.setBorder(null);
+            table.setShowGrid(true); // Giữ grid nhưng không có bóng
+            table.setOpaque(true);
+
+            // Tắt các client properties gây bóng
+            table.putClientProperty("JTable.autoStartsEdit", false);
+            table.putClientProperty("terminateEditOnFocusLost", true);
+            table.putClientProperty("JTable.showBorder", false);
+
+            // Căn giữa nội dung
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+            centerRenderer.setOpaque(true); // Quan trọng để tắt hiệu ứng trong suốt
+
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
+        }
+
+        // Nếu muốn tắt hoàn toàn Look and Feel effects
+        try {
+            UIManager.put("Table.focusCellHighlightBorder", null);
+            UIManager.put("Table.focusCellBackground", null);
+            UIManager.put("Table.dropCellBackground", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public QuanLyHoaDon() {
         initComponents();
-        // Đổi màu nền bảng
-        tblCTHD.setBackground(new Color(230, 230, 230)); // màu nền bảng
-
-// Đổi màu viền của tiêu đề cột
-        tblCTHD.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
-        tblCTHD.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
-        tblCTHD.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12)); // font đậm
-
-// Đổi màu hàng được chọn
-        tblCTHD.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
-        tblCTHD.setSelectionForeground(Color.WHITE);             // chữ khi chọn
-
-// Đổi màu đường lưới (nếu có)
-        tblCTHD.setGridColor(Color.GRAY);
-
-// Đổi màu chữ trong bảng
-        tblCTHD.setForeground(Color.BLACK); // màu chữ
-        tblCTHD.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // font chữ
-
-// Đặt độ cao hàng
-        tblCTHD.setRowHeight(30);
-
-        // Đổi màu nền bảng
-        tblHoaDon.setBackground(new Color(230, 230, 230)); // màu nền bảng
-
-// Đổi màu viền của tiêu đề cột
-        tblHoaDon.getTableHeader().setBackground(new Color(31, 51, 86)); // màu nền xanh đậm
-        tblHoaDon.getTableHeader().setForeground(Color.BLACK);           // màu chữ trắng
-        tblHoaDon.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12)); // font đậm
-
-// Đổi màu hàng được chọn
-        tblHoaDon.setSelectionBackground(new Color(60, 120, 200)); // màu nền khi chọn
-        tblHoaDon.setSelectionForeground(Color.WHITE);             // chữ khi chọn
-
-// Đổi màu đường lưới (nếu có)
-        tblHoaDon.setGridColor(Color.GRAY);
-
-// Đổi màu chữ trong bảng
-        tblHoaDon.setForeground(Color.BLACK); // màu chữ
-        tblHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // font chữ
-
-// Đặt độ cao hàng
-        tblHoaDon.setRowHeight(30);
+        improveAllTables();
         initTable();
         fillTable();
         fillTableCTHD();
@@ -205,10 +238,10 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         }
         hoaDon.append("________________________________________\n");
         hoaDon.append(String.format("Tổng tiền             : %,15.0f đ\n", tongTien_HD));
-        hoaDon.append(String.format("Ưu đãi                : %s - %,10.0f đ\n", uuDai, tienUuDai));
+        hoaDon.append(String.format("Ưu đãi                : %s -%,10.0f đ\n", uuDai, tienUuDai));
         hoaDon.append(String.format("Thành tiền            : %,15.0f đ\n", thanhTien));
         hoaDon.append("----------------------------------------\n");
-        hoaDon.append("Phương thức thanh toán: ").append(pttt).append("\n");
+        hoaDon.append("Phương thức thanh toán:  _").append(pttt).append("\n");
         hoaDon.append(String.format("Tiền khách đưa        : %,15.0f đ\n", tienKhachHang));
         hoaDon.append(String.format("Tiền trả lại          : %,15.0f đ\n", tienTraLai));
         hoaDon.append("________________________________________\n");
