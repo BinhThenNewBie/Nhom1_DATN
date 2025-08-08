@@ -154,7 +154,6 @@ public void them(){
             return;
         }
         
-        
         //Kiểm tra tên
         if (!hoTen.matches("^[\\p{L}\\s]+$")) {
         JOptionPane.showMessageDialog(this, "Tên phải nhập bằng chữ", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -191,7 +190,6 @@ public void them(){
     if (chon >= 0) {
         Taikhoan chontk = tkd.GETALL().get(chon);
 
-        String vaiTroHienTai = chontk.getVaiTro();
                      int result = 0;
         int sua = JOptionPane.showConfirmDialog(this, "Bạn muốn sửa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (sua == JOptionPane.YES_OPTION) {
