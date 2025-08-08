@@ -45,9 +45,10 @@ public class TaikhoanDAO {
                 Taikhoan tk = new Taikhoan();
                 tk.setID_TK(rs.getString(1));
                 tk.setID_NV(rs.getString(2));
-                tk.setPass(rs.getString(3));
-                tk.setEmail(rs.getString(4));
-                tk.setVaiTro(rs.getString(5));
+                tk.setTenNV(rs.getString(3));
+                tk.setPass(rs.getString(4));
+                tk.setEmail(rs.getString(5));
+                tk.setVaiTro(rs.getString(6));
                 String trangThai = rs.getString("TRANGTHAI");
                 tk.setTrangThai(trangThai != null ? trangThai : "ACTIVE");
                 Listtk.add(tk);
@@ -62,25 +63,27 @@ public class TaikhoanDAO {
     public Object[] GETROW(Taikhoan tk){
         String ID_TK = tk.getID_TK();
         String ID_NV = tk.getID_NV();
+        String tenNV = tk.getTenNV();
         String Pass = tk.getPass();
         String Email = tk.getEmail();
         String vaiTro = tk.getVaiTro();
         String trangThai = tk.getTrangThai();
-        Object[] rows = new Object[]{ID_TK,ID_NV, Pass, Email, vaiTro, trangThai};
+        Object[] rows = new Object[]{ID_TK,ID_NV,tenNV, Pass, Email, vaiTro, trangThai};
         return rows;
     }
     
 
 public int them(Taikhoan tk){
-    String sql = "INSERT INTO TAIKHOAN (ID_TK, ID_NV, PASS, EMAIL, VAITRO, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO TAIKHOAN (ID_TK, ID_NV, TENNV, PASS, EMAIL, VAITRO, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?, ?)";
     try (Connection con = DBconnect.getConnection();
          PreparedStatement pstm = con.prepareStatement(sql)) {
         pstm.setString(1, tk.getID_TK());
         pstm.setString(2, tk.getID_NV());
-        pstm.setString(5, tk.getPass());
-        pstm.setString(6, tk.getEmail());
-        pstm.setString(7, tk.getVaiTro());
-        pstm.setString(8, tk.getTrangThai()); 
+        pstm.setString(3, tk.getTenNV());
+        pstm.setString(4, tk.getPass());
+        pstm.setString(5, tk.getEmail());
+        pstm.setString(6, tk.getVaiTro());
+        pstm.setString(7, tk.getTrangThai()); // Thêm tham số cho TRANGTHAI
         
         int result = pstm.executeUpdate();
         if (result > 0) {
@@ -94,17 +97,18 @@ public int them(Taikhoan tk){
     return 0;
 }
     
-
+    // Sửa tài khoản (dành cho ADMIN)
     public int sua(String oldIDTK, Taikhoan tk){
-        String sql = "UPDATE TAIKHOAN SET ID_TK= ?,ID_NV=?, PASS=?, EMAIL=?, VAITRO=? WHERE ID_TK = ?";
+        String sql = "UPDATE TAIKHOAN SET ID_TK= ?,ID_NV=?,TENNV=?, PASS=?, EMAIL=?, VAITRO=? WHERE ID_TK = ?";
         try (Connection con = DBconnect.getConnection();
              PreparedStatement pstm = con.prepareStatement(sql)) {
             pstm.setString(1, tk.getID_TK());
             pstm.setString(2, tk.getID_NV());
-            pstm.setString(3, tk.getPass());
-            pstm.setString(4, tk.getEmail());
-            pstm.setString(5, tk.getVaiTro());
-            pstm.setString(6, oldIDTK);
+            pstm.setString(3, tk.getTenNV());
+            pstm.setString(4, tk.getPass());
+            pstm.setString(5, tk.getEmail());
+            pstm.setString(6, tk.getVaiTro());
+            pstm.setString(7, oldIDTK);
             
             int result = pstm.executeUpdate();
             if (result > 0) {
