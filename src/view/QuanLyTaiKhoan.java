@@ -60,7 +60,6 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         tblBang.setRowHeight(30);
         initTable();
         fillTable();
-        checkEmailTrung();
     }
 
     public void initTable() {
@@ -119,8 +118,8 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             txtTentk.setEnabled(true);
             txtEmail.setEnabled(true);
             cboVaitro.setEnabled(true);
+
         }
-        checkEmailTrung();
         }
     }
 
@@ -255,7 +254,6 @@ public void them(){
                 int result = tkd.moKhoaTaiKhoan(chontk.getID_TK());
                 if (result == 1) {
                     fillTable();
-                    showdetail(); // Refresh button states
                     JOptionPane.showMessageDialog(this, "Mở khóa tài khoản thành công!");
                 } else {
                     JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi mở khóa tài khoản!");
@@ -296,61 +294,6 @@ public void them(){
         }
     }
 
-    public void checkEmailTrung() {
-    List<Taikhoan> danhSach = tkd.GETALL();
-    Map<String, Integer> demEmail = new HashMap<>();
-
-    // Đếm số lần xuất hiện của mỗi email
-    for (Taikhoan tk : danhSach) {
-        String email = tk.getEmail();
-        if (email != null && !email.isBlank()) {
-            email = email.trim().toLowerCase(); // Chuẩn hóa email
-            demEmail.put(email, demEmail.getOrDefault(email, 0) + 1);
-        }
-    }
-
-    // Kiểm tra có email nào trùng không
-    for (Map.Entry<String, Integer> entry : demEmail.entrySet()) {
-        if (entry.getValue() > 1) {
-            // Có email bị trùng
-            String emailTrung = entry.getKey();
-            
-            // Vô hiệu hóa các thành phần
-            btnThem.setEnabled(false);
-            txtTentk.setEnabled(false);
-            txtID.setEnabled(false);
-            txtPass.setEnabled(false);
-            txtIdnv.setEnabled(false);
-            txtIdnv.setEnabled(false);
-            btnKhoa.setEnabled(false);
-            btnMokhoa.setEnabled(false);
-            btnLamMoi.setEnabled(false);
-            btnloc.setEnabled(false);
-            cboLoc.setEnabled(false);
-            txtEmail.setText(emailTrung); 
-            cboVaitro.setEnabled(false);
-            JOptionPane.showMessageDialog(this,
-                    "Phát hiện email bị trùng: " + emailTrung
-                    + "\nVui lòng sửa lại để tiếp tục sử dụng!",
-                    "Trùng Email", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-    }
-
-    // Nếu không có email trùng => bật lại các thành phần
-        btnThem.setEnabled(true);
-        txtTentk.setEnabled(true);
-        txtIdnv.setEnabled(true);
-        txtID.setEnabled(true);
-        txtPass.setEnabled(true);
-        txtEmail.setEnabled(true);
-        btnKhoa.setEnabled(true);
-        btnMokhoa.setEnabled(true);
-        btnLamMoi.setEnabled(true);
-        btnloc.setEnabled(true);
-        cboLoc.setEnabled(true);
-        cboVaitro.setEnabled(true);
-}
 public void loc(){
     String trangthailoc = cboLoc.getSelectedItem().toString();
     tableModel.setRowCount(0);
