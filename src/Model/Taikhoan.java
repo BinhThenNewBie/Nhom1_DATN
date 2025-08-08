@@ -9,15 +9,14 @@ package Model;
  * @author ADMIN
  */
 public class Taikhoan {
-    private String ID_TK,ID_NV,tenNV, pass,email, vaiTro, trangThai;
+    private String ID_TK,ID_NV, pass,email, vaiTro, trangThai;
 
     public Taikhoan() {
     }
 
-    public Taikhoan(String ID_TK, String ID_NV, String tenNV, String pass, String email, String vaiTro, String trangThai) {
+    public Taikhoan(String ID_TK, String ID_NV, String pass, String email, String vaiTro, String trangThai) {
         this.ID_TK = ID_TK;
         this.ID_NV = ID_NV;
-        this.tenNV = tenNV;
         this.pass = pass;
         this.email = email;
         this.vaiTro = vaiTro;
@@ -38,14 +37,6 @@ public class Taikhoan {
 
     public void setID_NV(String ID_NV) {
         this.ID_NV = ID_NV;
-    }
-
-    public String getTenNV() {
-        return tenNV;
-    }
-
-    public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
     }
 
     public String getPass() {
@@ -79,6 +70,8 @@ public class Taikhoan {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
+
+    
 
    
     
