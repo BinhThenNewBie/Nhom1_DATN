@@ -120,7 +120,6 @@ tblNhanvien.setRowHeight(30);
             } else {
                 try {
                     strAnh = nv.getIMG();
-                    // Sử dụng method helper để resize ảnh
                     ImageIcon resizedIcon = resizeImage("/Images_nhanvien/" + strAnh, IMAGE_WIDTH, IMAGE_HEIGHT);
 
                     if (resizedIcon != null) {
